@@ -1,15 +1,16 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Course {
 	private double price;
 	private String period;
-	private ArrayList<Member> members;
+	private List<Member> members;
 	private String name;
 	private String description;
 	private String address;
-	private long CourseID;
+	private long courseID;
 
 	public Course(double price, String period, String name, String description, String address) {
 		this.price = price;
@@ -36,7 +37,7 @@ public class Course {
 		this.period = period;
 	}
 
-	public ArrayList<Member> getMembers() {
+	public List<Member> getMembers() {
 		return members;
 	}
 
@@ -69,10 +70,10 @@ public class Course {
 	}
 
 	public long getCourseID() {
-		return CourseID;
+		return courseID;
 	}
 
 	public void setCourseID(long courseID) {
-		CourseID = courseID;
+		this.courseID = courseID;
 	}
 }

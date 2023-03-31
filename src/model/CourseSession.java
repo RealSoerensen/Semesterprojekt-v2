@@ -2,14 +2,15 @@ package model;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CourseSession {
 	private Timestamp date;
 	private Instructor instructor;
-	private ArrayList<Member> members;
+	private List<Member> members;
 	private String address;
 	private String subject;
-	private long CourseSessionID;
+	private long courseSessionID;
 
 	public CourseSession(Timestamp date, Instructor instructor, String address, String subject) {
 		this.date = date;
@@ -35,7 +36,7 @@ public class CourseSession {
 		this.instructor = instructor;
 	}
 
-	public ArrayList<Member> getMembers() {
+	public List<Member> getMembers() {
 		return members;
 	}
 
@@ -60,10 +61,10 @@ public class CourseSession {
 	}
 
 	public long getCourseSessionID() {
-		return CourseSessionID;
+		return courseSessionID;
 	}
 
 	public void setCourseSessionID(long courseSessionID) {
-		CourseSessionID = courseSessionID;
+		this.courseSessionID = courseSessionID;
 	}
 }

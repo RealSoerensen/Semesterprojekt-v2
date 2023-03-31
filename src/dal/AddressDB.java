@@ -1,0 +1,33 @@
+package dal;
+
+import model.Address;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class AddressDB implements CRUD<Address>{
+    @Override
+    public boolean create(Address obj) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public Address get(long id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public List<Address> getAll() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean update(Address obj) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(long id) throws SQLException {
+        return false;
+    }
+}

@@ -2,7 +2,7 @@ package model;
 
 public class Person {
     private String name;
-    private String address;
+    private Address address;
     private String email;
     private String phoneNumber;
     private int role; 		//1: member, 2: instructor, 3: administrator
@@ -10,7 +10,7 @@ public class Person {
     private String password;
     private int ssn;
 
-    public Person(String name, String address, String email, String phoneNumber, int role, String username, String password, int ssn) {
+    public Person(String name, Address address, String email, String phoneNumber, int role, String username, String password, int ssn) {
     	this.name = name;
     	this.address = address;
     	this.email = email;
@@ -29,11 +29,11 @@ public class Person {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
