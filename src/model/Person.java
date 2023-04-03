@@ -1,7 +1,8 @@
 package model;
 
 public class Person {
-    private String name;
+    private String firstName;
+    private String lastName;
     private Address address;
     private String email;
     private String phoneNumber;
@@ -10,8 +11,9 @@ public class Person {
     private String password;
     private int ssn;
 
-    public Person(String name, Address address, String email, String phoneNumber, int role, String username, String password, int ssn) {
-    	this.name = name;
+    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, int ssn) {
+    	this.firstName = firstName;
+    	this.lastName = lastName;
     	this.address = address;
     	this.email = email;
     	this.phoneNumber = phoneNumber;
@@ -21,15 +23,23 @@ public class Person {
     	this.ssn = ssn;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getFirstName() {
+		return firstName;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public Address getAddress() {
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Address getAddress() {
         return address;
     }
 
