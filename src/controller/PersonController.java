@@ -1,6 +1,4 @@
-package control;
-
-import model.Person;
+package controller;
 
 public class PersonController {
 
