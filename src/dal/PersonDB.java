@@ -22,7 +22,7 @@ public class PersonDB implements CRUD<Person>{
     }
 
     @Override
-    public boolean update(Person obj) throws SQLException {
+    public boolean update(long id, Person obj) throws SQLException {
         return false;
     }
 

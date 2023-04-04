@@ -22,7 +22,7 @@ public class AddressDB implements CRUD<Address>{
     }
 
     @Override
-    public boolean update(Address obj) throws SQLException {
+    public boolean update(long id, Address obj) throws SQLException {
         return false;
     }
 

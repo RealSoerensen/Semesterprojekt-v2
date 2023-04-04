@@ -9,9 +9,9 @@ public class Person {
     private int role; 		//1: member, 2: instructor, 3: administrator
     private String username;
     private String password;
-    private int ssn;
+    private long ssn;
 
-    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, int ssn) {
+    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn) {
     	this.firstName = firstName;
     	this.lastName = lastName;
     	this.address = address;
@@ -87,7 +87,7 @@ public class Person {
         this.password = password;
     }
 
-    public int getSsn() {
+    public long getSsn() {
         return ssn;
     }
 
