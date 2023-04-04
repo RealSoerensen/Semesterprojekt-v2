@@ -7,12 +7,13 @@ import java.util.List;
 public class CourseSession {
 	private Timestamp date;
 	private Instructor instructor;
-	private List<Member> members;
-	private String address;
-	private String subject;
+	private Address address;
+	private Subject subject;
 	private long courseSessionID;
+	private List<Member> members;
 
-	public CourseSession(Timestamp date, Instructor instructor, String address, String subject) {
+
+	public CourseSession(Timestamp date, Instructor instructor, Address address, Subject subject) {
 		this.date = date;
 		this.instructor = instructor;
 		this.address = address;
@@ -44,19 +45,19 @@ public class CourseSession {
 		this.members = members;
 	}
 
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
-	public String getSubject() {
+	public Subject getSubject() {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
 
