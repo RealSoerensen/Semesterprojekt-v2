@@ -32,6 +32,11 @@ public class PersonDB implements CRUD<Person>{
     }
 
     @Override
+    public boolean create(Person obj, long id) throws SQLException {
+        return false;
+    }
+
+    @Override
     public Person get(long id) throws SQLException {
     	Person person;
     	try {
