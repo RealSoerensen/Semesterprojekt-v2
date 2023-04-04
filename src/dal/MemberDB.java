@@ -34,7 +34,7 @@ public class MemberDB implements CRUD<Member>{
     public Member get(long id) throws SQLException {
     	Member member;
     	try (Connection connection = dbConnection.getConnection()) {
-    		member = findPerson(connection, id);
+    		member = findMember(connection, id);
     	}
     	
         return member;
@@ -42,6 +42,10 @@ public class MemberDB implements CRUD<Member>{
 
     @Override
     public List<Member> getAll() throws SQLException {
+    	List<Member> members;
+    	try (Connection connection = dbConnection.getConnection()) {
+    		members = findAllMembers(connection);
+    	}
         return null;
     }
 
@@ -55,7 +59,11 @@ public class MemberDB implements CRUD<Member>{
         return false;
     }
     
-    private Member findPerson(Connection connection, long id) throws SQLException {
+    private List<Member> findAllMembers(Connection connection) {
+    	
+    }
+    
+    private Member findMember(Connection connection, long id) throws SQLException {
     	String sql = "SELECT * FROM Person WHERE id = ?";
     	Member member;
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -103,7 +111,7 @@ public class MemberDB implements CRUD<Member>{
 			stmt.setString(1, member.getFirstName());
 			stmt.setString(2, member.getLastName());
 			stmt.setString(3, member.getEmail());
-			stmt.setInt(4, member.getSsn());
+			stmt.setLong(4, member.getSsn());
 			stmt.setInt(5, member.getRole());
 			stmt.setString(6, member.getPhoneNumber());
 			stmt.setString(7, member.getUsername());
