@@ -20,12 +20,12 @@ public class InstructorDB implements CRUD<Instructor>{
     }
 
     @Override
-    public boolean create(Instructor obj) throws SQLException {
+    public boolean create(Instructor obj) {
         return false;
     }
 
     @Override
-    public boolean create(Instructor obj, long id) throws SQLException {
+    public boolean create(Instructor obj, long id) {
         throw new UnsupportedOperationException();
     }
 
@@ -58,17 +58,17 @@ public class InstructorDB implements CRUD<Instructor>{
     }
 
     @Override
-    public List<Instructor> getAll() throws SQLException {
+    public List<Instructor> getAll() {
         return null;
     }
 
     @Override
-    public boolean update(long id, Instructor obj) throws SQLException {
+    public boolean update(long id, Instructor obj) {
         return false;
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         return false;
     }
 

@@ -1,7 +1,5 @@
 package dal;
 
-import model.Member;
-
 import java.sql.SQLException;
 
 public class MemberDB extends PersonDB {

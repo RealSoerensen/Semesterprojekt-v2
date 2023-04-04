@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDB implements CRUD<Person>{
-	private final DBConnection dbConnection;
 	private final Connection connection;
 
 	public PersonDB() throws SQLException {
-		dbConnection = DBConnection.getInstance();
+		DBConnection dbConnection = DBConnection.getInstance();
 		connection = dbConnection.getConnection();
 	}
 
@@ -32,12 +31,12 @@ public class PersonDB implements CRUD<Person>{
     }
 
     @Override
-    public boolean create(Person obj, long id) throws SQLException {
-        return false;
+    public boolean create(Person obj, long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Person get(long id) throws SQLException {
+    public Person get(long id) {
     	Person person;
     	try {
     		person = findPerson(id);
@@ -49,7 +48,7 @@ public class PersonDB implements CRUD<Person>{
     }
 
     @Override
-    public List<Person> getAll() throws SQLException {
+    public List<Person> getAll() {
     	List<Person> people;
     	try {
     		people = findAllPeople(connection);
@@ -95,46 +94,39 @@ public class PersonDB implements CRUD<Person>{
     	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
     		ResultSet rs = stmt.executeQuery();
     		while(rs.next()) {
-    			String firstName = rs.getString("firstName");
-				String lastName = rs.getString("lastName");
-				String email = rs.getString("email");
-				String phoneNo = rs.getString("phoneNo");
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				int role = rs.getInt("role");
-				long ssn = rs.getLong("ssn");
-				long addressID = rs.getLong("addressID");
-				Address address = findAddress(addressID);
-				
-				people.add(new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn));
+    			Person person = createPerson(rs);
+				people.add(person);
     		}
     	}
     	return people;
     }
     
     private Person findPerson(long id) throws SQLException {
-    	String sql = "SELECT * FROM Person WHERE id = ?";
+    	String sql = "SELECT * FROM Person WHERE ssn = ?";
     	Person person;
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 				stmt.setLong(1, id);
-				
 				ResultSet rs = stmt.executeQuery();
-				
-				String firstName = rs.getString("firstName");
-				String lastName = rs.getString("lastName");
-				String email = rs.getString("email");
-				String phoneNo = rs.getString("phoneNo");
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				int role = rs.getInt("role");
-				long ssn = rs.getLong("ssn");
-				long addressID = rs.getLong("addressID");
-				Address address = findAddress(addressID);
-				
-				person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+				person = createPerson(rs);
+
 		}
     	return person;
     }
+
+	private Person createPerson(ResultSet rs) throws SQLException {
+		String firstName = rs.getString("firstName");
+		String lastName = rs.getString("lastName");
+		String email = rs.getString("email");
+		String phoneNo = rs.getString("phoneNo");
+		String username = rs.getString("username");
+		String password = rs.getString("password");
+		int role = rs.getInt("role");
+		long ssn = rs.getLong("ssn");
+		long addressID = rs.getLong("addressID");
+		Address address = findAddress(addressID);
+
+		return new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+	}
     
     private Address findAddress(long addressID) throws SQLException {
     	String sql = "SELECT * FROM Address WHERE addressID = ?";
@@ -155,7 +147,8 @@ public class PersonDB implements CRUD<Person>{
     }
 
 	private boolean insertPerson(Person person) throws SQLException {
-		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, person.getFirstName());
 			stmt.setString(2, person.getLastName());

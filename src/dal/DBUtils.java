@@ -2,7 +2,6 @@ package dal;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DBUtils {
     private final Connection connection;

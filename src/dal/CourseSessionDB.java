@@ -19,7 +19,7 @@ public class CourseSessionDB implements CRUD<CourseSession>{
     }
 
     @Override
-    public boolean create(CourseSession obj) throws SQLException {
+    public boolean create(CourseSession obj) {
         throw new UnsupportedOperationException();
     }
 

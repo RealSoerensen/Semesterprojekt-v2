@@ -17,12 +17,12 @@ public class SubjectDB implements CRUD<Subject> {
     }
 
     @Override
-    public boolean create(Subject obj) throws SQLException {
+    public boolean create(Subject obj) {
         return false;
     }
 
     @Override
-    public boolean create(Subject obj, long id) throws SQLException {
+    public boolean create(Subject obj, long id) {
         throw new UnsupportedOperationException();
     }
 
@@ -44,17 +44,17 @@ public class SubjectDB implements CRUD<Subject> {
     }
 
     @Override
-    public List<Subject> getAll() throws SQLException {
+    public List<Subject> getAll() {
         return null;
     }
 
     @Override
-    public boolean update(long id, Subject obj) throws SQLException {
+    public boolean update(long id, Subject obj) {
         return false;
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         return false;
     }
 }

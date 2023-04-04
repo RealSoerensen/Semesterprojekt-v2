@@ -1,7 +1,6 @@
 package dal;
 
 import model.Address;
-import model.CourseSession;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,12 +17,12 @@ public class AddressDB implements CRUD<Address>{
     }
 
     @Override
-    public boolean create(Address obj) throws SQLException {
+    public boolean create(Address obj) {
         return false;
     }
 
     @Override
-    public boolean create(Address obj, long id) throws SQLException {
+    public boolean create(Address obj, long id) {
         throw new UnsupportedOperationException();
     }
 
@@ -48,17 +47,17 @@ public class AddressDB implements CRUD<Address>{
     }
 
     @Override
-    public List<Address> getAll() throws SQLException {
+    public List<Address> getAll() {
         return null;
     }
 
     @Override
-    public boolean update(long id, Address obj) throws SQLException {
+    public boolean update(long id, Address obj) {
         return false;
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         return false;
     }
 }
