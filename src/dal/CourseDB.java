@@ -59,7 +59,7 @@ public class CourseDB implements CRUD<Course>{
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             courseRS = stmt.executeQuery();
         }
-        if(courseRS.next()) {
+        while(courseRS.next()) {
             Course course = new Course(
                     courseRS.getString("name"),
                     courseRS.getDouble("price"),
