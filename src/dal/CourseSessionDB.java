@@ -71,84 +71,24 @@ public class CourseSessionDB implements CRUD<CourseSession>{
     }
 
     private Address getAddress(long addressId) throws SQLException {
-        Address address = null;
-        String sql = " SELECT * FROM address WHERE addressID = ? ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, addressId);
-            stmt.executeQuery();
-            ResultSet addressRS = stmt.getResultSet();
-            if (addressRS.next()) {
-                address = new Address(
-                        addressRS.getString("street"),
-                        addressRS.getString("city"),
-                        addressRS.getString("state"),
-                        addressRS.getString("zipCode")
-                );
-            }
-        }
-        return address;
+        AddressDB addressDB = new AddressDB();
+        return addressDB.get(addressId);
     }
 
 
     private Instructor getInstructor(long ssn) throws SQLException {
-        Instructor instructor = null;
-        String sql = " SELECT * FROM instructor WHERE ssn = ? ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, ssn);
-            stmt.executeQuery();
-            ResultSet instructorRS = stmt.getResultSet();
-            if (instructorRS.next()) {
-                Address address = getAddress(instructorRS.getLong("addressID"));
-                List<Subject> subjects = getInstructorSubjects(ssn);
-                instructor = new Instructor(
-                        instructorRS.getString("firstName"),
-                        instructorRS.getString("lastName"),
-                        address,
-                        instructorRS.getString("email"),
-                        instructorRS.getString("phoneNo"),
-                        instructorRS.getInt("role"),
-                        instructorRS.getString("username"),
-                        instructorRS.getString("password"),
-                        ssn,
-                        subjects
-                );
-            }
-        }
-        return instructor;
+        InstructorDB instructorDB = new InstructorDB();
+        return instructorDB.get(ssn);
     }
 
     private List<Subject> getInstructorSubjects(long ssn) throws SQLException {
-        List<Subject> subjects = new ArrayList<>();
-        String sql = " SELECT * FROM instructorSubjects WHERE ssn = ? ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, ssn);
-            ResultSet instructorSubjectRS = stmt.executeQuery();
-
-            while (instructorSubjectRS.next()) {
-                long subjectId = instructorSubjectRS.getLong("subjectID");
-                Subject subject = getSubject(subjectId);
-                subjects.add(subject);
-            }
-        }
-
-        return subjects;
+        InstructorDB instructorDB = new InstructorDB();
+        return instructorDB.getInstructorSubjects(ssn);
     }
 
     private Subject getSubject(long subjectID) throws SQLException {
-        Subject subject = null;
-        String sql = "SELECT * FROM Subject WHERE subjectID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, subjectID);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String subjectName = rs.getString("subject");
-                    String description = rs.getString("description");
-                    subject = new Subject(subjectName);
-                    subject.setDescription(description);
-                }
-            }
-        }
-        return subject;
+        SubjectDB subjectDB = new SubjectDB();
+        return subjectDB.get(subjectID);
     }
 
 }

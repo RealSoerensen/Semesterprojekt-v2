@@ -10,6 +10,11 @@ public class Subject {
         description = "";
     }
 
+    public Subject(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public long getSubjectID() {
         return subjectID;
     }
