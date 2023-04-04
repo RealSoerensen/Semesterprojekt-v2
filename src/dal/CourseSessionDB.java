@@ -77,12 +77,24 @@ public class CourseSessionDB implements CRUD<CourseSession>{
 
     @Override
     public boolean update(long id, CourseSession obj) throws SQLException {
-        return false;
+        String sql = " UPDATE courseSession SET date = ?, courseID = ?, instructorSsn = ? " +
+                " WHERE courseSessionID = ? ";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setTimestamp(1, obj.getDate());
+            stmt.setLong(2, id);
+            stmt.setLong(3, obj.getInstructor().getSsn());
+            stmt.setLong(4, id);
+            return stmt.executeUpdate() > 0;
+        }
     }
 
     @Override
     public boolean delete(long id) throws SQLException {
-        return false;
+        String sql = " DELETE FROM courseSession WHERE courseSessionID = ? ";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            return stmt.executeUpdate() > 0;
+        }
     }
 
     private Address getAddress(long addressId) throws SQLException {
