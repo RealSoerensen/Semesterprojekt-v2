@@ -9,20 +9,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SubjectDB implements CRUD<Subject>{
+public class SubjectDB implements CRUD<Subject> {
     private final Connection connection;
 
     public SubjectDB() throws SQLException {
         DBConnection dbConnection = DBConnection.getInstance();
         connection = dbConnection.getConnection();
     }
+
     @Override
     public boolean create(Subject obj) throws SQLException {
         return false;
     }
 
     @Override
-    public boolean create(CourseSession obj, long id) throws SQLException {
+    public boolean create(Subject obj, long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 

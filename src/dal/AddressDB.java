@@ -23,7 +23,7 @@ public class AddressDB implements CRUD<Address>{
     }
 
     @Override
-    public boolean create(CourseSession obj, long id) throws SQLException {
+    public boolean create(Address obj, long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 

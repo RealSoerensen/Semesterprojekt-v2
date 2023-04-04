@@ -1,6 +1,6 @@
 package dal;
 
-import model.*;
+import model.Instructor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +23,7 @@ public class InstructorDB implements CRUD<Instructor>{
     }
 
     @Override
-    public boolean create(CourseSession obj, long id) throws SQLException {
+    public boolean create(Instructor obj, long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
