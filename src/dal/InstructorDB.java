@@ -1,6 +1,8 @@
 package dal;
 
+import model.Address;
 import model.Instructor;
+import model.Subject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

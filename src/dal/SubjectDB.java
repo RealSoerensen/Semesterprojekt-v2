@@ -1,6 +1,5 @@
 package dal;
 
-import model.CourseSession;
 import model.Subject;
 
 import java.sql.Connection;
