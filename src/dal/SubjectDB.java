@@ -1,5 +1,6 @@
 package dal;
 
+import model.CourseSession;
 import model.Subject;
 
 import java.sql.Connection;
@@ -23,7 +24,7 @@ public class SubjectDB implements CRUD<Subject> {
 
     @Override
     public boolean create(Subject obj, long id) throws SQLException {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
