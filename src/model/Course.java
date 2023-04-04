@@ -39,7 +39,7 @@ public class Course {
 		return members;
 	}
 
-	public void setMembers(ArrayList<Member> members) {
+	public void setMembers(List<Member> members) {
 		this.members = members;
 	}
 
