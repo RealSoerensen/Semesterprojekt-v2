@@ -20,9 +20,6 @@ public class PersonDB implements CRUD<Person>{
 		boolean result;
 		try {
 			result = insertPerson(obj);
-			if (result) {
-				result = insertAddress(obj.getAddress());
-			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -39,7 +36,13 @@ public class PersonDB implements CRUD<Person>{
     public Person get(long id) {
     	Person person;
     	try {
-    		person = findPerson(id);
+			String sql = "SELECT * FROM Person WHERE ssn = ?";
+			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+				stmt.setLong(1, id);
+				ResultSet rs = stmt.executeQuery();
+				person = createPersonFromRS(rs);
+
+			}
     	} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -49,9 +52,16 @@ public class PersonDB implements CRUD<Person>{
 
     @Override
     public List<Person> getAll() {
-    	List<Person> people;
+    	List<Person> people = new ArrayList<>();
     	try {
-    		people = findAllPeople(connection);
+			String sql = "SELECT * FROM Person";
+			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next()) {
+					Person person = createPersonFromRS(rs);
+					people.add(person);
+				}
+			}
     	} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -86,34 +96,8 @@ public class PersonDB implements CRUD<Person>{
             return stmt.executeUpdate() > 0;
         }
     }
-    
-    private List<Person> findAllPeople(Connection connection) throws SQLException {
-    	List<Person> people = new ArrayList<>();
-    	
-    	String sql = "SELECT * FROM Person";
-    	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-    		ResultSet rs = stmt.executeQuery();
-    		while(rs.next()) {
-    			Person person = createPerson(rs);
-				people.add(person);
-    		}
-    	}
-    	return people;
-    }
-    
-    private Person findPerson(long id) throws SQLException {
-    	String sql = "SELECT * FROM Person WHERE ssn = ?";
-    	Person person;
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-				stmt.setLong(1, id);
-				ResultSet rs = stmt.executeQuery();
-				person = createPerson(rs);
 
-		}
-    	return person;
-    }
-
-	private Person createPerson(ResultSet rs) throws SQLException {
+	private Person createPersonFromRS(ResultSet rs) throws SQLException {
 		String firstName = rs.getString("firstName");
 		String lastName = rs.getString("lastName");
 		String email = rs.getString("email");
@@ -123,32 +107,17 @@ public class PersonDB implements CRUD<Person>{
 		int role = rs.getInt("role");
 		long ssn = rs.getLong("ssn");
 		long addressID = rs.getLong("addressID");
-		Address address = findAddress(addressID);
+		Address address = getAddress(addressID);
 
 		return new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
 	}
-    
-    private Address findAddress(long addressID) throws SQLException {
-    	String sql = "SELECT * FROM Address WHERE addressID = ?";
-    	Address address;
-    	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-    		stmt.setLong(1, addressID);
-    		
-    		ResultSet rs = stmt.executeQuery();
-    		
-    		String zipCode = rs.getString("zipCode");
-    		String houseNumber = rs.getString("address");
-    		String city = rs.getString("country");
-    		String street = rs.getString("street");
-    		
-    		address = new Address(zipCode, city, street, houseNumber);
-    	}
-    	return address;
-    }
+
 
 	private boolean insertPerson(Person person) throws SQLException {
-		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password) " +
-				"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		long id = createAddress(person.getAddress());
+
+		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password, addressID) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, person.getFirstName());
 			stmt.setString(2, person.getLastName());
@@ -158,20 +127,19 @@ public class PersonDB implements CRUD<Person>{
 			stmt.setString(6, person.getPhoneNumber());
 			stmt.setString(7, person.getUsername());
 			stmt.setString(8, person.getPassword());
+			stmt.setLong(9, id);
 
 			return stmt.executeUpdate() > 0;
 		}
 	}
 
-	private boolean insertAddress(Address address) throws SQLException {
-		String sql = "INSERT INTO Address (zipCode, address, country, street) VALUES (?, ?, ?, ?)";
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, address.getZipCode());
-			stmt.setString(2, address.getHouseNumber());
-			stmt.setString(3, address.getCity());
-			stmt.setString(4, address.getStreet());
+	private Address getAddress(long addressID) throws SQLException {
+		AddressDB addressDB = new AddressDB();
+		return addressDB.get(addressID);
+	}
 
-			return stmt.executeUpdate() > 0;
-		}
+	private long createAddress(Address address) throws SQLException {
+		AddressDB addressDB = new AddressDB();
+		return addressDB.getLongFromCreatedAddress(address);
 	}
 }
