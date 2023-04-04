@@ -1,18 +1,18 @@
 package model;
 
 public class Administrator extends Person {
-    private int snn;
+    private long snn;
 
-    public Administrator(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, int ssn) {
+    public Administrator(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn) {
         super(firstName, lastName, address, email, phoneNumber, role, username, password, ssn);
         this.snn = ssn;
     }
 
-    public int getSnn() {
+    public long getSnn() {
         return snn;
     }
 
-    public void setSnn(int snn) {
+    public void setSnn(long snn) {
         this.snn = snn;
     }
 }

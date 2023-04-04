@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
+	private long courseID;
+	private String name;
+	private String description;
 	private double price;
 	private String period;
 	private List<Member> members;
-	private String name;
-	private String description;
-	private String address;
-	private long courseID;
 
-	public Course(double price, String period, String name, String description, String address) {
-		this.price = price;
-		this.period = period;
+	public Course( String name, double price, String description, String period) {
 		this.name = name;
+		this.price = price;
 		this.description = description;
-		this.address = address;
-		members = new ArrayList<>();
+		this.period = period;
+		this.members = new ArrayList<>();
 	}
 
 	public double getPrice() {
@@ -59,14 +57,6 @@ public class Course {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public long getCourseID() {

@@ -37,7 +37,7 @@ public class MemberDB implements CRUD<Member>{
     }
 
     @Override
-    public boolean update(Member obj) throws SQLException {
+    public boolean update(long id, Member obj) throws SQLException {
         return false;
     }
 
