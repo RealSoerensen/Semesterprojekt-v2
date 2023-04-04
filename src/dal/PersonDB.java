@@ -62,9 +62,9 @@ public class PersonDB implements CRUD<Person>{
 
     @Override
     public boolean update(long id, Person obj) throws SQLException {
-    	String sql = " UPDATE Person SET firstName = ?, lastName = ?, email = ?, "
+    	String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, "
     			+ "phoneNo = ?, username = ?, password = ?, role = ?" +
-                " WHERE courseID = ? ";
+                " WHERE ssn = ?";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, obj.getFirstName());
 			stmt.setString(2, obj.getLastName());
@@ -73,13 +73,19 @@ public class PersonDB implements CRUD<Person>{
 			stmt.setString(5, obj.getUsername());
 			stmt.setString(6, obj.getPassword());
 			stmt.setInt(7, obj.getRole());
-            return stmt.executeUpdate() > 0;
+			stmt.setLong(8, id);
+			
+			return stmt.executeUpdate() > 0;
         }
     }
 
     @Override
     public boolean delete(long id) throws SQLException {
-        return false;
+    	String sql = " DELETE FROM Person WHERE ssn = ? ";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            return stmt.executeUpdate() > 0;
+        }
     }
     
     private List<Person> findAllPeople(Connection connection) throws SQLException {
@@ -98,7 +104,7 @@ public class PersonDB implements CRUD<Person>{
 				int role = rs.getInt("role");
 				long ssn = rs.getLong("ssn");
 				long addressID = rs.getLong("addressID");
-				Address address = findAddress(connection, addressID);
+				Address address = findAddress(addressID);
 				
 				people.add(new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn));
     		}
@@ -123,14 +129,14 @@ public class PersonDB implements CRUD<Person>{
 				int role = rs.getInt("role");
 				long ssn = rs.getLong("ssn");
 				long addressID = rs.getLong("addressID");
-				Address address = findAddress(connection, addressID);
+				Address address = findAddress(addressID);
 				
 				person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
 		}
     	return person;
     }
     
-    private Address findAddress(Connection connection, long addressID) throws SQLException {
+    private Address findAddress(long addressID) throws SQLException {
     	String sql = "SELECT * FROM Address WHERE addressID = ?";
     	Address address;
     	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
