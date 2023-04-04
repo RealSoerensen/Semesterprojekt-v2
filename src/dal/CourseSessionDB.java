@@ -57,7 +57,22 @@ public class CourseSessionDB implements CRUD<CourseSession>{
 
     @Override
     public List<CourseSession> getAll() throws SQLException {
-        return null;
+        List<CourseSession> courseSessions = new ArrayList<>();
+        String sql = " SELECT * FROM courseSession ";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.executeQuery();
+            ResultSet courseSessionRS = stmt.getResultSet();
+            while (courseSessionRS.next()) {
+                long instructorSsn = courseSessionRS.getLong("instructorSsn");
+                Timestamp date = courseSessionRS.getTimestamp("date");
+                Instructor instructor = getInstructor(instructorSsn);
+                Address address = getAddress(courseSessionRS.getLong("addressID"));
+                Subject subject = getSubject(courseSessionRS.getLong("subjectID"));
+                CourseSession courseSession = new CourseSession(date, instructor, address, subject);
+                courseSessions.add(courseSession);
+            }
+        }
+        return courseSessions;
     }
 
     @Override
