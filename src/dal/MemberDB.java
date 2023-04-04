@@ -4,6 +4,7 @@ import model.Address;
 import model.Member;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemberDB implements CRUD<Member>{
@@ -46,7 +47,7 @@ public class MemberDB implements CRUD<Member>{
     	try (Connection connection = dbConnection.getConnection()) {
     		members = findAllMembers(connection);
     	}
-        return null;
+        return members;
     }
 
     @Override
@@ -59,8 +60,28 @@ public class MemberDB implements CRUD<Member>{
         return false;
     }
     
-    private List<Member> findAllMembers(Connection connection) {
+    private List<Member> findAllMembers(Connection connection) throws SQLException {
+    	List<Member> members = new ArrayList<>();
     	
+    	String sql = "SELECT * FROM Person";
+    	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+    		ResultSet rs = stmt.executeQuery();
+    		while(rs.next()) {
+    			String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				String email = rs.getString("email");
+				String phoneNo = rs.getString("phoneNo");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				int role = rs.getInt("role");
+				long ssn = rs.getLong("ssn");
+				long addressID = rs.getLong("addressID");
+				Address address = findAddress(connection, addressID);
+				
+				members.add(new Member(firstName, lastName, address, email, phoneNo, role, username, password, ssn));
+    		}
+    	}
+    	return members;
     }
     
     private Member findMember(Connection connection, long id) throws SQLException {
