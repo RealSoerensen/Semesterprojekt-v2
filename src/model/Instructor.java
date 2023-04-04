@@ -1,18 +1,20 @@
 package model;
 
-public class Instructor extends Person{
-    private String subject;
+import java.util.List;
 
-    public Instructor(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn, String subject) {
+public class Instructor extends Person{
+    private List<Subject> subject;
+
+    public Instructor(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn, List<Subject> subject) {
         super(firstName, lastName, address, email, phoneNumber, role, username, password, ssn);
         this.subject = subject;
     }
 
-    public String getSubject() {
+    public List<Subject> getSubjects() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(List<Subject> subject) {
         this.subject = subject;
     }
 }
