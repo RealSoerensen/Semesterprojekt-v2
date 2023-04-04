@@ -81,11 +81,6 @@ public class CourseSessionDB implements CRUD<CourseSession>{
         return instructorDB.get(ssn);
     }
 
-    private List<Subject> getInstructorSubjects(long ssn) throws SQLException {
-        InstructorDB instructorDB = new InstructorDB();
-        return instructorDB.getInstructorSubjects(ssn);
-    }
-
     private Subject getSubject(long subjectID) throws SQLException {
         SubjectDB subjectDB = new SubjectDB();
         return subjectDB.get(subjectID);
