@@ -6,17 +6,17 @@ import java.util.List;
 public class Course {
 	private long courseID;
 	private String name;
-	private String description;
 	private double price;
+	private String description;
 	private String period;
 	private List<Member> members;
 
-	public Course( String name, double price, String description, String period) {
+	public Course(String name, double price, String description, String period) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.period = period;
-		this.members = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 
 	public double getPrice() {

@@ -22,7 +22,7 @@ public class CourseSessionDB implements CRUD<CourseSession>{
     }
 
     @Override
-    public boolean update(CourseSession obj) throws SQLException {
+    public boolean update(long id, CourseSession obj) throws SQLException {
         return false;
     }
 

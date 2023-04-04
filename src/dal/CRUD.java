@@ -11,6 +11,5 @@ public interface CRUD<C> {
     C get(long id) throws SQLException;
     List<C> getAll() throws SQLException;
     boolean update(long id, C obj) throws SQLException;
-
     boolean delete(long id) throws SQLException;
 }

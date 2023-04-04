@@ -8,19 +8,23 @@ import java.util.List;
 
 public class MemberDB implements CRUD<Member>{
 	private final DBConnection dbConnection;
+	private final Connection connection;
 
 	public MemberDB() throws SQLException {
 		dbConnection = DBConnection.getInstance();
+		connection = dbConnection.getConnection();
 	}
 
 	@Override
-    public boolean create(Member obj) throws SQLException {
+    public boolean create(Member obj) {
 		boolean result;
-		try (Connection connection = dbConnection.getConnection()) {
-			result = insertPerson(connection, obj);
+		try {
+			result = insertPerson(obj);
 			if (result) {
 				result = insertAddress(connection, obj.getAddress());
 			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 
 		return result;
@@ -93,7 +97,7 @@ public class MemberDB implements CRUD<Member>{
     	return address;
     }
 
-	private boolean insertPerson(Connection connection, Member member) throws SQLException {
+	private boolean insertPerson(Member member) throws SQLException {
 		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, member.getFirstName());
@@ -109,7 +113,7 @@ public class MemberDB implements CRUD<Member>{
 		}
 	}
 
-	private boolean insertAddress(Connection connection, Address address) throws SQLException {
+	private boolean insertAddress(Address address) throws SQLException {
 		String sql = "INSERT INTO Address (zipCode, address, country, street) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, address.getZipCode());
