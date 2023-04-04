@@ -1,6 +1,7 @@
 package dal;
 
 import model.Course;
+import model.CourseSession;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,6 +30,11 @@ public class CourseDB implements CRUD<Course>{
             stmt.setString(4, obj.getPeriod());
             return stmt.executeUpdate() > 0;
         }
+    }
+
+    @Override
+    public boolean create(CourseSession obj, long id) throws SQLException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
