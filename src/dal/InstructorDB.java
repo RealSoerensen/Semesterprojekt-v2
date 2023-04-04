@@ -1,11 +1,13 @@
 package dal;
 
+import model.Course;
 import model.Instructor;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class InstructorDB implements CRUD<Instructor>{
+
     @Override
     public boolean create(Instructor obj) throws SQLException {
         return false;
@@ -22,7 +24,7 @@ public class InstructorDB implements CRUD<Instructor>{
     }
 
     @Override
-    public boolean update(Instructor obj) throws SQLException {
+    public boolean update(long id, Instructor obj) throws SQLException {
         return false;
     }
 

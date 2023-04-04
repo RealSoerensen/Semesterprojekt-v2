@@ -1,6 +1,7 @@
 package dal;
 
 import model.Administrator;
+import model.Course;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,7 +23,7 @@ public class AdministratorDB implements CRUD<Administrator>{
     }
 
     @Override
-    public boolean update(Administrator obj) throws SQLException {
+    public boolean update(long id, Administrator obj) throws SQLException {
         return false;
     }
 

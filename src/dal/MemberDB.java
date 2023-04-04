@@ -32,7 +32,12 @@ public class MemberDB implements CRUD<Member>{
 
     @Override
     public Member get(long id) throws SQLException {
-        return null;
+    	Member member;
+    	try (Connection connection = dbConnection.getConnection()) {
+    		member = findPerson(connection, id);
+    	}
+    	
+        return member;
     }
 
     @Override
@@ -41,13 +46,55 @@ public class MemberDB implements CRUD<Member>{
     }
 
     @Override
-    public boolean update(Member obj) throws SQLException {
+    public boolean update(long id, Member obj) throws SQLException {
         return false;
     }
 
     @Override
     public boolean delete(long id) throws SQLException {
         return false;
+    }
+    
+    private Member findPerson(Connection connection, long id) throws SQLException {
+    	String sql = "SELECT * FROM Person WHERE id = ?";
+    	Member member;
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+				stmt.setLong(1, id);
+				
+				ResultSet rs = stmt.executeQuery();
+				
+				String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				String email = rs.getString("email");
+				String phoneNo = rs.getString("phoneNo");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				int role = rs.getInt("role");
+				long ssn = rs.getLong("ssn");
+				long addressID = rs.getLong("addressID");
+				Address address = findAddress(connection, addressID);
+				
+				member = new Member(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+		}
+    	return member;
+    }
+    
+    private Address findAddress(Connection connection, long addressID) throws SQLException {
+    	String sql = "SELECT * FROM Address WHERE addressID = ?";
+    	Address address;
+    	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+    		stmt.setLong(1, addressID);
+    		
+    		ResultSet rs = stmt.executeQuery();
+    		
+    		String zipCode = rs.getString("zipCode");
+    		String houseNumber = rs.getString("address");
+    		String city = rs.getString("country");
+    		String street = rs.getString("street");
+    		
+    		address = new Address(zipCode, city, street, houseNumber);
+    	}
+    	return address;
     }
 
 	private boolean insertPerson(Member member) throws SQLException {

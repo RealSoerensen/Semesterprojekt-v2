@@ -1,5 +1,8 @@
 package dal;
 
+import model.Course;
+import model.Member;
+
 import java.sql.SQLException;
 import java.util.List;
 
