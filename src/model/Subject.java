@@ -1,7 +1,6 @@
 package model;
 
 public class Subject {
-    private long subjectID;
     private String name;
     private String description;
 
@@ -13,14 +12,6 @@ public class Subject {
     public Subject(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public long getSubjectID() {
-        return subjectID;
-    }
-
-    public void setSubjectID(long subjectID) {
-        this.subjectID = subjectID;
     }
 
     public String getName() {

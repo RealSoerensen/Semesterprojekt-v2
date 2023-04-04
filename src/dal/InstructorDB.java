@@ -72,28 +72,32 @@ public class InstructorDB implements CRUD<Instructor>{
         return false;
     }
 
-    public Address getAddress(long id) throws SQLException {
-        AddressDB addressDB = new AddressDB();
-        return addressDB.get(id);
-    }
-
     public List<Subject> getInstructorSubjects(long id) {
         List<Subject> subjects = new ArrayList<>();
         String sql = " SELECT * FROM instructorSubjects WHERE ssn = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             ResultSet instructorSubjectRS = stmt.executeQuery();
-            SubjectDB subjectDB = new SubjectDB();
             while (instructorSubjectRS.next()) {
                 long subjectId = instructorSubjectRS.getLong("subjectID");
-                Subject subject = subjectDB.get(subjectId);
-                subjects.add(subject);
+                subjects.add(getSubject(subjectId));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return subjects;
+    }
+
+
+    public Address getAddress(long id) throws SQLException {
+        AddressDB addressDB = new AddressDB();
+        return addressDB.get(id);
+    }
+
+    private Subject getSubject(long id) throws SQLException {
+        SubjectDB subjectDB = new SubjectDB();
+        return subjectDB.get(id);
     }
 
 }

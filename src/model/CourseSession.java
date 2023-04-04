@@ -9,7 +9,6 @@ public class CourseSession {
 	private Instructor instructor;
 	private Address address;
 	private Subject subject;
-	private long courseSessionID;
 	private List<Member> members;
 
 
@@ -59,13 +58,5 @@ public class CourseSession {
 
 	public void setSubject(Subject subject) {
 		this.subject = subject;
-	}
-
-	public long getCourseSessionID() {
-		return courseSessionID;
-	}
-
-	public void setCourseSessionID(long courseSessionID) {
-		this.courseSessionID = courseSessionID;
 	}
 }
