@@ -36,13 +36,11 @@ public class PersonDB implements CRUD<Person>{
     public Person get(long id) {
     	Person person;
     	try {
-			String sql = "SELECT * FROM Person WHERE ssn = ?";
-			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-				stmt.setLong(1, id);
-				ResultSet rs = stmt.executeQuery();
-				person = createPersonFromRS(rs);
+			String sql = "SELECT * FROM Person WHERE ssn = " + id;
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			person = createPersonFromRS(rs);
 
-			}
     	} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -98,18 +96,25 @@ public class PersonDB implements CRUD<Person>{
     }
 
 	private Person createPersonFromRS(ResultSet rs) throws SQLException {
-		String firstName = rs.getString("firstName");
-		String lastName = rs.getString("lastName");
-		String email = rs.getString("email");
-		String phoneNo = rs.getString("phoneNo");
-		String username = rs.getString("username");
-		String password = rs.getString("password");
-		int role = rs.getInt("role");
-		long ssn = rs.getLong("ssn");
-		long addressID = rs.getLong("addressID");
-		Address address = getAddress(addressID);
+		Person person = null;
+		if(rs.next()){
+			String firstName = rs.getString("firstName");
+			String lastName = rs.getString("lastName");
+			String email = rs.getString("email");
+			String phoneNo = rs.getString("phoneNo");
+			String username = rs.getString("username");
+			String password = rs.getString("password");
+			int role = rs.getInt("role");
+			long ssn = rs.getLong("ssn");
+			long addressID = rs.getLong("addressID");
 
-		return new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+			AddressDB addressDB = new AddressDB();
+			Address address = addressDB.get(addressID);
+
+			person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+		}
+
+		return person;
 	}
 
 
@@ -140,6 +145,6 @@ public class PersonDB implements CRUD<Person>{
 
 	private long createAddress(Address address) throws SQLException {
 		AddressDB addressDB = new AddressDB();
-		return addressDB.getLongFromCreatedAddress(address);
+		return addressDB.createAddressAndGetID(address);
 	}
 }

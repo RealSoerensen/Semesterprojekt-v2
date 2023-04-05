@@ -1,6 +1,7 @@
 package test;
 
 import dal.DBConnection;
+import dal.DBUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -10,11 +11,16 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DBTest {
+    private final DBUtils utils;
+    private static DBConnection db;
+    public DBTest() throws SQLException {
+        utils = new DBUtils();
+        db = DBConnection.getInstance();
+    }
 
     @Test
     public void testDBConnection() throws SQLException {
         //Arrange
-        DBConnection db = DBConnection.getInstance();
 
         //Act
         Connection con = db.getConnection();
@@ -25,9 +31,32 @@ public class DBTest {
         assertTrue(open);
     }
 
+    @Test
+    public void testDropTables() throws SQLException {
+        //Arrange
+
+        //Act
+        utils.dropTables();
+
+        //Assert
+
+    }
+
+    @Test
+    public void testCreateTables() throws SQLException {
+        //Arrange
+
+        //Act
+        utils.createTables();
+
+        //Assert
+
+    }
+
+    
+
     @AfterAll
     public static void closeConnection() throws SQLException {
-        DBConnection db = DBConnection.getInstance();
         db.closeConnection();
     }
 }

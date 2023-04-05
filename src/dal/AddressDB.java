@@ -5,7 +5,7 @@ import model.Address;
 import java.sql.*;
 import java.util.List;
 
-public class AddressDB implements CRUD<Address>{
+public class AddressDB implements CRUD<Address> {
     private final Connection connection;
 
     public AddressDB() throws SQLException {
@@ -15,8 +15,10 @@ public class AddressDB implements CRUD<Address>{
 
     @Override
     public boolean create(Address obj) throws SQLException {
-        PreparedStatement stmt = insertAddress(obj);
-        return stmt.executeUpdate() > 0;
+        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES ('" + obj.getHouseNumber() + "', " +
+                "'" + obj.getStreet() + "', '" + obj.getCity() + "', '" + obj.getZipCode() + "') ";
+        Statement stmt = connection.createStatement();
+        return stmt.executeUpdate(sql) > 0;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class AddressDB implements CRUD<Address>{
                         addressRS.getString("street"),
                         addressRS.getString("city"),
                         addressRS.getString("zipCode"),
-                        addressRS.getString("country")
+                        addressRS.getString("houseNumber")
                 );
             }
         }
@@ -60,32 +62,15 @@ public class AddressDB implements CRUD<Address>{
         return false;
     }
 
-    public long getLongFromCreatedAddress(Address address) {
-        long id;
-        Statement stmt = insertAddress(address);
-        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                id = generatedKeys.getLong(1);
-            } else {
-                throw new SQLException("Creating address failed, no ID obtained.");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public long createAddressAndGetID(Address address) throws SQLException {
+        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES ('" + address.getHouseNumber() + "', " +
+                "'" + address.getStreet() + "', '" + address.getCity() + "', '" + address.getZipCode() + "') ";
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getLong(1);
         }
-        return id;
-    }
-
-    private PreparedStatement insertAddress(Address address) {
-        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES (?, ?, ?, ?) ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, address.getHouseNumber());
-            stmt.setString(2, address.getStreet());
-            stmt.setString(3, address.getCity());
-            stmt.setString(4, address.getZipCode());
-            stmt.executeUpdate();
-            return stmt;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return 0;
     }
 }
