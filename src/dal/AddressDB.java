@@ -1,8 +1,12 @@
 package dal;
 
 import model.Address;
+import model.CourseSession;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class AddressDB implements CRUD<Address> {
@@ -15,14 +19,15 @@ public class AddressDB implements CRUD<Address> {
 
     @Override
     public boolean create(Address obj) throws SQLException {
-        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES ('" + obj.getHouseNumber() + "', " +
+        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES ('" + obj.getHouseNumber()
+                + "', " +
                 "'" + obj.getStreet() + "', '" + obj.getCity() + "', '" + obj.getZipCode() + "') ";
         Statement stmt = connection.createStatement();
         return stmt.executeUpdate(sql) > 0;
     }
 
     @Override
-    public boolean create(Address obj, long id) {
+    public boolean create(Address obj, long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -36,34 +41,44 @@ public class AddressDB implements CRUD<Address> {
             ResultSet addressRS = stmt.getResultSet();
             if (addressRS.next()) {
                 address = new Address(
-                        addressRS.getLong("addressID"),
                         addressRS.getString("street"),
                         addressRS.getString("city"),
                         addressRS.getString("zipCode"),
-                        addressRS.getString("houseNumber")
-                );
+                        addressRS.getString("houseNumber"));
             }
         }
         return address;
     }
 
     @Override
-    public List<Address> getAll() {
+    public List<Address> getAll() throws SQLException {
         return null;
     }
 
     @Override
-    public boolean update(long id, Address obj) {
-        return false;
+    public boolean update(long id, Address obj) throws SQLException {
+        String sql = "UPDATE Address SET zipCode = ?, city = ?, houseNumber = ?, street = ?" +
+                " WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, obj.getZipCode());
+            stmt.setString(2, obj.getCity());
+            stmt.setString(3, obj.getHouseNumber());
+            stmt.setString(4, obj.getStreet());
+            stmt.setLong(5, id);
+
+            return stmt.executeUpdate() > 0;
+        }
+
     }
 
     @Override
-    public boolean delete(long id) {
+    public boolean delete(long id) throws SQLException {
         return false;
     }
 
     public long createAddressAndGetID(Address address) throws SQLException {
-        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES ('" + address.getHouseNumber() + "', " +
+        String sql = " INSERT INTO address (houseNumber, street, city, zipCode) VALUES ('" + address.getHouseNumber()
+                + "', " +
                 "'" + address.getStreet() + "', '" + address.getCity() + "', '" + address.getZipCode() + "') ";
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
@@ -73,4 +88,5 @@ public class AddressDB implements CRUD<Address> {
         }
         return 0;
     }
+
 }
