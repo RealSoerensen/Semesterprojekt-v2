@@ -1,14 +1,9 @@
 package dal;
 
-import model.Address;
+import model.Course;
 import model.Instructor;
-import model.Subject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InstructorDB implements CRUD<Instructor>{
@@ -99,5 +94,4 @@ public class InstructorDB implements CRUD<Instructor>{
         SubjectDB subjectDB = new SubjectDB();
         return subjectDB.get(id);
     }
-
 }
