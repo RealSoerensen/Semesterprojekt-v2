@@ -68,9 +68,40 @@ public class PersonDB implements CRUD<Person>{
 
         return people;
     }
-
     @Override
     public boolean update(long id, Person obj) throws SQLException {
+    	boolean result;
+		result = updatePerson(id, obj);
+		if (result) {
+			result = updateAddress(id, obj);
+		}
+
+		return result;
+    }
+
+    @Override
+    public boolean delete(long id) throws SQLException {
+    	String sql = " DELETE FROM Person WHERE ssn = ? ";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+	private Person createPersonFromRS(ResultSet rs) throws SQLException {
+		String firstName = rs.getString("firstName");
+		String lastName = rs.getString("lastName");
+		String email = rs.getString("email");
+		String phoneNo = rs.getString("phoneNo");
+		String username = rs.getString("username");
+		String password = rs.getString("password");
+		int role = rs.getInt("role");
+		long ssn = rs.getLong("ssn");
+		long addressID = rs.getLong("addressID");
+		Address address = getAddress(addressID);
+
+		return new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+	}
+    private boolean updatePerson(long id, Person obj) throws SQLException {
     	String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, "
     			+ "phoneNo = ?, username = ?, password = ?, role = ?" +
                 " WHERE ssn = ?";
@@ -87,32 +118,20 @@ public class PersonDB implements CRUD<Person>{
 			return stmt.executeUpdate() > 0;
         }
     }
-
-    @Override
-    public boolean delete(long id) throws SQLException {
-    	String sql = " DELETE FROM Person WHERE ssn = ? ";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
-            return stmt.executeUpdate() > 0;
-        }
+    private boolean updateAddress(long id, Person obj) throws SQLException {
+    	boolean result = false;
+    	String sql = "SELECT addressID FROM Person WHERE ssn = ?";
+		try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setLong(1, id);
+			
+			ResultSet rs = stmt.executeQuery(); //Finds the address ID from the person ssn
+			if(rs.next()) {
+				long addressID = rs.getLong("addressID");
+				result = new AddressDB().update(addressID, obj.getAddress());
+			}
+		}
+		return result;
     }
-
-	private Person createPersonFromRS(ResultSet rs) throws SQLException {
-		String firstName = rs.getString("firstName");
-		String lastName = rs.getString("lastName");
-		String email = rs.getString("email");
-		String phoneNo = rs.getString("phoneNo");
-		String username = rs.getString("username");
-		String password = rs.getString("password");
-		int role = rs.getInt("role");
-		long ssn = rs.getLong("ssn");
-		long addressID = rs.getLong("addressID");
-		Address address = getAddress(addressID);
-
-		return new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
-	}
-
-
 	private boolean insertPerson(Person person) throws SQLException {
 		long id = createAddress(person.getAddress());
 
@@ -132,7 +151,6 @@ public class PersonDB implements CRUD<Person>{
 			return stmt.executeUpdate() > 0;
 		}
 	}
-
 	private Address getAddress(long addressID) throws SQLException {
 		AddressDB addressDB = new AddressDB();
 		return addressDB.get(addressID);
