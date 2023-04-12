@@ -1,12 +1,8 @@
 package dal;
 
 import model.Address;
-import model.CourseSession;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class AddressDB implements CRUD<Address> {
@@ -58,7 +54,7 @@ public class AddressDB implements CRUD<Address> {
     @Override
     public boolean update(long id, Address obj) throws SQLException {
         String sql = "UPDATE Address SET zipCode = ?, city = ?, houseNumber = ?, street = ?" +
-                " WHERE id = ?";
+                " WHERE addressID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, obj.getZipCode());
             stmt.setString(2, obj.getCity());
