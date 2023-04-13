@@ -4,19 +4,29 @@ import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/*
+    * This class is used to create and drop tables in the database.
+    * It is used for testing purposes.
+*/
 public class DBUtils {
     private final Connection connection;
 
+    /**
+     * The DBUtils function is a constructor that creates a connection to the database.
+     *
+     * @return A connection
+     */
     public DBUtils() throws SQLException {
         DBConnection dbConnection = DBConnection.getInstance();
         connection = dbConnection.getConnection();
-
     }
 
+    /**
+     * The dropTables function drops all tables in the database.
+     */
     public void dropTables() throws SQLException {
         // Drop tables
         Statement stmt = connection.createStatement();
-        stmt.executeUpdate("DROP TABLE IF EXISTS CourseMembers");
         stmt.executeUpdate("DROP TABLE IF EXISTS CourseSessionMembers");
         stmt.executeUpdate("DROP TABLE IF EXISTS CourseSession");
         stmt.executeUpdate("DROP TABLE IF EXISTS MemberCourses");
@@ -30,6 +40,9 @@ public class DBUtils {
         stmt.executeUpdate("DROP TABLE IF EXISTS Address");
     }
 
+    /**
+     * The createTables function creates the tables in the database.
+     */
     public void createTables() throws SQLException {
         // Create tables
         Statement stmt = connection.createStatement();
@@ -122,6 +135,9 @@ public class DBUtils {
         );
     }
 
+    /**
+     * The resetDB function drops all tables in the database and then creates them again.
+     */
     public void resetDB() throws SQLException {
         dropTables();
         createTables();

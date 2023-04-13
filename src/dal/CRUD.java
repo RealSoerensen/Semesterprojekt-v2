@@ -3,6 +3,9 @@ package dal;
 import java.sql.SQLException;
 import java.util.List;
 
+/*
+    * CRUD interface
+ */
 public interface CRUD<C> {
     boolean create(C obj) throws SQLException;
     C get(long id) throws SQLException;

@@ -1,10 +1,12 @@
 package test;
 
+import dal.DBConnection;
 import dal.DBUtils;
 import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
 import model.Address;
 import model.Person;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
 
 public class PersonTest {
-    PersonDataAccessIF personDB;
+    private final PersonDataAccessIF personDB;
 
-    public PersonTest() throws SQLException {
+    public PersonTest() {
         personDB = PersonContainer.getInstance();
     }
 
@@ -48,5 +50,10 @@ public class PersonTest {
     @AfterEach
     public void tearDown() throws SQLException {
         new DBUtils().resetDB();
+    }
+
+    @AfterAll
+    public static void tearDownAll() throws SQLException {
+        DBConnection.getInstance().closeConnection();
     }
 }

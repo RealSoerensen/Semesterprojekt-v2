@@ -3,10 +3,12 @@ package model;
 public class Subject {
     private String name;
     private String description;
+    private long subjectID;
 
-    public Subject(String name) {
+    public Subject(long subjectID, String name, String description) {
         this.name = name;
-        description = "";
+        this.subjectID = subjectID;
+        this.description = description;
     }
 
     public Subject(String name, String description) {
@@ -29,4 +31,13 @@ public class Subject {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public long getSubjectID() {
+		return subjectID;
+	}
+
+	public void setSubjectID(long subjectID) {
+		this.subjectID = subjectID;
+	}
+    
 }

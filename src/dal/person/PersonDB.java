@@ -9,14 +9,29 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * PersonDB class
+ * Implements PersonDataAccessIF interface
+ */
 public class PersonDB implements PersonDataAccessIF {
 	private final Connection connection;
 
+	/**
+	* The PersonDB function is a constructor that creates an instance of the PersonDB class.
+	* It also establishes a connection to the database using DBConnection.getInstance().getConnection()
+	*/
 	public PersonDB() throws SQLException {
 		DBConnection dbConnection = DBConnection.getInstance();
 		connection = dbConnection.getConnection();
 	}
 
+	/**
+	* The create function takes in a Person object and inserts it into the database.
+	*
+	* @param obj Pass the person object to be inserted into the database
+	*
+	* @return A boolean value to indicate whether the person was inserted into the database or not
+	*/
 	@Override
 	public boolean create(Person obj) {
 		boolean result;
@@ -25,27 +40,36 @@ public class PersonDB implements PersonDataAccessIF {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-
 		return result;
 	}
 
+	/**
+	* The get function takes in a long id and returns the person with that ssn.
+	*
+	* @param id Get the person with that id
+	*
+	* @return A person object with the given id
+	*/
 	@Override
 	public Person get(long id) {
-		Person person;
+		Person person = null;
 		try {
 			String sql = "SELECT * FROM Person WHERE ssn = " + id;
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			person = createPersonFromRS(rs);
-
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
-
 		return person;
 	}
 
-	@Override
+	/**
+	* The getAll function returns a list of all the people in the database.
+	*
+	* @return A list of all the people in the database
+	*/
+ 	@Override
 	public List<Person> getAll() {
 		List<Person> people = new ArrayList<>();
 		try {
@@ -58,12 +82,20 @@ public class PersonDB implements PersonDataAccessIF {
 				}
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 
 		return people;
 	}
 
+	/**
+	  * The update function updates the person and address tables in the database.
+	  *
+	  * @param id Identify the person in the database
+	  * @param obj Get the new values for the person table
+	  *
+	  * @return A boolean value to indicate whether the person was updated in the database or not
+	*/
 	@Override
 	public boolean update(long id, Person obj) throws SQLException {
 		boolean result;
@@ -75,16 +107,36 @@ public class PersonDB implements PersonDataAccessIF {
 		return result;
 	}
 
-	@Override
+	/**
+	  * The delete function deletes a person from the database.
+	  *
+	  * @param id Identify the person to be deleted
+	  *
+	  * @return True or false depending on whether the person was deleted or not
+	*/
+ 	@Override
 	public boolean delete(long id) throws SQLException {
+		 boolean result = false;
 		String sql = " DELETE FROM Person WHERE ssn = ? ";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setLong(1, id);
-			return stmt.executeUpdate() > 0;
+			result = stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return result;
 	}
 
-	private boolean updatePerson(long id, Person obj) throws SQLException {
+	/**
+	* The updatePerson function updates the Person table in the database.
+	*
+	* @param id Identify the person that is to be updated
+	* @param obj Get the values of the person object
+	*
+	* @return A boolean value to indicate whether the person was updated in the database or not
+	*/
+ 	private boolean updatePerson(long id, Person obj) throws SQLException {
+		 boolean result = false;
 		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, "
 				+ "phoneNo = ?, username = ?, password = ?, role = ?" +
 				" WHERE ssn = ?";
@@ -97,11 +149,21 @@ public class PersonDB implements PersonDataAccessIF {
 			stmt.setString(6, obj.getPassword());
 			stmt.setInt(7, obj.getRole());
 			stmt.setLong(8, id);
-
-			return stmt.executeUpdate() > 0;
+			result = stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return result;
 	}
 
+	/**
+	* The updateAddress function is used to update the address of a person in the database.
+	*
+	* @param id Find the addressid of the person in order to update it
+	* @param obj Get the address object from the person obj
+	*
+	* @return A boolean value to indicate whether the address was updated in the database or not
+	*/
 	private boolean updateAddress(long id, Person obj) throws SQLException {
 		boolean result = false;
 		String sql = "SELECT addressID FROM Person WHERE ssn = ?";
@@ -130,18 +192,15 @@ public class PersonDB implements PersonDataAccessIF {
 			long ssn = rs.getLong("ssn");
 			long addressID = rs.getLong("addressID");
 
-			AddressDB addressDB = new AddressDB();
-			Address address = addressDB.get(addressID);
-
+			Address address = getAddress(addressID);
 			person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
 		}
-
 		return person;
 	}
 
 	private boolean insertPerson(Person person) throws SQLException {
+		boolean result = false;
 		long id = createAddress(person.getAddress());
-
 		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password, addressID) "
 				+
 				"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -155,16 +214,33 @@ public class PersonDB implements PersonDataAccessIF {
 			stmt.setString(7, person.getUsername());
 			stmt.setString(8, person.getPassword());
 			stmt.setLong(9, id);
-
-			return stmt.executeUpdate() > 0;
+			result = stmt.executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return result;
 	}
 
+	/**
+	* The getAddress function takes in a long addressID and returns an Address object.
+	*
+	* @param addressID Get the addressId from the database
+	*
+	* @return An address object with the values from the database
+	*/
 	private Address getAddress(long addressID) throws SQLException {
 		AddressDB addressDB = new AddressDB();
 		return addressDB.get(addressID);
 	}
 
+	/**
+	* The createAddress function takes an Address object as a parameter and creates a new address in the database.
+	* It returns the ID of the newly created address.
+	*
+	* @param address Pass the address object to the createAddress function
+	*
+	* @return The id of the address that was created in the database
+	*/
 	private long createAddress(Address address) throws SQLException {
 		AddressDB addressDB = new AddressDB();
 		return addressDB.createAddressAndGetID(address);
