@@ -1,5 +1,6 @@
 package dal.member;
 
+import model.Administrator;
 import model.Member;
 
 import java.sql.SQLException;
@@ -8,10 +9,10 @@ import java.util.List;
 
 public class MemberContainer implements MemberDataAccessIF{
     private MemberContainer instance;
-    private final List<Member> members;
+    List<Member> container;
 
     public MemberContainer() {
-        members = new ArrayList<>();
+    	container = new ArrayList<>();
     }
 
     public MemberContainer getInstance() {
@@ -22,27 +23,47 @@ public class MemberContainer implements MemberDataAccessIF{
     }
 
     @Override
-    public boolean create(Member obj) {
-        return false;
+    public boolean create(Member obj) throws SQLException {
+    	return container.add(obj);
     }
 
     @Override
-    public Member get(long id) {
-        return null;
+    public Member get(long id) throws SQLException {
+    	Member member = null;
+        for(int i = 0; i < container.size() && member == null; i++) {
+            if(container.get(i).getSsn() == id) {
+            	member = container.get(i);
+            }
+        }
+        return member;
     }
 
     @Override
-    public List<Member> getAll() {
-        return null;
+    public List<Member> getAll() throws SQLException {
+    	return container;
     }
 
     @Override
-    public boolean update(long id, Member obj) {
-        return false;
+    public boolean update(long id, Member obj) throws SQLException {
+    	boolean result = false;
+        for (int i = 0; i < container.size() && !result; i++) {
+            if (container.get(i).getSsn() == id) {
+                container.set(i, obj);
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
-    public boolean delete(long id) {
-        return false;
+    public boolean delete(long id) throws SQLException {
+    	boolean result = false;
+        for (int i = 0; i < container.size() && !result; i++) {
+            if (container.get(i).getSsn() == id) {
+                container.remove(i);
+                result = true;
+            }
+        }
+        return result;
     }
 }
