@@ -30,7 +30,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @return True if the CourseSession was created successfully, false otherwise.
      */
     @Override
-    public boolean create(CourseSession obj) throws SQLException {
+    public boolean create(CourseSession obj) {
         boolean result = false;
         String sql = " INSERT INTO courseSession(date, courseID, instructorSsn) " +
                 " VALUES(?, ?, ?) ";
@@ -91,7 +91,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @return True if the CourseSession was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSession obj) throws SQLException {
+    public boolean update(long id, CourseSession obj) {
         boolean result = false;
         String sql = " UPDATE courseSession SET date = ?, courseID = ?, instructorSsn = ? " +
                 " WHERE courseSessionID = ? ";
@@ -114,7 +114,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      */
     @Override
     public boolean delete(long id) throws SQLException {
-        boolean result = false;
+        boolean result;
         String sql = " DELETE FROM courseSession WHERE courseSessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);

@@ -1,6 +1,5 @@
 package dal.address;
 
-import dal.CRUD;
 import dal.DBConnection;
 import model.Address;
 
@@ -8,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressDB implements CRUD<Address> {
+public class AddressDB implements AddressDataAccessIF {
     private final Connection connection;
 
     /**
@@ -95,7 +94,7 @@ public class AddressDB implements CRUD<Address> {
      * @return True if the Address was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, Address obj) throws SQLException {
+    public boolean update(long id, Address obj) {
         boolean result = false;
         String sql = "UPDATE Address SET zipCode = ?, city = ?, houseNumber = ?, street = ?" +
                 " WHERE addressID = ?";
@@ -119,7 +118,7 @@ public class AddressDB implements CRUD<Address> {
      * @return True if the Address was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         String sql = " DELETE FROM address WHERE addressID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -137,7 +136,7 @@ public class AddressDB implements CRUD<Address> {
      * @param address The Address to be created.
      * @return The id of the newly created Address.
      */
-    public long createAddressAndGetID(Address address) throws SQLException {
+    public long createAddressAndGetID(Address address) {
         long id = 0;
         String sql = " INSERT INTO address (street, city, zipCode, houseNumber) VALUES (?, ?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

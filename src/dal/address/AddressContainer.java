@@ -38,7 +38,7 @@ public class AddressContainer implements AddressDataAccessIF{
     }
 
     /**
-     * Gets a Address from the container.
+     * Gets an Address from the container.
      * @param id The ID of the Address to be retrieved.
      *
      * @return The Address with the given ID, null if no Address with the given ID was found.

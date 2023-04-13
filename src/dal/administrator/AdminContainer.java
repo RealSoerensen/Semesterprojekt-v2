@@ -43,7 +43,7 @@ public class AdminContainer implements AdminDataAccessIF{
     }
 
     /**
-     * Gets a Administrator from the container.
+     * Gets an Administrator from the container.
      * @param id The ID of the Administrator to be retrieved.
      *
      * @return The Administrator with the given ID, null if no Administrator with the given ID was found.

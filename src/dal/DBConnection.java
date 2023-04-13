@@ -32,7 +32,7 @@ public class DBConnection {
      * existing instance. This ensures that only one connection to the database exists at any given time,
      * which prevents multiple connections from being opened simultaneously and causing errors in our program.
      *
-     * @return The instance of the dbconnection class.
+     * @return The instance of the dbConnection class.
      */
     public static DBConnection getInstance() throws SQLException {
         if(instance == null) {
@@ -62,8 +62,6 @@ public class DBConnection {
 
     /**
      * The closeConnection function closes the connection to the database.
-     *
-     * @return Nothing
      */
     public void closeConnection() {
         try {
