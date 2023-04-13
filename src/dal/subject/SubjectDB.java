@@ -1,5 +1,7 @@
-package dal;
+package dal.subject;
 
+import dal.CRUD;
+import dal.DBConnection;
 import model.Subject;
 
 import java.sql.Connection;
@@ -8,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SubjectDB implements CRUD<Subject> {
+public class SubjectDB implements SubjectDataAccessIF {
     private final Connection connection;
 
     public SubjectDB() throws SQLException {
@@ -19,11 +21,6 @@ public class SubjectDB implements CRUD<Subject> {
     @Override
     public boolean create(Subject obj) {
         return false;
-    }
-
-    @Override
-    public boolean create(Subject obj, long id) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

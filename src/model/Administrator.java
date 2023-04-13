@@ -3,8 +3,8 @@ package model;
 public class Administrator extends Person {
     private long snn;
 
-    public Administrator(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn) {
-        super(firstName, lastName, address, email, phoneNumber, role, username, password, ssn);
+    public Administrator(Person person, long ssn) {
+        super(person.getFirstName(), person.getLastName(), person.getAddress(), person.getEmail(), person.getPhoneNumber(), person.getRole(), person.getUsername(), person.getPassword(), ssn);
         this.snn = ssn;
     }
 

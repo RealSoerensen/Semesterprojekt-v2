@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CourseContainer implements CourseDataAccessIF{
     private static CourseContainer instance;
-    private List<Course> container;
+    private final List<Course> container;
 
     private CourseContainer() {
         container = new ArrayList<>();
@@ -24,11 +24,6 @@ public class CourseContainer implements CourseDataAccessIF{
     @Override
     public boolean create(Course obj) throws SQLException {
         return container.add(obj);
-    }
-
-    @Override
-    public boolean create(Course obj, long id) throws SQLException {
-        throw new UnsupportedOperationException();
     }
 
     @Override

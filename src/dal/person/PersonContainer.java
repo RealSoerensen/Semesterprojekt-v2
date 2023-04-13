@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonContainer implements PersonDataAccessIF {
-    private List<Person> container;
+    private final List<Person> container;
     private static PersonContainer instance;
 
     private PersonContainer() {
@@ -24,11 +24,6 @@ public class PersonContainer implements PersonDataAccessIF {
     @Override
     public boolean create(Person obj) throws SQLException {
         return container.add(obj);
-    }
-
-    @Override
-    public boolean create(Person obj, long id) throws SQLException {
-        throw new UnsupportedOperationException();
     }
 
     @Override
