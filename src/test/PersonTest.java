@@ -1,7 +1,8 @@
 package test;
 
 import dal.DBUtils;
-import dal.PersonDB;
+import dal.person.PersonContainer;
+import dal.person.PersonDataAccessIF;
 import model.Address;
 import model.Person;
 import org.junit.jupiter.api.AfterEach;
@@ -11,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
 
 public class PersonTest {
-    PersonDB personDB;
+    PersonDataAccessIF personDB;
 
     public PersonTest() throws SQLException {
-        personDB = new PersonDB();
+        personDB = PersonContainer.getInstance();
     }
 
     @Test
-    public void testCreatePerson() {
+    public void testCreatePerson() throws SQLException {
         //Arrange
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
         Person person = new Person("John", "Doe", address, "email", "phone", 3, "username", "password", 1303014586);
@@ -31,7 +32,7 @@ public class PersonTest {
     }
 
     @Test
-    public void testGetPerson() {
+    public void testGetPerson() throws SQLException {
         //Arrange
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
         Person person = new Person("John", "Doe", address, "email", "phone", 3, "username", "password", 1303014586);

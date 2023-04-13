@@ -53,7 +53,6 @@ public class DBTest {
 
     }
 
-    
 
     @AfterAll
     public static void closeConnection() throws SQLException {

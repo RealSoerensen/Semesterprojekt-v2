@@ -2,18 +2,29 @@ package controller;
 
 import java.sql.SQLException;
 
-import dal.*;
+import dal.course.CourseDB;
+import dal.CourseSessionDB;
+import dal.course.CourseDataAccessIF;
+import dal.person.PersonContainer;
 import model.*;
 
 public class CourseController {
-	private CourseDB courseDB;
-	private CourseSessionDB courseSessionDB;
+	private CourseDataAccessIF courseDB;
+	private final CourseSessionDB courseSessionDB;
 	private PersonController pc;
 	
-	public CourseController() throws SQLException {
-		courseDB = new CourseDB();
+	public CourseController(CourseDataAccessIF dataAccess) throws SQLException {
+		setCourseDB(dataAccess);
 		courseSessionDB = new CourseSessionDB();
-		pc = new PersonController();
+		pc = new PersonController(PersonContainer.getInstance());
+	}
+
+	private CourseDataAccessIF getCourseDB() {
+		return courseDB;
+	}
+
+	public void setCourseDB(CourseDataAccessIF courseDB) {
+		this.courseDB = courseDB;
 	}
 	
 	public void markAbsent(long courseSessionID, long ssn) throws SQLException {
