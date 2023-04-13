@@ -11,13 +11,15 @@ public class CourseSession {
 	private Address address;
 	private Subject subject;
 	private List<Member> members;
+	private long courseSessionID;
 
 
-	public CourseSession(Timestamp date, Instructor instructor, Address address, Subject subject) {
+	public CourseSession(Timestamp date, Instructor instructor, Address address, Subject subject, long courseSessionID) {
 		this.date = date;
 		this.instructor = instructor;
 		this.address = address;
 		this.subject = subject;
+		this.courseSessionID = courseSessionID;
 		members = new ArrayList<>();
 	}
 
@@ -67,5 +69,13 @@ public class CourseSession {
 
 	public void setSubject(Subject subject) {
 		this.subject = subject;
+	}
+
+	public long getCourseSessionID() {
+		return courseSessionID;
+	}
+
+	public void setCourseSessionID(long courseSessionID) {
+		this.courseSessionID = courseSessionID;
 	}
 }
