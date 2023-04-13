@@ -2,17 +2,25 @@ package controller;
 
 import java.sql.SQLException;
 
-import dal.*;
+import dal.person.PersonDataAccessIF;
 
 public class PersonController {
 
-	private PersonDB personDB;
+	private PersonDataAccessIF personDB;
 	
-	public PersonController() throws SQLException {
-		personDB = new PersonDB();
+	public PersonController(PersonDataAccessIF dataAccess) throws SQLException {
+		setPersonDB(dataAccess);
+	}
+
+	private PersonDataAccessIF getPersonDB() {
+		return personDB;
+	}
+
+	public void setPersonDB(PersonDataAccessIF personDB) {
+		this.personDB = personDB;
 	}
 	
-	public int getRoleOfPerson(long ssn) {
+	public int getRoleOfPerson(long ssn) throws SQLException {
 		return personDB.get(ssn).getRole();
 	}
 }

@@ -1,5 +1,6 @@
 package dal;
 
+import dal.*;
 import model.Address;
 import model.CourseSession;
 import model.Instructor;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseSessionDB implements CRUD<CourseSession>{
+public class CourseSessionDB implements CRUD<CourseSession> {
     DBConnection dbConnection;
     Connection connection;
 

@@ -1,5 +1,7 @@
-package dal;
+package dal.course;
 
+import dal.CRUD;
+import dal.DBConnection;
 import model.Course;
 
 import java.sql.Connection;
@@ -9,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseDB implements CRUD<Course>{
+public class CourseDB implements CourseDataAccessIF {
     DBConnection dbConnection;
     Connection connection;
 
