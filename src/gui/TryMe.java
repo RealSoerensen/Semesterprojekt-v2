@@ -3,6 +3,8 @@ package gui;
 import java.sql.SQLException;
 
 import controller.PersonController;
+import dal.person.PersonContainer;
+import dal.person.PersonDB;
 import model.Address;
 import model.Person;
 
@@ -11,7 +13,7 @@ public class TryMe {
 		
 		//Creating Persons in the system
 		try {
-			PersonController personController = new PersonController();
+			PersonController personController = new PersonController(PersonContainer.getInstance());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			
