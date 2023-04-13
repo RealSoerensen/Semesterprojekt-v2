@@ -14,9 +14,10 @@ public class CourseSession {
 	private long courseSessionID;
 
 
-	public CourseSession(Timestamp date, Instructor instructor, Address address, Subject subject, long courseSessionID) {
+	public CourseSession(Timestamp date, Instructor instructor, Course course, Address address, Subject subject, long courseSessionID) {
 		this.date = date;
 		this.instructor = instructor;
+		this.course = course;
 		this.address = address;
 		this.subject = subject;
 		this.courseSessionID = courseSessionID;

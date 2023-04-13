@@ -1,6 +1,5 @@
 package dal.subject;
 
-import model.Member;
 import model.Subject;
 
 import java.sql.SQLException;
@@ -23,12 +22,12 @@ public class SubjectContainer implements SubjectDataAccessIF {
     }
 
     @Override
-    public boolean create(Subject obj) throws SQLException {
+    public boolean create(Subject obj) {
     	return container.add(obj);
     }
 
     @Override
-    public Subject get(long id) throws SQLException {
+    public Subject get(long id) {
     	Subject subject = null;
         for(int i = 0; i < container.size() && subject == null; i++) {
             if(container.get(i).getSubjectID() == id) {
@@ -39,12 +38,12 @@ public class SubjectContainer implements SubjectDataAccessIF {
     }
 
     @Override
-    public List<Subject> getAll() throws SQLException {
+    public List<Subject> getAll() {
     	return container;
     }
 
     @Override
-    public boolean update(long id, Subject obj) throws SQLException {
+    public boolean update(long id, Subject obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getSubjectID() == id) {
@@ -56,7 +55,7 @@ public class SubjectContainer implements SubjectDataAccessIF {
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getSubjectID() == id) {

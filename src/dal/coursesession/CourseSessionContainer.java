@@ -1,7 +1,6 @@
 package dal.coursesession;
 
 import model.CourseSession;
-import model.Instructor;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,12 +22,12 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
     }
 
     @Override
-    public boolean create(CourseSession obj) throws SQLException {
+    public boolean create(CourseSession obj) {
     	return container.add(obj);
     }
 
     @Override
-    public CourseSession get(long id) throws SQLException {
+    public CourseSession get(long id) {
     	CourseSession courseSession = null;
         for(int i = 0; i < container.size() && courseSession == null; i++) {
             if(container.get(i).getCourseSessionID() == id) {
@@ -39,12 +38,12 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
     }
 
     @Override
-    public List<CourseSession> getAll() throws SQLException {
+    public List<CourseSession> getAll() {
     	return container;
     }
 
     @Override
-    public boolean update(long id, CourseSession obj) throws SQLException {
+    public boolean update(long id, CourseSession obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getCourseSessionID() == id) {
@@ -56,7 +55,7 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getCourseSessionID() == id) {

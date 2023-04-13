@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AdminDB implements AdminDataAccessIF {
     private final Connection connection;
-    private PersonDataAccessIF personDB = new PersonDB();
+    private final PersonDataAccessIF personDB = new PersonDB();
 
     public AdminDB() throws SQLException {
         DBConnection dbConnection = DBConnection.getInstance();
@@ -57,7 +57,7 @@ public class AdminDB implements AdminDataAccessIF {
     }
 
     @Override
-    public boolean update(long id, Administrator obj) throws SQLException {
+    public boolean update(long id, Administrator obj) {
         throw new UnsupportedOperationException();
     }
 

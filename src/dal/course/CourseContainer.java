@@ -22,12 +22,12 @@ public class CourseContainer implements CourseDataAccessIF{
     }
 
     @Override
-    public boolean create(Course obj) throws SQLException {
+    public boolean create(Course obj) {
         return container.add(obj);
     }
 
     @Override
-    public Course get(long id) throws SQLException {
+    public Course get(long id) {
         Course course = null;
         for (int i = 0; i < container.size() && course == null; i++) {
             if (container.get(i).getCourseID() == id) {
@@ -38,12 +38,12 @@ public class CourseContainer implements CourseDataAccessIF{
     }
 
     @Override
-    public List<Course> getAll() throws SQLException {
+    public List<Course> getAll() {
         return container;
     }
 
     @Override
-    public boolean update(long id, Course obj) throws SQLException {
+    public boolean update(long id, Course obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getCourseID() == id) {
@@ -55,7 +55,7 @@ public class CourseContainer implements CourseDataAccessIF{
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getCourseID() == id) {

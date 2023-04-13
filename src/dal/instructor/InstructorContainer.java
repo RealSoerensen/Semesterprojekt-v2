@@ -1,7 +1,6 @@
 package dal.instructor;
 
 import model.Instructor;
-import model.Member;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,12 +22,12 @@ public class InstructorContainer implements InstructorDataAccessIF {
     }
 
     @Override
-    public boolean create(Instructor obj) throws SQLException {
+    public boolean create(Instructor obj) {
     	return container.add(obj);
     }
 
     @Override
-    public Instructor get(long id) throws SQLException {
+    public Instructor get(long id) {
     	Instructor instructor = null;
         for(int i = 0; i < container.size() && instructor == null; i++) {
             if(container.get(i).getSsn() == id) {
@@ -39,12 +38,12 @@ public class InstructorContainer implements InstructorDataAccessIF {
     }
 
     @Override
-    public List<Instructor> getAll() throws SQLException {
+    public List<Instructor> getAll() {
     	return container;
     }
 
     @Override
-    public boolean update(long id, Instructor obj) throws SQLException {
+    public boolean update(long id, Instructor obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getSsn() == id) {
@@ -56,7 +55,7 @@ public class InstructorContainer implements InstructorDataAccessIF {
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getSsn() == id) {

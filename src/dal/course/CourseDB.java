@@ -1,6 +1,5 @@
 package dal.course;
 
-import dal.CRUD;
 import dal.DBConnection;
 import model.Course;
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminContainer implements AdminDataAccessIF{
-    List<Administrator> container;
+    final List<Administrator> container;
     AdminContainer instance;
 
     public AdminContainer() {
@@ -23,7 +23,7 @@ public class AdminContainer implements AdminDataAccessIF{
     }
 
     @Override
-    public boolean create(Administrator obj) throws SQLException {
+    public boolean create(Administrator obj) {
         return container.add(obj);
     }
 
