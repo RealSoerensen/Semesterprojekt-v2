@@ -2,7 +2,6 @@ package controller;
 
 import java.sql.SQLException;
 
-import dal.course.CourseDB;
 import dal.CourseSessionDB;
 import dal.course.CourseDataAccessIF;
 import dal.person.PersonContainer;

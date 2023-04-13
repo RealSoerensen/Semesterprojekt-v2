@@ -1,6 +1,6 @@
 package dal.person;
 
-import dal.AddressDB;
+import dal.address.AddressDB;
 import dal.DBConnection;
 import model.Address;
 import model.Person;
@@ -27,11 +27,6 @@ public class PersonDB implements PersonDataAccessIF {
 		}
 
 		return result;
-	}
-
-	@Override
-	public boolean create(Person obj, long id) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

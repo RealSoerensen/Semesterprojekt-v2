@@ -1,7 +1,7 @@
 package dal;
 
+import dal.address.AddressDB;
 import model.Address;
-import model.Course;
 import model.Instructor;
 import model.Subject;
 
@@ -23,11 +23,6 @@ public class InstructorDB implements CRUD<Instructor>{
     @Override
     public boolean create(Instructor obj) {
         return false;
-    }
-
-    @Override
-    public boolean create(Instructor obj, long id) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

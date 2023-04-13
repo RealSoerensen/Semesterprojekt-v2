@@ -22,11 +22,6 @@ public class SubjectDB implements CRUD<Subject> {
     }
 
     @Override
-    public boolean create(Subject obj, long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Subject get(long id) throws SQLException {
         Subject subject = null;
         String sql = " SELECT * FROM Subject WHERE subjectID = ? ";

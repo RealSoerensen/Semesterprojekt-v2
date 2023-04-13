@@ -1,6 +1,6 @@
 package dal;
 
-import dal.*;
+import dal.address.AddressDB;
 import model.Address;
 import model.CourseSession;
 import model.Instructor;
@@ -20,17 +20,12 @@ public class CourseSessionDB implements CRUD<CourseSession> {
     }
 
     @Override
-    public boolean create(CourseSession obj) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean create(CourseSession obj, long id) throws SQLException {
+    public boolean create(CourseSession obj) throws SQLException {
         String sql = " INSERT INTO courseSession(date, courseID, instructorSsn) " +
                 " VALUES(?, ?, ?) ";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, obj.getDate());
-            stmt.setLong(2, id);
+            stmt.setLong(2, obj.getCourse().getCourseID());
             stmt.setLong(3, obj.getInstructor().getSsn());
             return stmt.executeUpdate() > 0;
         }
@@ -106,7 +101,7 @@ public class CourseSessionDB implements CRUD<CourseSession> {
 
     private Instructor getInstructor(long ssn) throws SQLException {
         InstructorDB instructorDB = new InstructorDB();
-        return (Instructor) instructorDB.get(ssn);
+        return instructorDB.get(ssn);
     }
 
     private Subject getSubject(long subjectID) throws SQLException {
