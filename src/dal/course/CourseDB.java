@@ -34,11 +34,6 @@ public class CourseDB implements CourseDataAccessIF {
     }
 
     @Override
-    public boolean create(Course obj, long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Course get(long id) throws SQLException {
         String sql = " SELECT * FROM course WHERE courseID = ? ";
         ResultSet courseRS;

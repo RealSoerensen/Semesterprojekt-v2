@@ -7,6 +7,7 @@ import java.util.List;
 public class CourseSession {
 	private Timestamp date;
 	private Instructor instructor;
+	private Course course;
 	private Address address;
 	private Subject subject;
 	private List<Member> members;
@@ -34,6 +35,14 @@ public class CourseSession {
 
 	public void setInstructor(Instructor instructor) {
 		this.instructor = instructor;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 	public List<Member> getMembers() {
