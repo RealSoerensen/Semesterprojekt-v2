@@ -97,7 +97,7 @@ public class CourseSessionDB implements CRUD<CourseSession>{
         }
     }
     
-    public boolean remove(long courseSessionID, long ssn) throws SQLException {
+    public boolean removeMember(long courseSessionID, long ssn) throws SQLException {
     	String sql = " DELETE FROM courseSessionMembers WHERE courseSessionID = ? AND ssn = ? ";
     	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, courseSessionID);
