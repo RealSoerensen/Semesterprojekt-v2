@@ -1,5 +1,10 @@
-package dal;
+package dal.coursesession;
 
+import dal.CRUD;
+import dal.DBConnection;
+import dal.address.AddressDB;
+import dal.instructor.InstructorDB;
+import dal.subject.SubjectDB;
 import model.Address;
 import model.CourseSession;
 import model.Instructor;
@@ -9,7 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseSessionDB implements CRUD<CourseSession>{
+public class CourseSessionDB implements CourseSessionDataAccessIF {
     DBConnection dbConnection;
     Connection connection;
 
@@ -19,17 +24,12 @@ public class CourseSessionDB implements CRUD<CourseSession>{
     }
 
     @Override
-    public boolean create(CourseSession obj) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean create(CourseSession obj, long id) throws SQLException {
+    public boolean create(CourseSession obj) throws SQLException {
         String sql = " INSERT INTO courseSession(date, courseID, instructorSsn) " +
                 " VALUES(?, ?, ?) ";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, obj.getDate());
-            stmt.setLong(2, id);
+            stmt.setLong(2, obj.getCourse().getCourseID());
             stmt.setLong(3, obj.getInstructor().getSsn());
             return stmt.executeUpdate() > 0;
         }
@@ -96,6 +96,15 @@ public class CourseSessionDB implements CRUD<CourseSession>{
             return stmt.executeUpdate() > 0;
         }
     }
+    
+    public boolean removeMember(long courseSessionID, long ssn) throws SQLException {
+    	String sql = " DELETE FROM courseSessionMembers WHERE courseSessionID = ? AND ssn = ? ";
+    	try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, courseSessionID);
+            stmt.setLong(2, ssn);
+            return stmt.executeUpdate() > 0;
+        }
+    }
 
     private Address getAddress(long addressId) throws SQLException {
         AddressDB addressDB = new AddressDB();
@@ -105,7 +114,7 @@ public class CourseSessionDB implements CRUD<CourseSession>{
 
     private Instructor getInstructor(long ssn) throws SQLException {
         InstructorDB instructorDB = new InstructorDB();
-        return (Instructor) instructorDB.get(ssn);
+        return instructorDB.get(ssn);
     }
 
     private Subject getSubject(long subjectID) throws SQLException {

@@ -2,33 +2,41 @@ package controller;
 
 import java.sql.SQLException;
 
-import dal.*;
+import dal.coursesession.CourseSessionDB;
+import dal.course.CourseDataAccessIF;
+import dal.person.PersonContainer;
 import model.*;
 
 public class CourseController {
-	private CourseDB courseDB;
-	private CourseSessionDB courseSessionDB;
+	private CourseDataAccessIF courseDB;
+	private final CourseSessionDB courseSessionDB;
 	private PersonController pc;
 	
-	public CourseController() throws SQLException {
-		courseDB = new CourseDB();
+	public CourseController(CourseDataAccessIF dataAccess) throws SQLException {
+		setCourseDB(dataAccess);
 		courseSessionDB = new CourseSessionDB();
-		pc = new PersonController();
+		pc = new PersonController(PersonContainer.getInstance());
+	}
+
+	private CourseDataAccessIF getCourseDB() {
+		return courseDB;
+	}
+
+	public void setCourseDB(CourseDataAccessIF courseDB) {
+		this.courseDB = courseDB;
 	}
 	
 	public void markAbsent(long courseSessionID, long ssn) throws SQLException {
 		CourseSession courseSession = courseSessionDB.get(courseSessionID);
-		Person personToBeMarkedAbsent = null;
 		
 		int role = pc.getRoleOfPerson(ssn);
 		if(role == 1) {
-			personToBeMarkedAbsent = getMemberFromCourseSession(ssn, courseSession);
+			courseSessionDB.removeMember(courseSessionID, ssn);
 		}
 		else if(role == 2) {
-			personToBeMarkedAbsent = courseSession.getInstructor();
+			courseSession.setInstructor(null);
+			courseSessionDB.update(courseSessionID, courseSession);
 		}
-		
-		//TODO Fjerne en person fra courseSession baseret på courseSessionID og ssn
 	}
 	
 	private Member getMemberFromCourseSession(long ssn, CourseSession courseSession) {

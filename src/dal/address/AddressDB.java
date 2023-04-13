@@ -1,5 +1,7 @@
-package dal;
+package dal.address;
 
+import dal.CRUD;
+import dal.DBConnection;
 import model.Address;
 
 import java.sql.*;
@@ -20,11 +22,6 @@ public class AddressDB implements CRUD<Address> {
                 "'" + obj.getStreet() + "', '" + obj.getCity() + "', '" + obj.getZipCode() + "') ";
         Statement stmt = connection.createStatement();
         return stmt.executeUpdate(sql) > 0;
-    }
-
-    @Override
-    public boolean create(Address obj, long id) throws SQLException {
-        throw new UnsupportedOperationException();
     }
 
     @Override

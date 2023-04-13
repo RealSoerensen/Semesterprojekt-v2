@@ -19,7 +19,7 @@ public class DBTest {
     }
 
     @Test
-    public void testDBConnection() throws SQLException {
+    public void testDBConnection() {
         //Arrange
 
         //Act
@@ -53,10 +53,9 @@ public class DBTest {
 
     }
 
-    
 
     @AfterAll
-    public static void closeConnection() throws SQLException {
+    public static void closeConnection() {
         db.closeConnection();
     }
 }

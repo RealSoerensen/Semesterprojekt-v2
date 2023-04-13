@@ -1,5 +1,7 @@
-package dal;
+package dal.person;
 
+import dal.address.AddressDB;
+import dal.DBConnection;
 import model.Address;
 import model.Person;
 
@@ -7,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonDB implements CRUD<Person> {
+public class PersonDB implements PersonDataAccessIF {
 	private final Connection connection;
 
 	public PersonDB() throws SQLException {
@@ -25,11 +27,6 @@ public class PersonDB implements CRUD<Person> {
 		}
 
 		return result;
-	}
-
-	@Override
-	public boolean create(Person obj, long id) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
