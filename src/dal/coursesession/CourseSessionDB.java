@@ -1,14 +1,11 @@
 package dal.coursesession;
 
-import dal.CRUD;
 import dal.DBConnection;
 import dal.address.AddressDB;
+import dal.course.CourseDB;
 import dal.instructor.InstructorDB;
 import dal.subject.SubjectDB;
-import model.Address;
-import model.CourseSession;
-import model.Instructor;
-import model.Subject;
+import model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,12 +41,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
             stmt.executeQuery();
             ResultSet courseSessionRS = stmt.getResultSet();
             if (courseSessionRS.next()) {
-                long instructorSsn = courseSessionRS.getLong("instructorSsn");
-                Timestamp date = courseSessionRS.getTimestamp("date");
-                Instructor instructor = getInstructor(instructorSsn);
-                Address address = getAddress(courseSessionRS.getLong("addressID"));
-                Subject subject = getSubject(courseSessionRS.getLong("subjectID"));
-                courseSession = new CourseSession(date, instructor, address, subject);
+                courseSession = createCourseSession(courseSessionRS);
             }
         }
         return courseSession;
@@ -63,12 +55,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
             stmt.executeQuery();
             ResultSet courseSessionRS = stmt.getResultSet();
             while (courseSessionRS.next()) {
-                long instructorSsn = courseSessionRS.getLong("instructorSsn");
-                Timestamp date = courseSessionRS.getTimestamp("date");
-                Instructor instructor = getInstructor(instructorSsn);
-                Address address = getAddress(courseSessionRS.getLong("addressID"));
-                Subject subject = getSubject(courseSessionRS.getLong("subjectID"));
-                CourseSession courseSession = new CourseSession(date, instructor, address, subject);
+                CourseSession courseSession = createCourseSession(courseSessionRS);
                 courseSessions.add(courseSession);
             }
         }
@@ -106,6 +93,17 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
         }
     }
 
+    private CourseSession createCourseSession(ResultSet rs) throws SQLException {
+        long instructorSsn = rs.getLong("instructorSsn");
+        Timestamp date = rs.getTimestamp("date");
+        Instructor instructor = getInstructor(instructorSsn);
+        Course course = getCourse(rs.getLong("courseID"));
+        Address address = getAddress(rs.getLong("addressID"));
+        Subject subject = getSubject(rs.getLong("subjectID"));
+        long id = rs.getLong("courseSessionID");
+        return new CourseSession(date, instructor, course, address, subject, id);
+    }
+
     private Address getAddress(long addressId) throws SQLException {
         AddressDB addressDB = new AddressDB();
         return addressDB.get(addressId);
@@ -122,4 +120,8 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
         return subjectDB.get(subjectID);
     }
 
+    private Course getCourse(long courseID) throws SQLException {
+        CourseDB courseDB = new CourseDB();
+        return courseDB.get(courseID);
+    }
 }

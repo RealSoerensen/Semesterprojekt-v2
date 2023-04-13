@@ -22,27 +22,27 @@ public class MemberContainer implements MemberDataAccessIF{
     }
 
     @Override
-    public boolean create(Member obj) throws SQLException {
+    public boolean create(Member obj) {
         return false;
     }
 
     @Override
-    public Member get(long id) throws SQLException {
+    public Member get(long id) {
         return null;
     }
 
     @Override
-    public List<Member> getAll() throws SQLException {
+    public List<Member> getAll() {
         return null;
     }
 
     @Override
-    public boolean update(long id, Member obj) throws SQLException {
+    public boolean update(long id, Member obj) {
         return false;
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         return false;
     }
 }

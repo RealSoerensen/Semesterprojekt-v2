@@ -8,7 +8,7 @@ public class PersonController {
 
 	private PersonDataAccessIF personDB;
 	
-	public PersonController(PersonDataAccessIF dataAccess) throws SQLException {
+	public PersonController(PersonDataAccessIF dataAccess) {
 		setPersonDB(dataAccess);
 	}
 

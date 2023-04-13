@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
 
 public class PersonTest {
-    PersonDataAccessIF personDB;
+    final PersonDataAccessIF personDB;
 
-    public PersonTest() throws SQLException {
+    public PersonTest() {
         personDB = PersonContainer.getInstance();
     }
 

@@ -1,6 +1,5 @@
 package dal.instructor;
 
-import dal.CRUD;
 import dal.DBConnection;
 import dal.address.AddressDB;
 import dal.subject.SubjectDB;

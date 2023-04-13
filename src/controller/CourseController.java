@@ -10,7 +10,7 @@ import model.*;
 public class CourseController {
 	private CourseDataAccessIF courseDB;
 	private final CourseSessionDB courseSessionDB;
-	private PersonController pc;
+	private final PersonController pc;
 	
 	public CourseController(CourseDataAccessIF dataAccess) throws SQLException {
 		setCourseDB(dataAccess);

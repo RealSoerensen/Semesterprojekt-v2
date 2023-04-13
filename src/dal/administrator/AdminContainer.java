@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminContainer implements AdminDataAccessIF{
-    List<Administrator> container;
+    final List<Administrator> container;
     AdminContainer instance;
 
     public AdminContainer() {
@@ -22,27 +22,27 @@ public class AdminContainer implements AdminDataAccessIF{
     }
 
     @Override
-    public boolean create(Administrator obj) throws SQLException {
+    public boolean create(Administrator obj) {
         return container.add(obj);
     }
 
     @Override
-    public Administrator get(long id) throws SQLException {
+    public Administrator get(long id) {
         return null;
     }
 
     @Override
-    public List<Administrator> getAll() throws SQLException {
+    public List<Administrator> getAll() {
         return null;
     }
 
     @Override
-    public boolean update(long id, Administrator obj) throws SQLException {
+    public boolean update(long id, Administrator obj) {
         return false;
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         return false;
     }
 }

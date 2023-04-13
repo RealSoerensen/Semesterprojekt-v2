@@ -1,6 +1,5 @@
 package dal.subject;
 
-import dal.CRUD;
 import dal.DBConnection;
 import model.Subject;
 

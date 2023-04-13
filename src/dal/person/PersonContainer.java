@@ -22,12 +22,12 @@ public class PersonContainer implements PersonDataAccessIF {
     }
 
     @Override
-    public boolean create(Person obj) throws SQLException {
+    public boolean create(Person obj) {
         return container.add(obj);
     }
 
     @Override
-    public Person get(long id) throws SQLException {
+    public Person get(long id) {
         Person person = null;
         for(int i = 0; i < container.size() && person == null; i++) {
             if(container.get(i).getSsn() == id) {
@@ -43,7 +43,7 @@ public class PersonContainer implements PersonDataAccessIF {
     }
 
     @Override
-    public boolean update(long id, Person obj) throws SQLException {
+    public boolean update(long id, Person obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getSsn() == id) {
@@ -55,7 +55,7 @@ public class PersonContainer implements PersonDataAccessIF {
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getSsn() == id) {

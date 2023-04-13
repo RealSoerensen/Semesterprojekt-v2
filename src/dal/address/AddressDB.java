@@ -44,7 +44,7 @@ public class AddressDB implements CRUD<Address> {
     }
 
     @Override
-    public List<Address> getAll() throws SQLException {
+    public List<Address> getAll() {
         return null;
     }
 
@@ -65,7 +65,7 @@ public class AddressDB implements CRUD<Address> {
     }
 
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         return false;
     }
 
