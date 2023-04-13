@@ -105,7 +105,7 @@ public class SubjectDB implements SubjectDataAccessIF {
      *
      * @param id Identify the row in the database that we want to delete
      *
-     * @return True or false depending on whether the delete was successful or not
+     * @return True or false depending on whether the deletion was successful or not
      */
     @Override
     public boolean delete(long id) {

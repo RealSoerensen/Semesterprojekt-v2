@@ -29,7 +29,7 @@ public class CourseDB implements CourseDataAccessIF {
      * @return True if the Course was created successfully, false otherwise.
      */
     @Override
-    public boolean create(Course obj) throws SQLException {
+    public boolean create(Course obj) {
         boolean result = false;
         String sql = " INSERT INTO course(name, price, description, period) " +
                 " VALUES(?, ?, ?, ?) ";
@@ -103,7 +103,7 @@ public class CourseDB implements CourseDataAccessIF {
      * @return True if the Course was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, Course obj) throws SQLException {
+    public boolean update(long id, Course obj) {
         boolean result = false;
         String sql = " UPDATE course SET name = ?, price = ?, description = ?, period = ? " +
                 " WHERE courseID = ? ";
@@ -127,7 +127,7 @@ public class CourseDB implements CourseDataAccessIF {
      * @return True if the Course was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         String sql = " DELETE FROM course WHERE courseID = ? ";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {

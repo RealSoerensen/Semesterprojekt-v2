@@ -16,7 +16,7 @@ public class CourseController {
 	private final CourseSessionMemberDataAccessIF courseSessionMemberDB;
 	private final PersonController personController;
 	
-	public CourseController(CourseDataAccessIF dataAccess) throws SQLException {
+	public CourseController(CourseDataAccessIF dataAccess) {
 		courseDB = dataAccess;
 		courseSessionDB = CourseSessionContainer.getInstance();
 		courseSessionMemberDB = CourseSessionMemberContainer.getInstance();
@@ -27,7 +27,7 @@ public class CourseController {
 		return courseDB;
 	}
 
-	public void setCourseDB(CourseDataAccessIF courseDB) {
+	private void setCourseDB(CourseDataAccessIF courseDB) {
 		this.courseDB = courseDB;
 	}
 	

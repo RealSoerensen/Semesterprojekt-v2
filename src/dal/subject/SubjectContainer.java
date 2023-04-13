@@ -25,7 +25,7 @@ public class SubjectContainer implements SubjectDataAccessIF {
     /**
      * The getInstance function is a static function that returns the singleton instance of the SubjectContainer class.
      * If no instance exists, it creates one and then returns it.
-     * @return The instance of the subjectcontainer class that is currently in use
+     * @return The instance of the subjectContainer class that is currently in use
      */
     public static SubjectContainer getInstance() {
         if (instance == null) {

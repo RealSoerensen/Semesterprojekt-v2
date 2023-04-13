@@ -115,7 +115,7 @@ public class PersonDB implements PersonDataAccessIF {
 	  * @return True or false depending on whether the person was deleted or not
 	*/
  	@Override
-	public boolean delete(long id) throws SQLException {
+	public boolean delete(long id) {
 		 boolean result = false;
 		String sql = " DELETE FROM Person WHERE ssn = ? ";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -135,7 +135,7 @@ public class PersonDB implements PersonDataAccessIF {
 	*
 	* @return A boolean value to indicate whether the person was updated in the database or not
 	*/
- 	private boolean updatePerson(long id, Person obj) throws SQLException {
+ 	private boolean updatePerson(long id, Person obj) {
 		 boolean result = false;
 		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, "
 				+ "phoneNo = ?, username = ?, password = ?, role = ?" +
@@ -159,7 +159,7 @@ public class PersonDB implements PersonDataAccessIF {
 	/**
 	* The updateAddress function is used to update the address of a person in the database.
 	*
-	* @param id Find the addressid of the person in order to update it
+	* @param id Find the addressId of the person in order to update it
 	* @param obj Get the address object from the person obj
 	*
 	* @return A boolean value to indicate whether the address was updated in the database or not

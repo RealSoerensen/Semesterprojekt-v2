@@ -14,7 +14,6 @@ public class DBUtils {
     /**
      * The DBUtils function is a constructor that creates a connection to the database.
      *
-     * @return A connection
      */
     public DBUtils() throws SQLException {
         DBConnection dbConnection = DBConnection.getInstance();

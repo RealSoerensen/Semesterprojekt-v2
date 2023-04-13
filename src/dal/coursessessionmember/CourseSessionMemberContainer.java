@@ -2,7 +2,6 @@ package dal.coursessessionmember;
 
 import model.CourseSessionMember;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return True if the CourseSessionMember was created, false otherwise.
      */
     @Override
-    public boolean create(CourseSessionMember obj) throws SQLException {
+    public boolean create(CourseSessionMember obj) {
         return container.add(obj);
     }
 
@@ -50,7 +49,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return The CourseSessionMember with the given ID, null if no CourseSessionMember with the given ID was found.
      */
     @Override
-    public CourseSessionMember get(long id) throws SQLException {
+    public CourseSessionMember get(long id) {
         CourseSessionMember courseSessionMember = null;
         for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
             if (container.get(i).getMember().getSsn() == id) {
@@ -66,7 +65,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return A list of all CourseSessionMembers in the container.
      */
     @Override
-    public List<CourseSessionMember> getAll() throws SQLException {
+    public List<CourseSessionMember> getAll() {
         return container;
     }
 
@@ -78,7 +77,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return True if the CourseSessionMember was updated, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSessionMember obj) throws SQLException {
+    public boolean update(long id, CourseSessionMember obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getMember().getSsn() == id) {
@@ -96,7 +95,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return True if the CourseSessionMember was deleted, false otherwise.
      */
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getMember().getSsn() == id) {

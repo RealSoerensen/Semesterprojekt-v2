@@ -35,7 +35,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return True if the CourseSessionMember was created successfully, false otherwise.
      */
     @Override
-    public boolean create(CourseSessionMember obj) throws SQLException {
+    public boolean create(CourseSessionMember obj) {
         boolean result = false;
         String sql = "INSERT INTO CourseSessionMembers (ssn, courseSessionID) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -55,7 +55,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return The CourseSessionMember with the given id.
      */
     @Override
-    public CourseSessionMember get(long id) throws SQLException {
+    public CourseSessionMember get(long id) {
         CourseSessionMember courseSessionMember = null;
         String sql = "SELECT * FROM CourseSessionMembers WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -77,7 +77,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return A list of all CourseSessionMembers.
      */
     @Override
-    public List<CourseSessionMember> getAll() throws SQLException {
+    public List<CourseSessionMember> getAll() {
         List<CourseSessionMember> courseSessionMembers = new ArrayList<>();
         String sql = "SELECT * FROM CourseSessionMembers";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -100,7 +100,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return True if the CourseSessionMember was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSessionMember obj) throws SQLException {
+    public boolean update(long id, CourseSessionMember obj) {
         boolean result = false;
         String sql = "UPDATE CourseSessionMembers SET ssn = ?, courseSessionID = ? WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -121,7 +121,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return True if the CourseSessionMember was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         String sql = "DELETE FROM CourseSessionMembers WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

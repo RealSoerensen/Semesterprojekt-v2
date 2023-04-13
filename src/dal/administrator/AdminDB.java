@@ -33,7 +33,7 @@ public class AdminDB implements AdminDataAccessIF {
      */
     @Override
     public boolean create(Administrator obj) throws SQLException {
-        boolean result = false;
+        boolean result;
         String sql = "INSERT INTO administrator (ssn) VALUES (?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, obj.getSsn());
@@ -49,7 +49,7 @@ public class AdminDB implements AdminDataAccessIF {
      * @return The Administrator with the given id.
      */
     @Override
-    public Administrator get(long id) throws SQLException {
+    public Administrator get(long id) {
         Administrator administrator = null;
         String sql = "SELECT * FROM administrator WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -92,7 +92,7 @@ public class AdminDB implements AdminDataAccessIF {
      * @return True if the Administrator was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, Administrator obj) throws SQLException {
+    public boolean update(long id, Administrator obj) {
         boolean result = false;
         String sql = "UPDATE administrator SET ssn = ? WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -112,7 +112,7 @@ public class AdminDB implements AdminDataAccessIF {
      * @return True if the Administrator was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(long id) {
         boolean result = false;
         String sql = "DELETE FROM administrator WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
