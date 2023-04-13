@@ -2,7 +2,6 @@ package dal.instructor;
 
 import model.Instructor;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

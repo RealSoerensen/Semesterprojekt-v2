@@ -2,7 +2,6 @@ package dal.address;
 
 import model.Address;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 
