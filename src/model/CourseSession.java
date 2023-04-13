@@ -5,23 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseSession {
+	private long courseSessionID;
 	private Timestamp date;
 	private Instructor instructor;
 	private Course course;
 	private Address address;
 	private Subject subject;
-	private List<Member> members;
-	private long courseSessionID;
 
-
-	public CourseSession(Timestamp date, Instructor instructor, Course course, Address address, Subject subject, long courseSessionID) {
+	public CourseSession(long courseSessionID, Timestamp date, Instructor instructor, Course course, Address address, Subject subject) {
+		this.courseSessionID = courseSessionID;
 		this.date = date;
 		this.instructor = instructor;
 		this.course = course;
 		this.address = address;
 		this.subject = subject;
-		this.courseSessionID = courseSessionID;
-		members = new ArrayList<>();
+	}
+
+	public CourseSession(Timestamp date, Instructor instructor, Course course, Address address, Subject subject) {
+		this.date = date;
+		this.instructor = instructor;
+		this.course = course;
+		this.address = address;
+		this.subject = subject;
 	}
 
 	public Timestamp getDate() {
@@ -46,14 +51,6 @@ public class CourseSession {
 
 	public void setCourse(Course course) {
 		this.course = course;
-	}
-
-	public List<Member> getMembers() {
-		return members;
-	}
-
-	public void setMembers(List<Member> members) {
-		this.members = members;
 	}
 
 	public Address getAddress() {

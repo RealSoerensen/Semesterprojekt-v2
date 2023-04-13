@@ -2,20 +2,25 @@ package controller;
 
 import java.sql.SQLException;
 
-import dal.coursesession.CourseSessionDB;
+import dal.coursesession.CourseSessionContainer;
 import dal.course.CourseDataAccessIF;
+import dal.coursesession.CourseSessionDataAccessIF;
+import dal.coursessessionmember.CourseSessionMemberContainer;
+import dal.coursessessionmember.CourseSessionMemberDataAccessIF;
 import dal.person.PersonContainer;
 import model.*;
 
 public class CourseController {
 	private CourseDataAccessIF courseDB;
-	private final CourseSessionDB courseSessionDB;
-	private final PersonController pc;
+	private final CourseSessionDataAccessIF courseSessionDB;
+	private final CourseSessionMemberDataAccessIF courseSessionMemberDB;
+	private final PersonController personController;
 	
 	public CourseController(CourseDataAccessIF dataAccess) throws SQLException {
-		setCourseDB(dataAccess);
-		courseSessionDB = new CourseSessionDB();
-		pc = new PersonController(PersonContainer.getInstance());
+		courseDB = dataAccess;
+		courseSessionDB = CourseSessionContainer.getInstance();
+		courseSessionMemberDB = CourseSessionMemberContainer.getInstance();
+		personController = new PersonController(PersonContainer.getInstance());
 	}
 
 	private CourseDataAccessIF getCourseDB() {
@@ -26,32 +31,26 @@ public class CourseController {
 		this.courseDB = courseDB;
 	}
 	
-	public void markAbsent(long courseSessionID, long ssn) throws SQLException {
-		CourseSession courseSession = courseSessionDB.get(courseSessionID);
-		
-		int role = pc.getRoleOfPerson(ssn);
+	public void markAbsent(CourseSession courseSession, long ssn) throws SQLException {
+		int role = personController.getRole(ssn);
 		if(role == 1) {
-			courseSessionDB.removeMember(courseSessionID, ssn);
+			removeMember(ssn);
 		}
 		else if(role == 2) {
 			courseSession.setInstructor(null);
-			courseSessionDB.update(courseSessionID, courseSession);
+			courseSessionDB.update(courseSession.getCourseSessionID(), courseSession);
 		}
 	}
 	
 	private Member getMemberFromCourseSession(long ssn, CourseSession courseSession) {
 		Member member = null;
 
-		int amountOfMembers = courseSession.getMembers().size();
-		boolean found = false;
-		while(amountOfMembers > 0 && !found) {
-			if(ssn == courseSession.getMembers().get(amountOfMembers).getSsn()) {
-				member = courseSession.getMembers().get(amountOfMembers);
-				found = true;
-			}
-			amountOfMembers--;
-		}
+		//TODO: Implement this method
 		
 		return member;
+	}
+
+	private boolean removeMember(long ssn) throws SQLException {
+		return courseSessionMemberDB.delete(ssn);
 	}
 }

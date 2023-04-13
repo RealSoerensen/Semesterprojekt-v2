@@ -3,18 +3,7 @@ package model;
 import java.util.List;
 
 public class Instructor extends Person{
-    private List<Subject> subject;
-
-    public Instructor(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn, List<Subject> subject) {
-        super(firstName, lastName, address, email, phoneNumber, role, username, password, ssn);
-        this.subject = subject;
-    }
-
-    public List<Subject> getSubjects() {
-        return subject;
-    }
-
-    public void setSubject(List<Subject> subject) {
-        this.subject = subject;
+    public Instructor(Person person) {
+        super(person.getFirstName(), person.getLastName(), person.getAddress(), person.getEmail(), person.getPhoneNumber(), person.getRole(), person.getUsername(), person.getPassword(), person.getSsn());
     }
 }

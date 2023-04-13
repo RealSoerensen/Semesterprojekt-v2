@@ -9,14 +9,20 @@ public class Course {
 	private double price;
 	private String description;
 	private String period;
-	private List<Member> members;
 
 	public Course(String name, double price, String description, String period) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.period = period;
-		members = new ArrayList<>();
+	}
+
+	public Course(long courseID, String name, double price, String description, String period) {
+		this.courseID = courseID;
+		this.name = name;
+		this.price = price;
+		this.description = description;
+		this.period = period;
 	}
 
 	public double getPrice() {
@@ -33,14 +39,6 @@ public class Course {
 
 	public void setPeriod(String period) {
 		this.period = period;
-	}
-
-	public List<Member> getMembers() {
-		return members;
-	}
-
-	public void setMembers(List<Member> members) {
-		this.members = members;
 	}
 
 	public String getName() {

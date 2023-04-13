@@ -5,10 +5,10 @@ public class Subject {
     private String description;
     private long subjectID;
 
-    public Subject(String name, long subjectID) {
+    public Subject(long subjectID, String name, String description) {
         this.name = name;
         this.subjectID = subjectID;
-        description = "";
+        this.description = description;
     }
 
     public Subject(String name, String description) {
