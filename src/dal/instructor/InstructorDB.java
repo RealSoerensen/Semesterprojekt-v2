@@ -1,6 +1,9 @@
-package dal;
+package dal.instructor;
 
+import dal.CRUD;
+import dal.DBConnection;
 import dal.address.AddressDB;
+import dal.subject.SubjectDB;
 import model.Address;
 import model.Instructor;
 import model.Subject;
@@ -12,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstructorDB implements CRUD<Instructor>{
+public class InstructorDB implements InstructorDataAccessIF {
     private final Connection connection;
 
     public InstructorDB() throws SQLException {
