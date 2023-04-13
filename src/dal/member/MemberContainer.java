@@ -1,5 +1,6 @@
 package dal.member;
 
+import model.Administrator;
 import model.Member;
 
 import java.sql.SQLException;
@@ -8,10 +9,10 @@ import java.util.List;
 
 public class MemberContainer implements MemberDataAccessIF{
     private MemberContainer instance;
-    private final List<Member> members;
+    List<Member> container;
 
     public MemberContainer() {
-        members = new ArrayList<>();
+    	container = new ArrayList<>();
     }
 
     public MemberContainer getInstance() {
@@ -23,26 +24,46 @@ public class MemberContainer implements MemberDataAccessIF{
 
     @Override
     public boolean create(Member obj) throws SQLException {
-        return false;
+    	return container.add(obj);
     }
 
     @Override
     public Member get(long id) throws SQLException {
-        return null;
+    	Member member = null;
+        for(int i = 0; i < container.size() && member == null; i++) {
+            if(container.get(i).getSsn() == id) {
+            	member = container.get(i);
+            }
+        }
+        return member;
     }
 
     @Override
     public List<Member> getAll() throws SQLException {
-        return null;
+    	return container;
     }
 
     @Override
     public boolean update(long id, Member obj) throws SQLException {
-        return false;
+    	boolean result = false;
+        for (int i = 0; i < container.size() && !result; i++) {
+            if (container.get(i).getSsn() == id) {
+                container.set(i, obj);
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean delete(long id) throws SQLException {
-        return false;
+    	boolean result = false;
+        for (int i = 0; i < container.size() && !result; i++) {
+            if (container.get(i).getSsn() == id) {
+                container.remove(i);
+                result = true;
+            }
+        }
+        return result;
     }
 }
