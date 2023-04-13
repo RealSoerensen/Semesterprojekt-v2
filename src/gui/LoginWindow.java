@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.PersonController;
+import dal.person.PersonContainer;
 import model.Person;
 
 import javax.swing.JTextField;
@@ -109,7 +110,7 @@ public class LoginWindow extends JFrame {
 
 	private void logIn() throws SQLException {
 	// TODO Auto-generated method stub
-		PersonController personController = new PersonController();
+		PersonController personController = new PersonController(PersonContainer.getInstance());
 		
 	}
 }
