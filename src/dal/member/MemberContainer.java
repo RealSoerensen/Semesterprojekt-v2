@@ -2,7 +2,6 @@ package dal.member;
 
 import model.Member;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
