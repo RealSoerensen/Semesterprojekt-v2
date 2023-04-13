@@ -18,17 +18,15 @@ public class CourseController {
 	
 	public void markAbsent(long courseSessionID, long ssn) throws SQLException {
 		CourseSession courseSession = courseSessionDB.get(courseSessionID);
-		Person personToBeMarkedAbsent = null;
 		
 		int role = pc.getRoleOfPerson(ssn);
 		if(role == 1) {
-			personToBeMarkedAbsent = getMemberFromCourseSession(ssn, courseSession);
+			courseSessionDB.removeMember(courseSessionID, ssn);
 		}
 		else if(role == 2) {
-			personToBeMarkedAbsent = courseSession.getInstructor();
+			courseSession.setInstructor(null);
+			courseSessionDB.update(courseSessionID, courseSession);
 		}
-		
-		//TODO Fjerne en person fra courseSession baseret på courseSessionID og ssn
 	}
 	
 	private Member getMemberFromCourseSession(long ssn, CourseSession courseSession) {
