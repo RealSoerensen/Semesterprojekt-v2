@@ -18,6 +18,7 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class LoginWindow extends JFrame {
@@ -108,6 +109,17 @@ public class LoginWindow extends JFrame {
 	private void logIn() throws SQLException {
 	// TODO Auto-generated method stub
 		PersonController personController = new PersonController(PersonContainer.getInstance());
+		PersonContainer pc = PersonContainer.getInstance();
+		List<Person> persons = pc.getAll();
+		String usernameResult = textFieldUsername.getText();
+		String passwordResult = passwordField.getText();
+		
+		for(Person p : persons) {
+			if(usernameResult.equalsIgnoreCase(p.getUsername()) && passwordResult.equalsIgnoreCase(p.getPassword())) {
+				System.out.println(p.getFirstName());
+				
+			}
+		}
 		
 	}
 }
