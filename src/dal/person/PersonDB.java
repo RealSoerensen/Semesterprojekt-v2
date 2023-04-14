@@ -146,7 +146,6 @@ public class PersonDB implements PersonDataAccessIF {
 			stmt.setString(4, obj.getPhoneNumber());
 			stmt.setString(5, obj.getUsername());
 			stmt.setString(6, obj.getPassword());
-			stmt.setInt(7, obj.getRole());
 			stmt.setLong(8, id);
 			result = stmt.executeUpdate() > 0;
 		} catch (SQLException e) {
@@ -192,7 +191,7 @@ public class PersonDB implements PersonDataAccessIF {
 			long addressID = rs.getLong("addressID");
 
 			Address address = getAddress(addressID);
-			person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+			person = new Person(firstName, lastName, address, email, phoneNo, username, password, ssn);
 		}
 		return person;
 	}
@@ -208,7 +207,6 @@ public class PersonDB implements PersonDataAccessIF {
 			stmt.setString(2, person.getLastName());
 			stmt.setString(3, person.getEmail());
 			stmt.setLong(4, person.getSsn());
-			stmt.setInt(5, person.getRole());
 			stmt.setString(6, person.getPhoneNumber());
 			stmt.setString(7, person.getUsername());
 			stmt.setString(8, person.getPassword());

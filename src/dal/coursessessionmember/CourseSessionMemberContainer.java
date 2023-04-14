@@ -2,7 +2,6 @@ package dal.coursessessionmember;
 
 import model.CourseSessionMember;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
