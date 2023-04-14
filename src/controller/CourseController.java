@@ -28,7 +28,12 @@ public class CourseController {
 	private void setCourseDB(CourseDataAccessIF courseDB) {
 		this.courseDB = courseDB;
 	}
-	
+
+	public boolean markInstructorAbsent(CourseSession courseSession) throws SQLException {
+		courseSession.setInstructor(null);
+		return courseSessionDB.update(courseSession.getCourseSessionID(), courseSession);
+	}
+
 	public boolean markMemberAbsent(long ssn, CourseSession courseSession) throws SQLException {
 		boolean markedAbsent = false;
 		Member member = getMemberFromCourseSession(ssn, courseSession);
@@ -38,15 +43,11 @@ public class CourseController {
 		return markedAbsent;
 	}
 
-	public boolean markInstructorAbsent(CourseSession courseSession) throws SQLException {
-		courseSession.setInstructor(null);
-		return courseSessionDB.update(courseSession.getCourseSessionID(), courseSession);
-	}
-
 	private Member getMemberFromCourseSession(long ssn, CourseSession courseSession) throws SQLException {
 		Member member = null;
 		List<CourseSessionMember> courseMembers = courseSessionMemberDB.getAll();
-		for(CourseSessionMember courseMember : courseMembers) {
+		for(int i = 0; i < courseMembers.size() && member == null; i++) {
+			CourseSessionMember courseMember = courseMembers.get(i);
 			long courseMemberSsn = courseMember.getMember().getSsn();
 			long courseMemberCourseSessionID = courseMember.getCourseSession().getCourseSessionID();
 			if(courseMemberSsn == ssn && courseMemberCourseSessionID == courseSession.getCourseSessionID()) {
