@@ -116,7 +116,7 @@ public class LoginWindow extends JFrame {
 		
 		for(Person p : persons) {
 			if(usernameResult.equalsIgnoreCase(p.getUsername()) && passwordResult.equalsIgnoreCase(p.getPassword())) {
-				System.out.println(p.getFirstName());
+				System.out.println("Logged in as: " + p.getFirstName());
 				
 			}
 		}
