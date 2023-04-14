@@ -2,6 +2,7 @@ package dal.coursessessionmember;
 
 import model.CourseSessionMember;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,15 +45,15 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
 
     /**
      * Gets a CourseSessionMember from the container.
-     * @param id The ID of the CourseSessionMember to be retrieved.
      *
-     * @return The CourseSessionMember with the given ID, null if no CourseSessionMember with the given ID was found.
+     * @param ssn The ssn of the CourseSessionMember to be retrieved.
+     * @param courseSessionID The id of the CourseSession.
+     * @return The CourseSessionMember with the given ssn and from the given course session.
      */
-    @Override
-    public CourseSessionMember get(long id) {
+    public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
         CourseSessionMember courseSessionMember = null;
         for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
-            if (container.get(i).getMember().getSsn() == id) {
+            if (container.get(i).getMember().getSsn() == ssn && container.get(i).getCourseSession().getCourseSessionID() == courseSessionID) {
                 courseSessionMember = container.get(i);
             }
         }
@@ -105,4 +106,12 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
         }
         return result;
     }
+
+    /**
+     * Created to satisfy the interface. It does nothing.
+     */
+	@Override
+	public CourseSessionMember get(long id) throws SQLException {
+		return null;
+	}
 }
