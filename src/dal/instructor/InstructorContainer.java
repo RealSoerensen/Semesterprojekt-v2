@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InstructorContainer implements InstructorDataAccessIF {
-    private InstructorContainer instance;
+    private static InstructorContainer instance;
     private final List<Instructor> container;
 
     /**
@@ -23,7 +23,7 @@ public class InstructorContainer implements InstructorDataAccessIF {
      *
      * @return The instance of the class InstructorContainer
      */
-    public InstructorContainer getInstance() {
+    public static InstructorContainer getInstance() {
         if (instance == null) {
             instance = new InstructorContainer();
         }

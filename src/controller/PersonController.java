@@ -19,8 +19,4 @@ public class PersonController {
 	private void setPersonDB(PersonDataAccessIF personDB) {
 		this.personDB = personDB;
 	}
-	
-	public int getRole(long ssn) throws SQLException {
-		return personDB.get(ssn).getRole();
-	}
 }

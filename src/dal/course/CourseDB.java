@@ -11,15 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDB implements CourseDataAccessIF {
-    DBConnection dbConnection;
     Connection connection;
 
     /**
      * Constructor for CourseDB class.
      */
     public CourseDB() throws SQLException {
-        dbConnection = DBConnection.getInstance();
-        connection = dbConnection.getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     /**

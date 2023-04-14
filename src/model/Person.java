@@ -6,18 +6,16 @@ public class Person {
     private Address address;
     private String email;
     private String phoneNumber;
-    private int role; 		//1: member, 2: instructor, 3: administrator
     private String username;
     private String password;
     private long ssn;
 
-    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn) {
+    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, String username, String password, long ssn) {
     	this.firstName = firstName;
     	this.lastName = lastName;
     	this.address = address;
     	this.email = email;
     	this.phoneNumber = phoneNumber;
-    	this.role = role;
     	this.username = username;
     	this.password = password;
     	this.ssn = ssn;
@@ -61,14 +59,6 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
     }
 
     public String getUsername() {
