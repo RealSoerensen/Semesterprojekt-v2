@@ -51,15 +51,16 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
     /**
      * Gets a CourseSessionMember from the database.
      *
-     * @param id The id of the CourseSessionMember to be retrieved.
-     * @return The CourseSessionMember with the given id.
+     * @param ssn The ssn of the CourseSessionMember to be retrieved.
+     * @param courseSessionID The id of the CourseSession.
+     * @return The CourseSessionMember with the given ssn and from the given course session.
      */
-    @Override
-    public CourseSessionMember get(long id) {
+    public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
         CourseSessionMember courseSessionMember = null;
-        String sql = "SELECT * FROM CourseSessionMembers WHERE ssn = ?";
+        String sql = "SELECT * FROM CourseSessionMembers WHERE ssn = ? AND courseSessionID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setLong(1, ssn);
+            stmt.setLong(2, courseSessionID);
             stmt.executeQuery();
             ResultSet courseSessionMemberRS = stmt.getResultSet();
             if (courseSessionMemberRS.next()) {
@@ -163,4 +164,12 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
         CourseSessionDataAccessIF courseSessionDB = CourseSessionContainer.getInstance();
         return courseSessionDB.get(courseSessionID);
     }
+
+    /**
+     * Created to satisfy the interface. It does nothing.
+     */
+	@Override
+	public CourseSessionMember get(long id) throws SQLException {
+		return null;
+	}
 }
