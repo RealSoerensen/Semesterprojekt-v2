@@ -25,8 +25,7 @@ public class InstructorDB implements InstructorDataAccessIF {
      * It also establishes a connection to the database using DBConnection.getInstance().getConnection()
      */
     public InstructorDB() throws SQLException {
-        DBConnection dbConnection = DBConnection.getInstance();
-        connection = dbConnection.getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     /**

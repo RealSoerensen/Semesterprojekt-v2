@@ -21,8 +21,7 @@ public class PersonDB implements PersonDataAccessIF {
 	* It also establishes a connection to the database using DBConnection.getInstance().getConnection()
 	*/
 	public PersonDB() throws SQLException {
-		DBConnection dbConnection = DBConnection.getInstance();
-		connection = dbConnection.getConnection();
+		connection = DBConnection.getInstance().getConnection();
 	}
 
 	/**

@@ -14,8 +14,7 @@ public class AddressDB implements AddressDataAccessIF {
      * Constructor for AddressDB class.
      */
     public AddressDB() throws SQLException {
-        DBConnection dbConnection = DBConnection.getInstance();
-        connection = dbConnection.getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     /**

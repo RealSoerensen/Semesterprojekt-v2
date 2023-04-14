@@ -20,8 +20,7 @@ public class SubjectDB implements SubjectDataAccessIF {
      * The SubjectDB function is a constructor that creates a connection to the database.
      */
     public SubjectDB() throws SQLException {
-        DBConnection dbConnection = DBConnection.getInstance();
-        connection = dbConnection.getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     @Override

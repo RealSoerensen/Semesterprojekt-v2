@@ -1,7 +1,7 @@
 package dal.administrator;
 
 import dal.DBConnection;
-import dal.person.PersonDB;
+import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
 import model.Administrator;
 import model.Person;
@@ -15,14 +15,12 @@ import java.util.List;
 
 public class AdminDB implements AdminDataAccessIF {
     private final Connection connection;
-    private final PersonDataAccessIF personDB = new PersonDB();
 
     /**
      * Constructor for AdminDB class.
      */
     public AdminDB() throws SQLException {
-        DBConnection dbConnection = DBConnection.getInstance();
-        connection = dbConnection.getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     /**
@@ -131,6 +129,7 @@ public class AdminDB implements AdminDataAccessIF {
      * @return The Person with the given ssn.
      */
     private Person getPerson(long ssn) throws SQLException {
+        PersonDataAccessIF personDB = PersonContainer.getInstance();
         return personDB.get(ssn);
     }
 }

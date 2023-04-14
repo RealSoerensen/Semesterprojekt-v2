@@ -55,6 +55,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @param courseSessionID The id of the CourseSession.
      * @return The CourseSessionMember with the given ssn and from the given course session.
      */
+    @Override
     public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
         CourseSessionMember courseSessionMember = null;
         String sql = "SELECT * FROM CourseSessionMembers WHERE ssn = ? AND courseSessionID = ?";
@@ -169,7 +170,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * Created to satisfy the interface. It does nothing.
      */
 	@Override
-	public CourseSessionMember get(long id) throws SQLException {
-		return null;
+	public CourseSessionMember get(long id) {
+		throw new UnsupportedOperationException();
 	}
 }

@@ -50,6 +50,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @param courseSessionID The id of the CourseSession.
      * @return The CourseSessionMember with the given ssn and from the given course session.
      */
+    @Override
     public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
         CourseSessionMember courseSessionMember = null;
         for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
@@ -111,7 +112,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * Created to satisfy the interface. It does nothing.
      */
 	@Override
-	public CourseSessionMember get(long id) throws SQLException {
-		return null;
+	public CourseSessionMember get(long id) {
+		throw new UnsupportedOperationException();
 	}
 }

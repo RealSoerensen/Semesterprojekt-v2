@@ -21,8 +21,7 @@ public class MemberDB implements MemberDataAccessIF {
 	* It also establishes a connection to the database using DBConnection.getInstance().getConnection()
 	*/
 	public MemberDB() throws SQLException {
-		DBConnection dbConnection = DBConnection.getInstance();
-		connection = dbConnection.getConnection();
+		connection = DBConnection.getInstance().getConnection();
 	}
 
 	/**
