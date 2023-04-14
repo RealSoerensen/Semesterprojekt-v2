@@ -6,6 +6,7 @@ public class Member extends Person {
 
     }
 
+    @Override
     public int getRole() {
         return 1;
     }

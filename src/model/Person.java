@@ -77,6 +77,10 @@ public class Person {
         this.password = password;
     }
 
+    public int getRole() {
+    	return 0;
+    }
+
     public long getSsn() {
         return ssn;
     }
