@@ -1,13 +1,13 @@
-package dal.coursesession;
+package dal.session;
 
-import model.CourseSession;
+import model.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseSessionContainer implements CourseSessionDataAccessIF {
-    private static CourseSessionContainer instance;
-    private final List<CourseSession> container;
+public class SessionContainer implements SessionDataAccessIF {
+    private static SessionContainer instance;
+    private final List<Session> container;
 
     /**
      * Constructor for CourseSessionContainer class.
@@ -15,7 +15,7 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
      * Private to prevent instantiation.
      * Use getInstance() to get the instance of the CourseSessionContainer.
      */
-    private CourseSessionContainer() {
+    private SessionContainer() {
     	container = new ArrayList<>();
     }
 
@@ -24,9 +24,9 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
      *
      * @return The instance of the CourseSessionContainer.
      */
-    public static CourseSessionContainer getInstance() {
+    public static SessionContainer getInstance() {
         if (instance == null) {
-            instance = new CourseSessionContainer();
+            instance = new SessionContainer();
         }
         return instance;
     }
@@ -38,7 +38,7 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
      * @return True if the CourseSession was created, false otherwise.
      */
     @Override
-    public boolean create(CourseSession obj) {
+    public boolean create(Session obj) {
     	return container.add(obj);
     }
 
@@ -49,8 +49,8 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
      * @return The CourseSession with the given ID, null if no CourseSession with the given ID was found.
      */
     @Override
-    public CourseSession get(long id) {
-    	CourseSession courseSession = null;
+    public Session get(long id) {
+    	Session courseSession = null;
         for(int i = 0; i < container.size() && courseSession == null; i++) {
             if(container.get(i).getCourseSessionID() == id) {
             	courseSession = container.get(i);
@@ -65,7 +65,7 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
      * @return A list of all CourseSessions in the container.
      */
     @Override
-    public List<CourseSession> getAll() {
+    public List<Session> getAll() {
     	return container;
     }
 
@@ -77,7 +77,7 @@ public class CourseSessionContainer implements CourseSessionDataAccessIF {
      * @return True if the CourseSession was updated, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSession obj) {
+    public boolean update(long id, Session obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getCourseSessionID() == id) {

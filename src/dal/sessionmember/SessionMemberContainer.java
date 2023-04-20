@@ -1,13 +1,13 @@
-package dal.coursessessionmember;
+package dal.sessionmember;
 
-import model.CourseSessionMember;
+import model.SessionMember;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseSessionMemberContainer implements CourseSessionMemberDataAccessIF{
-    private static CourseSessionMemberContainer instance;
-    private final List<CourseSessionMember> container;
+public class SessionMemberContainer implements SessionMemberDataAccessIF {
+    private static SessionMemberContainer instance;
+    private final List<SessionMember> container;
 
     /**
      * Constructor for CourseSessionMemberContainer class.
@@ -15,7 +15,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * Private to prevent instantiation.
      * Use getInstance() to get the instance of the CourseSessionMemberContainer.
      */
-    private CourseSessionMemberContainer() {
+    private SessionMemberContainer() {
     	container = new ArrayList<>();
     }
 
@@ -24,9 +24,9 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      *
      * @return The instance of the CourseSessionMemberContainer.
      */
-    public static CourseSessionMemberContainer getInstance() {
+    public static SessionMemberContainer getInstance() {
         if (instance == null) {
-            instance = new CourseSessionMemberContainer();
+            instance = new SessionMemberContainer();
         }
         return instance;
     }
@@ -38,7 +38,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return True if the CourseSessionMember was created, false otherwise.
      */
     @Override
-    public boolean create(CourseSessionMember obj) {
+    public boolean create(SessionMember obj) {
         return container.add(obj);
     }
 
@@ -50,8 +50,8 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return The CourseSessionMember with the given ssn and from the given course session.
      */
     @Override
-    public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
-        CourseSessionMember courseSessionMember = null;
+    public SessionMember getCourseSessionMember(long ssn, long courseSessionID) {
+        SessionMember courseSessionMember = null;
         for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
             if (container.get(i).getPerson().getSsn() == ssn && container.get(i).getCourseSession().getCourseSessionID() == courseSessionID) {
                 courseSessionMember = container.get(i);
@@ -66,7 +66,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return A list of all CourseSessionMembers in the container.
      */
     @Override
-    public List<CourseSessionMember> getAll() {
+    public List<SessionMember> getAll() {
         return container;
     }
 
@@ -78,7 +78,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * @return True if the CourseSessionMember was updated, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSessionMember obj) {
+    public boolean update(long id, SessionMember obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
             if (container.get(i).getPerson().getSsn() == id) {
@@ -111,7 +111,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
      * Created to satisfy the interface. It does nothing.
      */
 	@Override
-	public CourseSessionMember get(long id) {
+	public SessionMember get(long id) {
 		throw new UnsupportedOperationException();
 	}
 }

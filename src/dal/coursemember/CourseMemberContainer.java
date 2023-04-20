@@ -1,7 +1,6 @@
 package dal.coursemember;
 
 import model.CourseMember;
-import model.CourseSessionMember;
 
 import java.util.ArrayList;
 import java.util.List;

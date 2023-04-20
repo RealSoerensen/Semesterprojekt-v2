@@ -1,12 +1,12 @@
-package dal.coursessessionmember;
+package dal.sessionmember;
 
 import dal.DBConnection;
-import dal.coursesession.CourseSessionContainer;
-import dal.coursesession.CourseSessionDataAccessIF;
+import dal.session.SessionContainer;
+import dal.session.SessionDataAccessIF;
 import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
-import model.CourseSession;
-import model.CourseSessionMember;
+import model.Session;
+import model.SessionMember;
 import model.Person;
 
 import java.sql.Connection;
@@ -16,14 +16,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
+public class SessionMemberDB implements SessionMemberDataAccessIF {
 
     private final Connection connection;
 
     /**
      * Constructor for CourseSessionMemberDB class.
      */
-    public CourseSessionMemberDB() throws SQLException {
+    public SessionMemberDB() throws SQLException {
         DBConnection dbConnection = DBConnection.getInstance();
         connection = dbConnection.getConnection();
     }
@@ -35,7 +35,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return True if the CourseSessionMember was created successfully, false otherwise.
      */
     @Override
-    public boolean create(CourseSessionMember obj) {
+    public boolean create(SessionMember obj) {
         boolean result = false;
         String sql = "INSERT INTO CourseSessionMembers (ssn, courseSessionID) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -56,8 +56,8 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return The CourseSessionMember with the given ssn and from the given course session.
      */
     @Override
-    public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
-        CourseSessionMember courseSessionMember = null;
+    public SessionMember getCourseSessionMember(long ssn, long courseSessionID) {
+        SessionMember courseSessionMember = null;
         String sql = "SELECT * FROM CourseSessionMembers WHERE ssn = ? AND courseSessionID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, ssn);
@@ -79,8 +79,8 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return A list of all CourseSessionMembers.
      */
     @Override
-    public List<CourseSessionMember> getAll() {
-        List<CourseSessionMember> courseSessionMembers = new ArrayList<>();
+    public List<SessionMember> getAll() {
+        List<SessionMember> courseSessionMembers = new ArrayList<>();
         String sql = "SELECT * FROM CourseSessionMembers";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.executeQuery();
@@ -102,7 +102,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @return True if the CourseSessionMember was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSessionMember obj) {
+    public boolean update(long id, SessionMember obj) {
         boolean result = false;
         String sql = "UPDATE CourseSessionMembers SET ssn = ?, courseSessionID = ? WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -140,10 +140,10 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @param courseSessionMemberRS The ResultSet containing the CourseSessionMember.
      * @return The CourseSessionMember with the given id.
      */
-    private CourseSessionMember getCourseSessionMember(ResultSet courseSessionMemberRS) throws SQLException {
+    private SessionMember getCourseSessionMember(ResultSet courseSessionMemberRS) throws SQLException {
         Person member = getMember(courseSessionMemberRS.getLong("ssn"));
-        CourseSession courseSession = getCourseSession(courseSessionMemberRS.getLong("courseSessionID"));
-        return new CourseSessionMember(member, courseSession);
+        Session courseSession = getCourseSession(courseSessionMemberRS.getLong("courseSessionID"));
+        return new SessionMember(member, courseSession);
     }
 
     /**
@@ -161,8 +161,8 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * @param courseSessionID The id of the CourseSession to be retrieved.
      * @return The CourseSession with the given id.
      */
-    private CourseSession getCourseSession(long courseSessionID) throws SQLException {
-        CourseSessionDataAccessIF courseSessionDB = CourseSessionContainer.getInstance();
+    private Session getCourseSession(long courseSessionID) throws SQLException {
+        SessionDataAccessIF courseSessionDB = SessionContainer.getInstance();
         return courseSessionDB.get(courseSessionID);
     }
 
@@ -170,7 +170,7 @@ public class CourseSessionMemberDB implements CourseSessionMemberDataAccessIF {
      * Created to satisfy the interface. It does nothing.
      */
 	@Override
-	public CourseSessionMember get(long id) {
+	public SessionMember get(long id) {
 		throw new UnsupportedOperationException();
 	}
 }
