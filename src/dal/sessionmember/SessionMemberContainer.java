@@ -10,19 +10,19 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     private final List<SessionMember> container;
 
     /**
-     * Constructor for CourseSessionMemberContainer class.
+     * Constructor for SessionMemberContainer class.
      * Initializes the container.
      * Private to prevent instantiation.
-     * Use getInstance() to get the instance of the CourseSessionMemberContainer.
+     * Use getInstance() to get the instance of the SessionMemberContainer.
      */
     private SessionMemberContainer() {
     	container = new ArrayList<>();
     }
 
     /**
-     * Gets the instance of the CourseSessionMemberContainer.
+     * Gets the instance of the SessionMemberContainer.
      *
-     * @return The instance of the CourseSessionMemberContainer.
+     * @return The instance of the SessionMemberContainer.
      */
     public static SessionMemberContainer getInstance() {
         if (instance == null) {
@@ -32,10 +32,10 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     }
 
     /**
-     * Creates a new CourseSessionMember in the container.
-     * @param obj The CourseSessionMember to be created.
+     * Creates a new SessionMemberContainer in the container.
+     * @param obj The SessionMemberContainer to be created.
      *
-     * @return True if the CourseSessionMember was created, false otherwise.
+     * @return True if the SessionMemberContainer was created, false otherwise.
      */
     @Override
     public boolean create(SessionMember obj) {
@@ -43,27 +43,27 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     }
 
     /**
-     * Gets a CourseSessionMember from the container.
+     * Gets a SessionMemberContainer from the container.
      *
-     * @param ssn The ssn of the CourseSessionMember to be retrieved.
-     * @param courseSessionID The id of the CourseSession.
-     * @return The CourseSessionMember with the given ssn and from the given course session.
+     * @param ssn The ssn of the SessionMember to be retrieved.
+     * @param sessionID The id of the Session.
+     * @return The SessionMember with the given ssn and from the given session id.
      */
     @Override
-    public SessionMember getCourseSessionMember(long ssn, long courseSessionID) {
-        SessionMember courseSessionMember = null;
-        for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
-            if (container.get(i).getPerson().getSsn() == ssn && container.get(i).getCourseSession().getSessionID() == courseSessionID) {
-                courseSessionMember = container.get(i);
+    public SessionMember getSessionMember(long ssn, long sessionID) {
+        SessionMember sessionMember = null;
+        for (int i = 0; i < container.size() && sessionMember == null; i++) {
+            if (container.get(i).getPerson().getSsn() == ssn && container.get(i).getSession().getSessionID() == sessionID) {
+                sessionMember = container.get(i);
             }
         }
-        return courseSessionMember;
+        return sessionMember;
     }
 
     /**
-     * Gets all CourseSessionMembers from the container.
+     * Gets all SessionMembers from the container.
      *
-     * @return A list of all CourseSessionMembers in the container.
+     * @return A list of all SessionMembers in the container.
      */
     @Override
     public List<SessionMember> getAll() {
@@ -71,11 +71,11 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     }
 
     /**
-     * Updates a CourseSessionMember in the container.
-     * @param id The ID of the CourseSessionMember to be updated.
-     * @param obj The CourseSessionMember to be updated.
+     * Updates a SessionMembers in the container.
+     * @param id The ID of the SessionMembers to be updated.
+     * @param obj The SessionMembers to be updated.
      *
-     * @return True if the CourseSessionMember was updated, false otherwise.
+     * @return True if the SessionMembers was updated, false otherwise.
      */
     @Override
     public boolean update(long id, SessionMember obj) {
@@ -90,10 +90,10 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     }
 
     /**
-     * Deletes a CourseSessionMember from the container.
-     * @param id The ID of the CourseSessionMember to be deleted.
+     * Deletes a SessionMembers from the container.
+     * @param id The ID of the SessionMembers to be deleted.
      *
-     * @return True if the CourseSessionMember was deleted, false otherwise.
+     * @return True if the SessionMembers was deleted, false otherwise.
      */
     @Override
     public boolean delete(long id) {

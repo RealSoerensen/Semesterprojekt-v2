@@ -43,15 +43,15 @@ public class CourseController {
 		return markedAbsent;
 	}
 
-	private Person getMemberFromSession(long ssn, Session courseSession) throws SQLException {
+	private Person getMemberFromSession(long ssn, Session session) throws SQLException {
 		Person member = null;
-		List<SessionMember> courseMembers = sessionMemberDB.getAll();
-		for(int i = 0; i < courseMembers.size() && member == null; i++) {
-			SessionMember courseMember = courseMembers.get(i);
-			long courseMemberSsn = courseMember.getPerson().getSsn();
-			long courseMemberCourseSessionID = courseMember.getCourseSession().getSessionID();
-			if(courseMemberSsn == ssn && courseMemberCourseSessionID == courseSession.getSessionID()) {
-				member = courseMember.getPerson();
+		List<SessionMember> sessionMembers = sessionMemberDB.getAll();
+		for(int i = 0; i < sessionMembers.size() && member == null; i++) {
+			SessionMember sessionMember = sessionMembers.get(i);
+			long sessionMemberSsn = sessionMember.getPerson().getSsn();
+			long memberSessionID = sessionMember.getSession().getSessionID();
+			if(sessionMemberSsn == ssn && memberSessionID == session.getSessionID()) {
+				member = sessionMember.getPerson();
 			}
 		}
 		return member;
