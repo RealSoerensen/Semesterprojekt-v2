@@ -1,5 +1,6 @@
 package dal.coursemember;
 
+import model.Course;
 import model.CourseMember;
 
 import java.util.ArrayList;
@@ -46,14 +47,14 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
      * Gets a CourseMember from the container.
      *
      * @param ssn The ssn of the CourseMember to be retrieved.
-     * @param courseID The id of the Course.
-     * @return The CourseMember with the given ssn and from the given course session.
+     * @param course The course of the CourseMember to be retrieved.
+     * @return The CourseMember with the given ssn and from the given course.
      */
     @Override
-    public CourseMember getCourseMember(long ssn, long courseID) {
+    public CourseMember getCourseMember(long ssn, Course course) {
         CourseMember courseMember = null;
         for (int i = 0; i < container.size() && courseMember == null; i++) {
-            if (container.get(i).getMember().getSsn() == ssn && container.get(i).getCourse().getCourseID() == courseID) {
+            if (container.get(i).getMember().getSsn() == ssn && container.get(i).getCourse().equals(course)) {
                 courseMember = container.get(i);
             }
         }

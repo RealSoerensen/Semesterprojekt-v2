@@ -2,10 +2,8 @@ package dal.sessionmember;
 
 import dal.DBConnection;
 import dal.person.PersonDB;
-import dal.session.SessionContainer;
 import dal.session.SessionDB;
 import dal.session.SessionDataAccessIF;
-import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
 import model.Session;
 import model.SessionMember;
@@ -53,9 +51,10 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
     /**
      * Gets a SessionMembers from the database.
      *
-     * @param ssn The ssn of the SessionMembers to be retrieved.
+     * @param ssn       The ssn of the SessionMembers to be retrieved.
      * @param sessionID The id of the Session.
-     * @return The SessionMembers with the given ssn and from the given course session.
+     * @return The SessionMembers with the given ssn and from the given course
+     *         session.
      */
     @Override
     public SessionMember getSessionMember(long ssn, long sessionID) {
@@ -109,11 +108,7 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
         String sql = "UPDATE SessionMember SET ssn = ?, courseSessionID = ? WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, obj.getPerson().getSsn());
-<<<<<<< Updated upstream
-            stmt.setLong(2, obj.getCourseSession().getCourseSessionID());
-=======
             stmt.setLong(2, obj.getSession().getSessionID());
->>>>>>> Stashed changes
             stmt.setLong(3, id);
             result = stmt.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -143,6 +138,7 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
 
     /**
      * Gets a SessionMembers from the database.
+     * 
      * @param sessionMemberRS The ResultSet containing the SessionMembers.
      * @return The SessionMembers with the given id.
      */
@@ -154,6 +150,7 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
 
     /**
      * Gets a Member from the database.
+     * 
      * @param ssn The ssn of the Member to be retrieved.
      * @return The Member with the given ssn.
      */
@@ -164,6 +161,7 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
 
     /**
      * Gets a Session from the database.
+     * 
      * @param sessionID The id of the Session to be retrieved.
      * @return The Session with the given id.
      */
@@ -175,8 +173,8 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
     /**
      * Created to satisfy the interface. It does nothing.
      */
-	@Override
-	public SessionMember get(long id) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public SessionMember get(long id) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -1,10 +1,8 @@
 package dal.coursemember;
 
 import dal.DBConnection;
-import dal.course.CourseContainer;
 import dal.course.CourseDB;
 import dal.course.CourseDataAccessIF;
-import dal.person.PersonContainer;
 import dal.person.PersonDB;
 import dal.person.PersonDataAccessIF;
 import model.Course;
@@ -54,16 +52,16 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
      * Gets a CourseMember from the database.
      *
      * @param ssn The ssn of the CourseMember to be retrieved.
-     * @param courseID The id of the Course.
-     * @return The CourseMember with the given ssn and from the given course session.
+     * @param course The course of the CourseMember to be retrieved.
+     * @return The CourseMember with the given ssn and from the given course.
      */
     @Override
-    public CourseMember getCourseMember(long ssn, long courseID) {
+    public CourseMember getCourseMember(long ssn, Course course) {
         CourseMember courseMember = null;
         String sql = "SELECT * FROM SessionMember WHERE ssn = ? AND sessionID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, ssn);
-            stmt.setLong(2, courseID);
+            stmt.setLong(2, course.getCourseID());
             stmt.executeQuery();
             ResultSet courseMemberRS = stmt.getResultSet();
             if (courseMemberRS.next()) {
@@ -139,6 +137,7 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
 
     /**
      * Gets a CourseMember from the database.
+     * 
      * @param courseMemberRS The ResultSet containing the CourseMember.
      * @return The CourseMember with the given id.
      */
@@ -150,6 +149,7 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
 
     /**
      * Gets a Person from the database.
+     * 
      * @param ssn The ssn of the Person to be retrieved.
      * @return The Person with the given ssn.
      */
@@ -160,6 +160,7 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
 
     /**
      * Gets a Course from the database.
+     * 
      * @param courseID The id of the Course to be retrieved.
      * @return The Course with the given id.
      */
@@ -171,8 +172,8 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
     /**
      * Created to satisfy the interface. It does nothing.
      */
-	@Override
-	public CourseMember get(long id) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public CourseMember get(long id) {
+        throw new UnsupportedOperationException();
+    }
 }
