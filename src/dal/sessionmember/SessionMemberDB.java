@@ -40,7 +40,7 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
         String sql = "INSERT INTO CourseSessionMembers (ssn, courseSessionID) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, obj.getPerson().getSsn());
-            stmt.setLong(2, obj.getCourseSession().getCourseSessionID());
+            stmt.setLong(2, obj.getCourseSession().getSessionID());
             result = stmt.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
