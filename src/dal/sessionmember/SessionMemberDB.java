@@ -107,7 +107,7 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
         String sql = "UPDATE CourseSessionMembers SET ssn = ?, courseSessionID = ? WHERE ssn = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, obj.getPerson().getSsn());
-            stmt.setLong(2, obj.getCourseSession().getCourseSessionID());
+            stmt.setLong(2, obj.getCourseSession().getSessionID());
             stmt.setLong(3, id);
             result = stmt.executeUpdate() == 1;
         } catch (SQLException e) {

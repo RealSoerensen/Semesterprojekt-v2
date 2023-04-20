@@ -80,7 +80,7 @@ public class SessionContainer implements SessionDataAccessIF {
     public boolean update(long id, Session obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getCourseSessionID() == id) {
+            if (container.get(i).getSessionID() == id) {
                 container.set(i, obj);
                 result = true;
             }
@@ -98,7 +98,7 @@ public class SessionContainer implements SessionDataAccessIF {
     public boolean delete(long id) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getCourseSessionID() == id) {
+            if (container.get(i).getSessionID() == id) {
                 container.remove(i);
                 result = true;
             }
