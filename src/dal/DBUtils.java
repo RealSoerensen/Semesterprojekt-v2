@@ -26,6 +26,7 @@ public class DBUtils {
     public void dropTables() throws SQLException {
         // Drop tables
         Statement stmt = connection.createStatement();
+<<<<<<< Updated upstream
         stmt.executeUpdate("DROP TABLE IF EXISTS CourseSessionMembers");
         stmt.executeUpdate("DROP TABLE IF EXISTS CourseSession");
         stmt.executeUpdate("DROP TABLE IF EXISTS MemberCourses");
@@ -34,6 +35,13 @@ public class DBUtils {
         stmt.executeUpdate("DROP TABLE IF EXISTS Administrator");
         stmt.executeUpdate("DROP TABLE IF EXISTS InstructorSubjects");
         stmt.executeUpdate("DROP TABLE IF EXISTS Instructor");
+=======
+        stmt.executeUpdate("DROP TABLE IF EXISTS SessionMember");
+        stmt.executeUpdate("DROP TABLE IF EXISTS Session");
+        stmt.executeUpdate("DROP TABLE IF EXISTS CourseMember");
+        stmt.executeUpdate("DROP TABLE IF EXISTS Course");
+        stmt.executeUpdate("DROP TABLE IF EXISTS InstructorSubject");
+>>>>>>> Stashed changes
         stmt.executeUpdate("DROP TABLE IF EXISTS Person");
         stmt.executeUpdate("DROP TABLE IF EXISTS Subject");
         stmt.executeUpdate("DROP TABLE IF EXISTS Address");
@@ -74,6 +82,7 @@ public class DBUtils {
         );
 
         stmt.executeUpdate("""
+<<<<<<< Updated upstream
                 CREATE TABLE Instructor (\t[ssn] bigint PRIMARY KEY,
                 \t[subjectID] bigint NOT NULL,
                 \tCONSTRAINT FK_Instructor_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
@@ -82,9 +91,12 @@ public class DBUtils {
 
         stmt.executeUpdate("""
                 CREATE TABLE InstructorSubjects (\t[ssn] bigint PRIMARY KEY,
+=======
+                CREATE TABLE InstructorSubject (\t[ssn] bigint PRIMARY KEY,
+>>>>>>> Stashed changes
                 \t[subjectID] bigint NOT NULL,
-                \tCONSTRAINT FK_InstructorSubjects_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
-                    CONSTRAINT FK_InstructorSubjects_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))"""
+                \tCONSTRAINT FK_InstructorSubject_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                    CONSTRAINT FK_InstructorSubject_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))"""
         );
 
         stmt.executeUpdate("""
@@ -107,19 +119,25 @@ public class DBUtils {
         );
 
         stmt.executeUpdate("""
-                CREATE TABLE MemberCourses (\t[ssn] bigint PRIMARY KEY,
+                CREATE TABLE CourseMember (\t[ssn] bigint PRIMARY KEY,
                 \t[courseID] bigint NOT NULL,
+<<<<<<< Updated upstream
                 \tCONSTRAINT FK_MemberCourses_Person FOREIGN KEY (ssn) REFERENCES Member(ssn),
                 \tCONSTRAINT FK_MemberCourses_Course FOREIGN KEY (courseID) REFERENCES Course(courseID))"""
+=======
+                \tCONSTRAINT FK_CourseMember_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                \tCONSTRAINT FK_CourseMember_Course FOREIGN KEY (courseID) REFERENCES Course(courseID))"""
+>>>>>>> Stashed changes
         );
 
         stmt.executeUpdate("""
-                CREATE TABLE CourseSession (\t[date] varchar(50) NOT NULL,
-                \t[courseSessionID] bigint IDENTITY(1,1) PRIMARY KEY,
+                CREATE TABLE Session (\t[date] varchar(50) NOT NULL,
+                \t[sessionID] bigint IDENTITY(1,1) PRIMARY KEY,
                 \t[courseID] bigint NOT NULL,
                 \t[instructorSsn] bigint NOT NULL,
                 \t[subjectID] bigint NOT NULL,
                 \t[addressID] bigint NOT NULL,
+<<<<<<< Updated upstream
                 \tCONSTRAINT FK_CourseSession_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
                 \tCONSTRAINT FK_CourseSession_Instructor FOREIGN KEY (instructorSsn) REFERENCES Instructor(ssn),
                 \tCONSTRAINT FK_CourseSession_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID),
@@ -131,6 +149,19 @@ public class DBUtils {
                 \t[courseSessionID] bigint PRIMARY KEY,
                 \tCONSTRAINT FK_CourseSessionMembers_Member FOREIGN KEY (ssn) REFERENCES Member(ssn),
                 \tCONSTRAINT FK_CourseSessionMembers_CourseSession FOREIGN KEY (courseSessionID) REFERENCES CourseSession(courseSessionID))"""
+=======
+                \tCONSTRAINT FK_Session_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
+                \tCONSTRAINT FK_Session_Person FOREIGN KEY (instructorSsn) REFERENCES Person(ssn),
+                \tCONSTRAINT FK_Session_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID),
+                \tCONSTRAINT FK_Session_Address FOREIGN KEY (addressID) REFERENCES Address(addressID))"""
+        );
+
+        stmt.executeUpdate("""
+                CREATE TABLE SessionMember (\t[ssn] bigint NOT NULL,
+                \t[sessionID] bigint PRIMARY KEY,
+                \tCONSTRAINT FK_SessionMember_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                \tCONSTRAINT FK_SessionMember_session FOREIGN KEY (sessionID) REFERENCES Session(sessionID))"""
+>>>>>>> Stashed changes
         );
     }
 

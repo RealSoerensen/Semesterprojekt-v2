@@ -4,5 +4,5 @@ import dal.CRUD;
 import model.SessionMember;
 
 public interface SessionMemberDataAccessIF extends CRUD<SessionMember> {
-    SessionMember getCourseSessionMember(long ssn, long courseSessionID);
+    SessionMember getSessionMember(long ssn, long sessionID);
 }

@@ -17,11 +17,11 @@ public class SessionMember {
         this.person = person;
     }
 
-    public Session getCourseSession() {
+    public Session getSession() {
         return session;
     }
 
-    public void setCourseSession(Session courseSession) {
-        this.session = courseSession;
+    public void setSession(Session session) {
+        this.session = session;
     }
 }

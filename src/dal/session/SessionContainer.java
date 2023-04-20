@@ -10,19 +10,19 @@ public class SessionContainer implements SessionDataAccessIF {
     private final List<Session> container;
 
     /**
-     * Constructor for CourseSessionContainer class.
+     * Constructor for SessionContainer class.
      * Initializes the container.
      * Private to prevent instantiation.
-     * Use getInstance() to get the instance of the CourseSessionContainer.
+     * Use getInstance() to get the instance of the SessionContainer.
      */
     private SessionContainer() {
     	container = new ArrayList<>();
     }
 
     /**
-     * Gets the instance of the CourseSessionContainer.
+     * Gets the instance of the SessionContainer.
      *
-     * @return The instance of the CourseSessionContainer.
+     * @return The instance of the SessionContainer.
      */
     public static SessionContainer getInstance() {
         if (instance == null) {
@@ -32,10 +32,10 @@ public class SessionContainer implements SessionDataAccessIF {
     }
 
     /**
-     * Creates a new CourseSession in the container.
-     * @param obj The CourseSession to be created.
+     * Creates a new Session in the container.
+     * @param obj The Session to be created.
      *
-     * @return True if the CourseSession was created, false otherwise.
+     * @return True if the Session was created, false otherwise.
      */
     @Override
     public boolean create(Session obj) {
@@ -43,26 +43,26 @@ public class SessionContainer implements SessionDataAccessIF {
     }
 
     /**
-     * Gets a CourseSession from the container.
-     * @param id The ID of the CourseSession to be retrieved.
+     * Gets a Session from the container.
+     * @param id The ID of the Session to be retrieved.
      *
-     * @return The CourseSession with the given ID, null if no CourseSession with the given ID was found.
+     * @return The Session with the given ID, null if no Session with the given ID was found.
      */
     @Override
     public Session get(long id) {
-    	Session courseSession = null;
-        for(int i = 0; i < container.size() && courseSession == null; i++) {
+    	Session session = null;
+        for(int i = 0; i < container.size() && session == null; i++) {
             if(container.get(i).getSessionID() == id) {
-            	courseSession = container.get(i);
+            	session = container.get(i);
             }
         }
-        return courseSession;
+        return session;
     }
 
     /**
-     * Gets all CourseSessions from the container.
+     * Gets all Session from the container.
      *
-     * @return A list of all CourseSessions in the container.
+     * @return A list of all Session in the container.
      */
     @Override
     public List<Session> getAll() {
@@ -70,11 +70,11 @@ public class SessionContainer implements SessionDataAccessIF {
     }
 
     /**
-     * Updates a CourseSession in the container.
-     * @param id The ID of the CourseSession to be updated.
-     * @param obj The CourseSession to be updated.
+     * Updates a Session in the container.
+     * @param id The ID of the Session to be updated.
+     * @param obj The Session to be updated.
      *
-     * @return True if the CourseSession was updated, false otherwise.
+     * @return True if the Session was updated, false otherwise.
      */
     @Override
     public boolean update(long id, Session obj) {
@@ -89,10 +89,10 @@ public class SessionContainer implements SessionDataAccessIF {
     }
 
     /**
-     * Deletes a CourseSession from the container.
-     * @param id The ID of the CourseSession to be deleted.
+     * Deletes a Session from the container.
+     * @param id The ID of the Session to be deleted.
      *
-     * @return True if the CourseSession was deleted, false otherwise.
+     * @return True if the Session was deleted, false otherwise.
      */
     @Override
     public boolean delete(long id) {

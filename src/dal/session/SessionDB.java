@@ -15,22 +15,22 @@ public class SessionDB implements SessionDataAccessIF {
     Connection connection;
 
     /**
-     * Constructor for CourseSessionDB class.
+     * Constructor for SessionDB class.
      */
     public SessionDB() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
     }
 
     /**
-     * Creates a new CourseSession in the database.
+     * Creates a new Session in the database.
      *
-     * @param obj The CourseSession to be created.
-     * @return True if the CourseSession was created successfully, false otherwise.
+     * @param obj The Session to be created.
+     * @return True if the Session was created successfully, false otherwise.
      */
     @Override
     public boolean create(Session obj) {
         boolean result = false;
-        String sql = " INSERT INTO courseSession(date, courseID, instructorSsn) " +
+        String sql = " INSERT INTO Session(date, courseID, instructorSsn) " +
                 " VALUES(?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, obj.getDate());
@@ -43,56 +43,56 @@ public class SessionDB implements SessionDataAccessIF {
     }
 
     /**
-     * Gets a CourseSession from the database.
+     * Gets a Session from the database.
      *
-     * @param id The id of the CourseSession to be retrieved.
-     * @return The CourseSession with the given id.
+     * @param id The id of the Session to be retrieved.
+     * @return The Session with the given id.
      */
     @Override
     public Session get(long id) throws SQLException {
-        Session courseSession = null;
-        String sql = " SELECT * FROM courseSession WHERE courseSessionID = ? ";
+        Session session = null;
+        String sql = " SELECT * FROM Session WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeQuery();
-            ResultSet courseSessionRS = stmt.getResultSet();
-            if (courseSessionRS.next()) {
-                courseSession = createCourseSession(courseSessionRS);
+            ResultSet sessionRS = stmt.getResultSet();
+            if (sessionRS.next()) {
+                session = createSession(sessionRS);
             }
         }
-        return courseSession;
+        return session;
     }
 
     /**
-     * Get all CourseSessions from the database.
-     * @return A list of all CourseSessions.
+     * Get all Session from the database.
+     * @return A list of all Session.
      */
     @Override
     public List<Session> getAll() throws SQLException {
-        List<Session> courseSessions = new ArrayList<>();
-        String sql = " SELECT * FROM courseSession ";
+        List<Session> sessions = new ArrayList<>();
+        String sql = " SELECT * FROM Session ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.executeQuery();
-            ResultSet courseSessionRS = stmt.getResultSet();
-            while (courseSessionRS.next()) {
-                Session courseSession = createCourseSession(courseSessionRS);
-                courseSessions.add(courseSession);
+            ResultSet sessionRS = stmt.getResultSet();
+            while (sessionRS.next()) {
+                Session courseSession = createSession(sessionRS);
+                sessions.add(courseSession);
             }
         }
-        return courseSessions;
+        return sessions;
     }
 
     /**
-     * Updates a CourseSession in the database.
-     * @param id The id of the CourseSession to be updated.
-     * @param obj The updated CourseSession.
-     * @return True if the CourseSession was updated successfully, false otherwise.
+     * Updates a Session in the database.
+     * @param id The id of the Session to be updated.
+     * @param obj The updated Session.
+     * @return True if the Session was updated successfully, false otherwise.
      */
     @Override
     public boolean update(long id, Session obj) {
         boolean result = false;
         String sql = " UPDATE courseSession SET date = ?, courseID = ?, instructorSsn = ? " +
-                " WHERE courseSessionID = ? ";
+                " WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, obj.getDate());
             stmt.setLong(2, id);
@@ -106,14 +106,14 @@ public class SessionDB implements SessionDataAccessIF {
     }
 
     /**
-     * Deletes a CourseSession from the database.
-     * @param id The id of the CourseSession to be deleted.
-     * @return True if the CourseSession was deleted successfully, false otherwise.
+     * Deletes a Session from the database.
+     * @param id The id of the Session to be deleted.
+     * @return True if the Session was deleted successfully, false otherwise.
      */
     @Override
     public boolean delete(long id) throws SQLException {
         boolean result;
-        String sql = " DELETE FROM courseSession WHERE courseSessionID = ? ";
+        String sql = " DELETE FROM Session WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             result = stmt.executeUpdate() > 0;
@@ -122,18 +122,18 @@ public class SessionDB implements SessionDataAccessIF {
     }
 
     /**
-     * Creates a CourseSession object from a ResultSet.
+     * Creates a Session object from a ResultSet.
      * @param rs The ResultSet to be converted.
-     * @return The CourseSession object.
+     * @return The Session object.
      */
-    private Session createCourseSession(ResultSet rs) throws SQLException {
+    private Session createSession(ResultSet rs) throws SQLException {
         long instructorSsn = rs.getLong("instructorSsn");
         Timestamp date = rs.getTimestamp("date");
         Person instructor = getInstructor(instructorSsn);
         Course course = getCourse(rs.getLong("courseID"));
         Address address = getAddress(rs.getLong("addressID"));
         Subject subject = getSubject(rs.getLong("subjectID"));
-        long id = rs.getLong("courseSessionID");
+        long id = rs.getLong("sessionID");
         return new Session(id, date, instructor, course, address, subject);
     }
 
