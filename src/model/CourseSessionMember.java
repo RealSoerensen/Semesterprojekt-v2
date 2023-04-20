@@ -1,20 +1,20 @@
 package model;
 
 public class CourseSessionMember {
-    private Member member;
+    private Person person;
     private CourseSession courseSession;
 
-    public CourseSessionMember(Member member, CourseSession courseSession) {
-        this.member = member;
+    public CourseSessionMember(Person person, CourseSession courseSession) {
+        this.person = person;
         this.courseSession = courseSession;
     }
 
-    public Member getMember() {
-        return member;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setMember(Person person) {
+        this.person = person;
     }
 
     public CourseSession getCourseSession() {

@@ -1,20 +1,20 @@
 package model;
 
 public class CourseMember {
-    private Member member;
+    private Person person;
     private Course course;
 
-    public CourseMember(Member member, Course course) {
-        this.member = member;
+    public CourseMember(Person person, Course course) {
+        this.person = person;
         this.course = course;
     }
 
-    public Member getMember() {
-        return member;
+    public Person getMember() {
+        return person;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setMember(Person person) {
+        this.person = person;
     }
 
     public Course getCourse() {

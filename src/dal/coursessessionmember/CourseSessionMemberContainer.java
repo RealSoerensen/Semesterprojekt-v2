@@ -53,7 +53,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
     public CourseSessionMember getCourseSessionMember(long ssn, long courseSessionID) {
         CourseSessionMember courseSessionMember = null;
         for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
-            if (container.get(i).getMember().getSsn() == ssn && container.get(i).getCourseSession().getCourseSessionID() == courseSessionID) {
+            if (container.get(i).getPerson().getSsn() == ssn && container.get(i).getCourseSession().getCourseSessionID() == courseSessionID) {
                 courseSessionMember = container.get(i);
             }
         }
@@ -81,7 +81,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
     public boolean update(long id, CourseSessionMember obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getMember().getSsn() == id) {
+            if (container.get(i).getPerson().getSsn() == id) {
                 container.set(i, obj);
                 result = true;
             }
@@ -99,7 +99,7 @@ public class CourseSessionMemberContainer implements CourseSessionMemberDataAcce
     public boolean delete(long id) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getMember().getSsn() == id) {
+            if (container.get(i).getPerson().getSsn() == id) {
                 container.remove(i);
                 result = true;
             }

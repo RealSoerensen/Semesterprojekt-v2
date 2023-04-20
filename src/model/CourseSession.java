@@ -5,12 +5,12 @@ import java.sql.Timestamp;
 public class CourseSession {
 	private long courseSessionID;
 	private Timestamp date;
-	private Instructor instructor;
+	private Person instructor;
 	private Course course;
 	private Address address;
 	private Subject subject;
 
-	public CourseSession(long courseSessionID, Timestamp date, Instructor instructor, Course course, Address address, Subject subject) {
+	public CourseSession(long courseSessionID, Timestamp date, Person instructor, Course course, Address address, Subject subject) {
 		this.courseSessionID = courseSessionID;
 		this.date = date;
 		this.instructor = instructor;
@@ -19,7 +19,7 @@ public class CourseSession {
 		this.subject = subject;
 	}
 
-	public CourseSession(Timestamp date, Instructor instructor, Course course, Address address, Subject subject) {
+	public CourseSession(Timestamp date, Person instructor, Course course, Address address, Subject subject) {
 		this.date = date;
 		this.instructor = instructor;
 		this.course = course;
@@ -35,11 +35,11 @@ public class CourseSession {
 		this.date = date;
 	}
 
-	public Instructor getInstructor() {
+	public Person getInstructor() {
 		return instructor;
 	}
 
-	public void setInstructor(Instructor instructor) {
+	public void setInstructor(Person instructor) {
 		this.instructor = instructor;
 	}
 

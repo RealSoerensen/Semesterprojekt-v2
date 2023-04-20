@@ -191,7 +191,7 @@ public class PersonDB implements PersonDataAccessIF {
 			long addressID = rs.getLong("addressID");
 
 			Address address = getAddress(addressID);
-			person = new Person(firstName, lastName, address, email, phoneNo, username, password, ssn);
+			person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
 		}
 		return person;
 	}
