@@ -53,7 +53,7 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     public SessionMember getCourseSessionMember(long ssn, long courseSessionID) {
         SessionMember courseSessionMember = null;
         for (int i = 0; i < container.size() && courseSessionMember == null; i++) {
-            if (container.get(i).getPerson().getSsn() == ssn && container.get(i).getCourseSession().getCourseSessionID() == courseSessionID) {
+            if (container.get(i).getPerson().getSsn() == ssn && container.get(i).getCourseSession().getSessionID() == courseSessionID) {
                 courseSessionMember = container.get(i);
             }
         }

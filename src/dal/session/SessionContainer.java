@@ -52,7 +52,7 @@ public class SessionContainer implements SessionDataAccessIF {
     public Session get(long id) {
     	Session courseSession = null;
         for(int i = 0; i < container.size() && courseSession == null; i++) {
-            if(container.get(i).getCourseSessionID() == id) {
+            if(container.get(i).getSessionID() == id) {
             	courseSession = container.get(i);
             }
         }
