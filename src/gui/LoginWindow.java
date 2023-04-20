@@ -100,7 +100,7 @@ public class LoginWindow extends JFrame {
 		PersonContainer pc = PersonContainer.getInstance();
 		List<Person> persons = pc.getAll();
 		String usernameResult = textFieldUsername.getText();
-		String passwordResult = Arrays.toString(passwordField.getPassword());
+		String passwordResult = new String(passwordField.getPassword());
 
 		for (Person p : persons) {
 			if (usernameResult.equalsIgnoreCase(p.getUsername()) && passwordResult.equalsIgnoreCase(p.getPassword())) {

@@ -29,11 +29,8 @@ public class DBUtils {
         stmt.executeUpdate("DROP TABLE IF EXISTS CourseSessionMembers");
         stmt.executeUpdate("DROP TABLE IF EXISTS CourseSession");
         stmt.executeUpdate("DROP TABLE IF EXISTS MemberCourses");
-        stmt.executeUpdate("DROP TABLE IF EXISTS Member");
         stmt.executeUpdate("DROP TABLE IF EXISTS Course");
-        stmt.executeUpdate("DROP TABLE IF EXISTS Administrator");
         stmt.executeUpdate("DROP TABLE IF EXISTS InstructorSubjects");
-        stmt.executeUpdate("DROP TABLE IF EXISTS Instructor");
         stmt.executeUpdate("DROP TABLE IF EXISTS Person");
         stmt.executeUpdate("DROP TABLE IF EXISTS Subject");
         stmt.executeUpdate("DROP TABLE IF EXISTS Address");
@@ -74,23 +71,10 @@ public class DBUtils {
         );
 
         stmt.executeUpdate("""
-                CREATE TABLE Instructor (\t[ssn] bigint PRIMARY KEY,
-                \t[subjectID] bigint NOT NULL,
-                \tCONSTRAINT FK_Instructor_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
-                    CONSTRAINT FK_Instructor_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))"""
-        );
-
-        stmt.executeUpdate("""
                 CREATE TABLE InstructorSubjects (\t[ssn] bigint PRIMARY KEY,
                 \t[subjectID] bigint NOT NULL,
                 \tCONSTRAINT FK_InstructorSubjects_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
                     CONSTRAINT FK_InstructorSubjects_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))"""
-        );
-
-        stmt.executeUpdate("""
-            CREATE TABLE [Administrator] (
-            \t[ssn] bigint PRIMARY KEY,
-            \tCONSTRAINT FK_Administrator_Person FOREIGN KEY (ssn) REFERENCES Person(ssn))"""
         );
 
         stmt.executeUpdate("""
@@ -101,15 +85,10 @@ public class DBUtils {
                 \t[period] varchar(50) NOT NULL)"""
         );
 
-        stmt.executeUpdate("CREATE TABLE Member (" +
-                "\t[ssn] bigint PRIMARY KEY,\n" +
-                "\tCONSTRAINT FK_Member_Person FOREIGN KEY (ssn) REFERENCES Member(ssn))"
-        );
-
         stmt.executeUpdate("""
                 CREATE TABLE MemberCourses (\t[ssn] bigint PRIMARY KEY,
                 \t[courseID] bigint NOT NULL,
-                \tCONSTRAINT FK_MemberCourses_Person FOREIGN KEY (ssn) REFERENCES Member(ssn),
+                \tCONSTRAINT FK_MemberCourses_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
                 \tCONSTRAINT FK_MemberCourses_Course FOREIGN KEY (courseID) REFERENCES Course(courseID))"""
         );
 
@@ -121,7 +100,7 @@ public class DBUtils {
                 \t[subjectID] bigint NOT NULL,
                 \t[addressID] bigint NOT NULL,
                 \tCONSTRAINT FK_CourseSession_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
-                \tCONSTRAINT FK_CourseSession_Instructor FOREIGN KEY (instructorSsn) REFERENCES Instructor(ssn),
+                \tCONSTRAINT FK_CourseSession_Person FOREIGN KEY (instructorSsn) REFERENCES Person(ssn),
                 \tCONSTRAINT FK_CourseSession_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID),
                 \tCONSTRAINT FK_CourseSession_Address FOREIGN KEY (addressID) REFERENCES Address(addressID))"""
         );
@@ -129,7 +108,7 @@ public class DBUtils {
         stmt.executeUpdate("""
                 CREATE TABLE CourseSessionMembers (\t[ssn] bigint NOT NULL,
                 \t[courseSessionID] bigint PRIMARY KEY,
-                \tCONSTRAINT FK_CourseSessionMembers_Member FOREIGN KEY (ssn) REFERENCES Member(ssn),
+                \tCONSTRAINT FK_CourseSessionMembers_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
                 \tCONSTRAINT FK_CourseSessionMembers_CourseSession FOREIGN KEY (courseSessionID) REFERENCES CourseSession(courseSessionID))"""
         );
     }
