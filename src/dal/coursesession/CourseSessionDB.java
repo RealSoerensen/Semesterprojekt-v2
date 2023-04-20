@@ -3,7 +3,7 @@ package dal.coursesession;
 import dal.DBConnection;
 import dal.address.AddressDB;
 import dal.course.CourseDB;
-import dal.instructor.InstructorDB;
+import dal.person.PersonDB;
 import dal.subject.SubjectDB;
 import model.*;
 
@@ -129,7 +129,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
     private CourseSession createCourseSession(ResultSet rs) throws SQLException {
         long instructorSsn = rs.getLong("instructorSsn");
         Timestamp date = rs.getTimestamp("date");
-        Instructor instructor = getInstructor(instructorSsn);
+        Person instructor = getInstructor(instructorSsn);
         Course course = getCourse(rs.getLong("courseID"));
         Address address = getAddress(rs.getLong("addressID"));
         Subject subject = getSubject(rs.getLong("subjectID"));
@@ -152,8 +152,8 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @param ssn The ssn of the Instructor to be retrieved.
      * @return The Instructor with the given ssn.
      */
-    private Instructor getInstructor(long ssn) throws SQLException {
-        InstructorDB instructorDB = new InstructorDB();
+    private Person getInstructor(long ssn) throws SQLException {
+        PersonDB instructorDB = new PersonDB();
         return instructorDB.get(ssn);
     }
 

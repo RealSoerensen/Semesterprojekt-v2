@@ -3,11 +3,11 @@ package dal.coursemember;
 import dal.DBConnection;
 import dal.course.CourseContainer;
 import dal.course.CourseDataAccessIF;
-import dal.member.MemberContainer;
-import dal.member.MemberDataAccessIF;
+import dal.person.PersonContainer;
+import dal.person.PersonDataAccessIF;
 import model.Course;
 import model.CourseMember;
-import model.Member;
+import model.Person;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -141,7 +141,7 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
      * @return The CourseSessionMember with the given id.
      */
     private CourseMember getCourseMember(ResultSet courseMemberRS) throws SQLException {
-        Member member = getMember(courseMemberRS.getLong("ssn"));
+        Person member = getMember(courseMemberRS.getLong("ssn"));
         Course course = getCourse(courseMemberRS.getLong("courseID"));
         return new CourseMember(member, course);
     }
@@ -151,14 +151,14 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
      * @param ssn The ssn of the Member to be retrieved.
      * @return The Member with the given ssn.
      */
-    private Member getMember(long ssn) throws SQLException {
-        MemberDataAccessIF memberDB = MemberContainer.getInstance();
+    private Person getMember(long ssn) throws SQLException {
+        PersonDataAccessIF memberDB = PersonContainer.getInstance();
         return memberDB.get(ssn);
     }
 
     /**
      * Gets a CourseSession from the database.
-     * @param courseSessionID The id of the CourseSession to be retrieved.
+     * @param courseID The id of the CourseSession to be retrieved.
      * @return The CourseSession with the given id.
      */
     private Course getCourse(long courseID) throws SQLException {

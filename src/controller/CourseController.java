@@ -36,28 +36,28 @@ public class CourseController {
 
 	public boolean markMemberAbsent(long ssn, CourseSession courseSession) throws SQLException {
 		boolean markedAbsent = false;
-		Member member = getMemberFromCourseSession(ssn, courseSession);
+		Person member = getMemberFromCourseSession(ssn, courseSession);
 		if(member != null) {
 			markedAbsent = removeMember(member);
 		}
 		return markedAbsent;
 	}
 
-	private Member getMemberFromCourseSession(long ssn, CourseSession courseSession) throws SQLException {
-		Member member = null;
+	private Person getMemberFromCourseSession(long ssn, CourseSession courseSession) throws SQLException {
+		Person member = null;
 		List<CourseSessionMember> courseMembers = courseSessionMemberDB.getAll();
 		for(int i = 0; i < courseMembers.size() && member == null; i++) {
 			CourseSessionMember courseMember = courseMembers.get(i);
-			long courseMemberSsn = courseMember.getMember().getSsn();
+			long courseMemberSsn = courseMember.getPerson().getSsn();
 			long courseMemberCourseSessionID = courseMember.getCourseSession().getCourseSessionID();
 			if(courseMemberSsn == ssn && courseMemberCourseSessionID == courseSession.getCourseSessionID()) {
-				member = courseMember.getMember();
+				member = courseMember.getPerson();
 			}
 		}
 		return member;
 	}
 
-	private boolean removeMember(Member member) throws SQLException {
+	private boolean removeMember(Person member) throws SQLException {
 		return courseSessionMemberDB.delete(member.getSsn());
 	}
 }
