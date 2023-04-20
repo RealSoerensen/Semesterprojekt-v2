@@ -1,4 +1,4 @@
-package dal.coursesession;
+package dal.session;
 
 import dal.DBConnection;
 import dal.address.AddressDB;
@@ -11,13 +11,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseSessionDB implements CourseSessionDataAccessIF {
+public class SessionDB implements SessionDataAccessIF {
     Connection connection;
 
     /**
      * Constructor for CourseSessionDB class.
      */
-    public CourseSessionDB() throws SQLException {
+    public SessionDB() throws SQLException {
         connection = DBConnection.getInstance().getConnection();
     }
 
@@ -28,7 +28,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @return True if the CourseSession was created successfully, false otherwise.
      */
     @Override
-    public boolean create(CourseSession obj) {
+    public boolean create(Session obj) {
         boolean result = false;
         String sql = " INSERT INTO courseSession(date, courseID, instructorSsn) " +
                 " VALUES(?, ?, ?) ";
@@ -49,8 +49,8 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @return The CourseSession with the given id.
      */
     @Override
-    public CourseSession get(long id) throws SQLException {
-        CourseSession courseSession = null;
+    public Session get(long id) throws SQLException {
+        Session courseSession = null;
         String sql = " SELECT * FROM courseSession WHERE courseSessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
@@ -68,14 +68,14 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @return A list of all CourseSessions.
      */
     @Override
-    public List<CourseSession> getAll() throws SQLException {
-        List<CourseSession> courseSessions = new ArrayList<>();
+    public List<Session> getAll() throws SQLException {
+        List<Session> courseSessions = new ArrayList<>();
         String sql = " SELECT * FROM courseSession ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.executeQuery();
             ResultSet courseSessionRS = stmt.getResultSet();
             while (courseSessionRS.next()) {
-                CourseSession courseSession = createCourseSession(courseSessionRS);
+                Session courseSession = createCourseSession(courseSessionRS);
                 courseSessions.add(courseSession);
             }
         }
@@ -89,7 +89,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @return True if the CourseSession was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, CourseSession obj) {
+    public boolean update(long id, Session obj) {
         boolean result = false;
         String sql = " UPDATE courseSession SET date = ?, courseID = ?, instructorSsn = ? " +
                 " WHERE courseSessionID = ? ";
@@ -126,7 +126,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
      * @param rs The ResultSet to be converted.
      * @return The CourseSession object.
      */
-    private CourseSession createCourseSession(ResultSet rs) throws SQLException {
+    private Session createCourseSession(ResultSet rs) throws SQLException {
         long instructorSsn = rs.getLong("instructorSsn");
         Timestamp date = rs.getTimestamp("date");
         Person instructor = getInstructor(instructorSsn);
@@ -134,7 +134,7 @@ public class CourseSessionDB implements CourseSessionDataAccessIF {
         Address address = getAddress(rs.getLong("addressID"));
         Subject subject = getSubject(rs.getLong("subjectID"));
         long id = rs.getLong("courseSessionID");
-        return new CourseSession(id, date, instructor, course, address, subject);
+        return new Session(id, date, instructor, course, address, subject);
     }
 
     /**

@@ -2,16 +2,16 @@ package model;
 
 import java.sql.Timestamp;
 
-public class CourseSession {
-	private long courseSessionID;
+public class Session {
+	private long sessionID;
 	private Timestamp date;
 	private Person instructor;
 	private Course course;
 	private Address address;
 	private Subject subject;
 
-	public CourseSession(long courseSessionID, Timestamp date, Person instructor, Course course, Address address, Subject subject) {
-		this.courseSessionID = courseSessionID;
+	public Session(long sessionID, Timestamp date, Person instructor, Course course, Address address, Subject subject) {
+		this.sessionID = sessionID;
 		this.date = date;
 		this.instructor = instructor;
 		this.course = course;
@@ -19,7 +19,7 @@ public class CourseSession {
 		this.subject = subject;
 	}
 
-	public CourseSession(Timestamp date, Person instructor, Course course, Address address, Subject subject) {
+	public Session(Timestamp date, Person instructor, Course course, Address address, Subject subject) {
 		this.date = date;
 		this.instructor = instructor;
 		this.course = course;
@@ -67,11 +67,11 @@ public class CourseSession {
 		this.subject = subject;
 	}
 
-	public long getCourseSessionID() {
-		return courseSessionID;
+	public long getSessionID() {
+		return sessionID;
 	}
 
-	public void setCourseSessionID(long courseSessionID) {
-		this.courseSessionID = courseSessionID;
+	public void setSessionID(long sessionID) {
+		this.sessionID = sessionID;
 	}
 }
