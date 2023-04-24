@@ -1,8 +1,13 @@
 package dal.sessionmember;
 
-import dal.CRUD;
-import model.SessionMember;
+import model.Session;
+import model.Person;
 
-public interface SessionMemberDataAccessIF extends CRUD<SessionMember> {
-    SessionMember getSessionMember(long ssn, long sessionID);
+import java.util.List;
+
+public interface SessionMemberDataAccessIF {
+    boolean create(Session session, Person member);
+    Person getMemberFromSession(long ssn, Session session);
+    List<Person> getMembersInSession(Session session);
+    boolean removeMemberFromSession(Session session, Person member);
 }

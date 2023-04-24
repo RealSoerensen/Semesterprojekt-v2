@@ -34,9 +34,9 @@ public class CourseController {
 		return sessionDB.update(session.getSessionID(), session);
 	}
 
-	public boolean markMemberAbsent(long ssn, Session courseSession) throws SQLException {
+	public boolean markMemberAbsent(long ssn, Session session) throws SQLException {
 		boolean markedAbsent = false;
-		Person member = getMemberFromSession(ssn, courseSession);
+		Person member = getMemberFromSession(ssn, session);
 		if(member != null) {
 			markedAbsent = removeMember(member);
 		}
