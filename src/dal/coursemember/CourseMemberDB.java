@@ -7,6 +7,7 @@ import dal.person.PersonDB;
 import dal.person.PersonDataAccessIF;
 import model.Course;
 import model.Person;
+import model.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,17 +35,29 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
     }
 
     @Override
-    public Person getMemberFromCourse(long ssn, Course course) {
+    public boolean isPersonIn(Course course, Person person) {
+        boolean result = false;
+        String sql = "SELECT * FROM CourseMember WHERE ssn = ? AND sessionid = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, person.getSsn());
+            preparedStatement.setLong(2, course.getCourseID());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Person> getAll(Course course) {
         return null;
     }
 
     @Override
-    public List<Person> getMembersInCourse(Course course) {
-        return null;
-    }
-
-    @Override
-    public boolean removeMemberFromCourse(Course course, Person member) {
+    public boolean remove(Course course, Person member) {
         return false;
     }
 }

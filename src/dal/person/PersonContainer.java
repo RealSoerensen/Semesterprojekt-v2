@@ -64,10 +64,10 @@ public class PersonContainer implements PersonDataAccessIF {
     }
 
     @Override
-    public boolean update(long id, Person obj) {
+    public boolean update(Person obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getSsn() == id) {
+            if (container.get(i).getSsn() == obj.getSsn()) {
                 container.set(i, obj);
                 result = true;
             }
@@ -76,10 +76,10 @@ public class PersonContainer implements PersonDataAccessIF {
     }
 
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Person obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getSsn() == id) {
+            if (container.get(i).getSsn() == obj.getSsn()) {
                 container.remove(i);
                 result = true;
             }

@@ -77,16 +77,15 @@ public class SubjectContainer implements SubjectDataAccessIF {
     /**
      * The update function is used to update the Subject object in the container.
      *
-     * @param id Find the object in the container
      * @param obj Update the subject object in the container
      *
      * @return A boolean value that indicates whether the subject was updated in the container or not
      */
     @Override
-    public boolean update(long id, Subject obj) {
+    public boolean update(Subject obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getSubjectID() == id) {
+            if (container.get(i).getSubjectID() == obj.getSubjectID()) {
                 container.set(i, obj);
                 result = true;
             }
@@ -97,15 +96,15 @@ public class SubjectContainer implements SubjectDataAccessIF {
     /**
      * The delete function deletes a subject from the container.
      *
-     * @param id Find the subject in the container
+     * @param obj Delete the subject object from the container
      *
      * @return True if the object was deleted, and false otherwise
      */
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Subject obj) {
     	boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getSubjectID() == id) {
+            if (container.get(i).getSubjectID() == obj.getSubjectID()) {
                 container.remove(i);
                 result = true;
             }

@@ -4,11 +4,13 @@ import model.Person;
 import model.Session;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SessionMemberContainer implements SessionMemberDataAccessIF {
     private static SessionMemberContainer instance;
-    private final List<Person> container;
+    private final List<Person> personList = new ArrayList<>();
+    private final HashMap<Session, List<Person>> container;
 
     /**
      * Constructor for SessionMemberContainer class.
@@ -17,7 +19,7 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
      * Use getInstance() to get the instance of the SessionMemberContainer.
      */
     private SessionMemberContainer() {
-    	container = new ArrayList<>();
+    	container = new HashMap<>();
     }
 
     /**
@@ -35,21 +37,36 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
 
     @Override
     public boolean create(Session session, Person member) {
+        boolean result = false;
+        if (container.containsKey(session)) {
+            personList.add(member);
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isPersonIn(Session session, Person person) {
         return false;
     }
 
     @Override
-    public Person getMemberFromSession(long ssn, Session session) {
-        return null;
+    public List<Person> getAll(Session session) {
+        List<Person> members = new ArrayList<>();
+        if (container.containsKey(session)) {
+            members = container.get(session);
+        }
+        return members;
     }
 
     @Override
-    public List<Person> getMembersInSession(Session session) {
-        return null;
+    public boolean remove(Session session, Person member) {
+        boolean result = false;
+        if (container.containsKey(session)) {
+            personList.remove(member);
+            result = true;
+        }
+        return result;
     }
 
-    @Override
-    public boolean removeMemberFromSession(Session session, Person member) {
-        return false;
-    }
 }

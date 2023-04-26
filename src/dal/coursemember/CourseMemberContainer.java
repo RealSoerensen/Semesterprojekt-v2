@@ -31,23 +31,24 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
         return instance;
     }
 
+
     @Override
     public boolean create(Course course, Person member) {
         return false;
     }
 
     @Override
-    public Person getMemberFromCourse(long ssn, Course course) {
+    public boolean isPersonIn(Course course, Person person) {
+        return false;
+    }
+
+    @Override
+    public List<Person> getAll(Course course) {
         return null;
     }
 
     @Override
-    public List<Person> getMembersInCourse(Course course) {
-        return null;
-    }
-
-    @Override
-    public boolean removeMemberFromCourse(Course course, Person member) {
+    public boolean remove(Course course, Person member) {
         return false;
     }
 }

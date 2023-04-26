@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SessionMemberDataAccessIF {
     boolean create(Session session, Person member);
-    Person getMemberFromSession(long ssn, Session session);
-    List<Person> getMembersInSession(Session session);
-    boolean removeMemberFromSession(Session session, Person member);
+    boolean isPersonIn(Session session, Person person);
+    List<Person> getAll(Session session);
+    boolean remove(Session session, Person member);
 }

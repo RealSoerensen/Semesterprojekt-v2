@@ -3,22 +3,21 @@ package controller;
 import java.sql.SQLException;
 import java.util.List;
 
-import dal.session.SessionContainer;
 import dal.course.CourseDataAccessIF;
 import dal.session.SessionDataAccessIF;
-import dal.sessionmember.SessionMemberContainer;
+import dal.sessionmember.SessionMemberDB;
 import dal.sessionmember.SessionMemberDataAccessIF;
 import model.*;
 
 public class CourseController {
 	private CourseDataAccessIF courseDB;
-	private final SessionDataAccessIF sessionDB;
-	private final SessionMemberDataAccessIF sessionMemberDB;
-	
-	public CourseController(CourseDataAccessIF dataAccess) {
-		courseDB = dataAccess;
-		sessionDB = SessionContainer.getInstance();
-		sessionMemberDB = SessionMemberContainer.getInstance();
+	private SessionDataAccessIF sessionDB;
+	private SessionMemberDataAccessIF sessionMemberDB;
+
+	public CourseController(CourseDataAccessIF courseDataAccess, SessionDataAccessIF sessionDataAccess, SessionMemberDataAccessIF sessionMemberDataAccess) {
+		setCourseDB(courseDataAccess);
+		setSessionDB(sessionDataAccess);
+		setSessionMemberDB(sessionMemberDataAccess);
 	}
 
 	private CourseDataAccessIF getCourseDB() {
@@ -29,35 +28,90 @@ public class CourseController {
 		this.courseDB = courseDB;
 	}
 
-	public boolean markInstructorAbsent(Session session) throws SQLException {
-		session.setInstructor(null);
-		return sessionDB.update(session.getSessionID(), session);
+	private SessionDataAccessIF getSessionDB(){
+		return sessionDB;
 	}
 
-	public boolean markMemberAbsent(long ssn, Session session) throws SQLException {
-		boolean markedAbsent = false;
-		Person member = getMemberFromSession(ssn, session);
-		if(member != null) {
-			markedAbsent = removeMember(member);
-		}
-		return markedAbsent;
+	private void setSessionDB(SessionDataAccessIF sessionDB) {
+		this.sessionDB = sessionDB;
 	}
 
-	private Person getMemberFromSession(long ssn, Session session) throws SQLException {
-		Person member = null;
-		List<SessionMember> sessionMembers = sessionMemberDB.getAll();
-		for(int i = 0; i < sessionMembers.size() && member == null; i++) {
-			SessionMember sessionMember = sessionMembers.get(i);
-			long sessionMemberSsn = sessionMember.getPerson().getSsn();
-			long memberSessionID = sessionMember.getSession().getSessionID();
-			if(sessionMemberSsn == ssn && memberSessionID == session.getSessionID()) {
-				member = sessionMember.getPerson();
+	private SessionMemberDataAccessIF getSessionMemberDB() {
+		return sessionMemberDB;
+	}
+
+	private void setSessionMemberDB(SessionMemberDataAccessIF sessionMemberDB) {
+		this.sessionMemberDB = sessionMemberDB;
+	}
+
+	public boolean createCourse(Course course) throws SQLException {
+		return getCourseDB().create(course);
+	}
+
+	public Course getCourse(long courseID) throws SQLException {
+		return getCourseDB().get(courseID);
+	}
+
+	public List<Course> getAllCourses() throws SQLException {
+		return getCourseDB().getAll();
+	}
+
+	public boolean updateCourse(Course course) throws SQLException {
+		return getCourseDB().update(course);
+	}
+
+	public boolean removeCourse(Course course) throws SQLException {
+		return getCourseDB().delete(course);
+	}
+
+	public boolean createSession(Session session) throws SQLException {
+		return getSessionDB().create(session);
+	}
+
+	public Session getSession(Course course, long sessionID) throws SQLException {
+		Session session = null;
+		List<Session> allSessions = getAllSessions();
+		for(int i = 0; i < allSessions.size() && session == null; i++) {
+			Session currentSession = allSessions.get(i);
+			if(currentSession.getSessionID() == sessionID && currentSession.getCourse().equals(course)) {
+				session = allSessions.get(i);
 			}
 		}
-		return member;
+		return session;
 	}
 
-	private boolean removeMember(Person member) throws SQLException {
-		return sessionMemberDB.delete(member.getSsn());
+	public List<Session> getAllSessions() throws SQLException {
+		return getSessionDB().getAll();
+	}
+
+	public List<Session> getAllSessionsFromCourse(Course course) throws SQLException {
+		List<Session> allSessions = getAllSessions();
+		for(int i = 0; i < allSessions.size(); i++) {
+			if(!allSessions.get(i).getCourse().equals(course)) {
+				allSessions.remove(i);
+				i--;
+			}
+		}
+		return allSessions;
+	}
+
+	public boolean updateSession(Session session) throws SQLException {
+		return getSessionDB().update(session);
+	}
+
+	public boolean removeSession(Session session) throws SQLException {
+		return getSessionDB().delete(session);
+	}
+
+	public boolean createSessionMember(Session session, Person member) throws SQLException {
+		return getSessionMemberDB().create(session, member);
+	}
+
+	public List<Person> getAllSessionMembers(Session session) throws SQLException {
+		return getSessionMemberDB().getAll(session);
+	}
+
+	public boolean removeSessionMember(Session session, Person person) throws SQLException {
+		return getSessionMemberDB().remove(session, person);
 	}
 }
