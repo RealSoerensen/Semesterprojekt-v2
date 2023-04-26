@@ -71,16 +71,15 @@ public class CourseContainer implements CourseDataAccessIF{
 
     /**
      * Updates a Course in the container.
-     * @param id The ID of the Course to be updated.
      * @param obj The Course to be updated.
      *
      * @return True if the Course was updated, false otherwise.
      */
     @Override
-    public boolean update(long id, Course obj) {
+    public boolean update(Course obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getCourseID() == id) {
+            if (container.get(i).getCourseID() == obj.getCourseID()) {
                 container.set(i, obj);
                 result = true;
             }
@@ -90,15 +89,15 @@ public class CourseContainer implements CourseDataAccessIF{
 
     /**
      * Deletes a Course from the container.
-     * @param id The ID of the Course to be deleted.
+     * @param obj The Course to be deleted.
      *
      * @return True if the Course was deleted, false otherwise.
      */
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Course obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getCourseID() == id) {
+            if (container.get(i).getCourseID() == obj.getCourseID()) {
                 container.remove(i);
                 result = true;
             }

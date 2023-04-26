@@ -72,10 +72,10 @@ public class AddressContainer implements AddressDataAccessIF{
      * @return True if the Address was updated, false otherwise.
      */
     @Override
-    public boolean update(long id, Address obj) {
+    public boolean update(Address obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getAddressID() == id) {
+            if (container.get(i).getAddressID() == obj.getAddressID()) {
                 container.set(i, obj);
                 result = true;
             }
@@ -85,15 +85,15 @@ public class AddressContainer implements AddressDataAccessIF{
 
     /**
      * Deletes an Address from the container.
-     * @param id The ID of the Address to be deleted.
+     * @param obj The Address to be deleted.
      *
      * @return True if the Address was deleted, false otherwise.
      */
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Address obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getAddressID() == id) {
+            if (container.get(i).getAddressID() == obj.getAddressID()) {
                 container.remove(i);
                 result = true;
             }

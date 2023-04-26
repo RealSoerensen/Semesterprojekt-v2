@@ -79,19 +79,18 @@ public class SubjectDB implements SubjectDataAccessIF {
     /**
      * The update function updates the name and description of a subject in the database.
      *
-     * @param id Update the subject with the id that is passed in
-     * @param obj Get the name and description from the object
+     * @param obj Pass the subject object to be updated in the database
      *
      * @return A boolean value to indicate whether the subject was updated or not
      */
     @Override
-    public boolean update(long id, Subject obj) {
+    public boolean update(Subject obj) {
         boolean updated = false;
         String sql = " UPDATE Subject SET name = ?, description = ? WHERE subjectID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, obj.getName());
             stmt.setString(2, obj.getDescription());
-            stmt.setLong(3, id);
+            stmt.setLong(3, obj.getSubjectID());
             updated = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,16 +101,16 @@ public class SubjectDB implements SubjectDataAccessIF {
     /**
      * The delete function deletes a subject from the database.
      *
-     * @param id Identify the row in the database that we want to delete
+     * @param obj Pass the subject object to be deleted from the database
      *
      * @return True or false depending on whether the deletion was successful or not
      */
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Subject obj) {
         boolean deleted = false;
         String sql = " DELETE FROM Subject WHERE subjectID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setLong(1, obj.getSubjectID());
             deleted = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

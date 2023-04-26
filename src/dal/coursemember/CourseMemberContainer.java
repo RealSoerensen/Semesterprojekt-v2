@@ -1,14 +1,14 @@
 package dal.coursemember;
 
 import model.Course;
-import model.CourseMember;
+import model.Person;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourseMemberContainer implements CourseMemberDataAccessIF{
     private static CourseMemberContainer instance;
-    private final List<CourseMember> container;
+    private final List<Person> container;
 
     /**
      * Constructor for SessionMemberContainer class.
@@ -21,9 +21,8 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
     }
 
     /**
-     * Gets the instance of the SessionMemberContainer.
-     *
-     * @return The instance of the SessionMemberContainer.
+     * Gets the instance of the CourseMemberContainer.
+     * @return The instance of the CourseMemberContainer.
      */
     public static CourseMemberContainer getInstance() {
         if (instance == null) {
@@ -32,87 +31,24 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
         return instance;
     }
 
-    /**
-     * Creates a new SessionMember in the container.
-     * @param obj The SessionMember to be created.
-     *
-     * @return True if the SessionMember was created, false otherwise.
-     */
+
     @Override
-    public boolean create(CourseMember obj) {
-        return container.add(obj);
+    public boolean create(Course course, Person member) {
+        return false;
     }
 
-    /**
-     * Gets a CourseMember from the container.
-     *
-     * @param ssn The ssn of the CourseMember to be retrieved.
-     * @param course The course of the CourseMember to be retrieved.
-     * @return The CourseMember with the given ssn and from the given course.
-     */
     @Override
-    public CourseMember getCourseMember(long ssn, Course course) {
-        CourseMember courseMember = null;
-        for (int i = 0; i < container.size() && courseMember == null; i++) {
-            if (container.get(i).getMember().getSsn() == ssn && container.get(i).getCourse().equals(course)) {
-                courseMember = container.get(i);
-            }
-        }
-        return courseMember;
+    public boolean isPersonIn(Course course, Person person) {
+        return false;
     }
 
-    /**
-     * Gets all CourseMembers from the container.
-     *
-     * @return A list of all CourseMembers in the container.
-     */
     @Override
-    public List<CourseMember> getAll() {
-        return container;
+    public List<Person> getAll(Course course) {
+        return null;
     }
 
-    /**
-     * Updates a CourseMember in the container.
-     * @param id The ID of the CourseMember to be updated.
-     * @param obj The CourseMember to be updated.
-     *
-     * @return True if the CourseMember was updated, false otherwise.
-     */
     @Override
-    public boolean update(long id, CourseMember obj) {
-        boolean result = false;
-        for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getMember().getSsn() == id) {
-                container.set(i, obj);
-                result = true;
-            }
-        }
-        return result;
+    public boolean remove(Course course, Person member) {
+        return false;
     }
-
-    /**
-     * Deletes a CourseMember from the container.
-     * @param id The ID of the CourseMember to be deleted.
-     *
-     * @return True if the CourseMember was deleted, false otherwise.
-     */
-    @Override
-    public boolean delete(long id) {
-        boolean result = false;
-        for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getMember().getSsn() == id) {
-                container.remove(i);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Created to satisfy the interface. It does nothing.
-     */
-	@Override
-	public CourseMember get(long id) {
-		throw new UnsupportedOperationException();
-	}
 }

@@ -88,21 +88,20 @@ public class AddressDB implements AddressDataAccessIF {
     /**
      * Updates an Address in the database.
      *
-     * @param id  The id of the Address to be updated.
      * @param obj The Address to be updated.
      * @return True if the Address was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, Address obj) {
+    public boolean update(Address obj) {
         boolean result = false;
-        String sql = "UPDATE Address SET zipCode = ?, city = ?, houseNumber = ?, street = ?" +
+        String sql = "UPDATE address SET zipCode = ?, city = ?, houseNumber = ?, street = ?" +
                 " WHERE addressID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, obj.getZipCode());
             stmt.setString(2, obj.getCity());
             stmt.setString(3, obj.getHouseNumber());
             stmt.setString(4, obj.getStreet());
-            stmt.setLong(5, id);
+            stmt.setLong(5, obj.getAddressID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,15 +112,15 @@ public class AddressDB implements AddressDataAccessIF {
     /**
      * Deletes an Address from the database.
      *
-     * @param id The id of the Address to be deleted.
+     * @param obj The Address to be deleted.
      * @return True if the Address was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Address obj) {
         boolean result = false;
         String sql = " DELETE FROM address WHERE addressID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setLong(1, obj.getAddressID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -32,12 +32,22 @@ public class PersonDB implements PersonDataAccessIF {
 	* @return A boolean value to indicate whether the person was inserted into the database or not
 	*/
 	@Override
-	public boolean create(Person obj) {
-		boolean result;
-		try {
-			result = insertPerson(obj);
+	public boolean create(Person obj) throws SQLException {
+		boolean result = false;
+		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password, addressID) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, obj.getFirstName());
+			stmt.setString(2, obj.getLastName());
+			stmt.setString(3, obj.getEmail());
+			stmt.setLong(4, obj.getSsn());
+			stmt.setString(6, obj.getPhoneNumber());
+			stmt.setString(7, obj.getUsername());
+			stmt.setString(8, obj.getPassword());
+			stmt.setLong(9, obj.getAddress().getAddressID());
+			result = stmt.executeUpdate() > 0;
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 		return result;
 	}
@@ -90,89 +100,42 @@ public class PersonDB implements PersonDataAccessIF {
 	/**
 	  * The update function updates the person and address tables in the database.
 	  *
-	  * @param id Identify the person in the database
-	  * @param obj Get the new values for the person table
+	  * @param obj Pass the person object to be updated in the database
 	  *
 	  * @return A boolean value to indicate whether the person was updated in the database or not
 	*/
 	@Override
-	public boolean update(long id, Person obj) throws SQLException {
+	public boolean update(Person obj) throws SQLException {
 		boolean result;
-		result = updatePerson(id, obj);
-		if (result) {
-			result = updateAddress(id, obj);
+		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, phone = ?, addressId = ? WHERE ssn = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, obj.getFirstName());
+			stmt.setString(2, obj.getLastName());
+			stmt.setString(3, obj.getEmail());
+			stmt.setString(4, obj.getPhoneNumber());
+			stmt.setLong(5, obj.getAddress().getAddressID());
+			stmt.setLong(6, obj.getSsn());
+			result = stmt.executeUpdate() > 0;
 		}
-
 		return result;
 	}
 
 	/**
 	  * The delete function deletes a person from the database.
 	  *
-	  * @param id Identify the person to be deleted
+	  * @param obj Identify the person to be deleted
 	  *
 	  * @return True or false depending on whether the person was deleted or not
 	*/
  	@Override
-	public boolean delete(long id) {
-		 boolean result = false;
+	public boolean delete(Person obj) {
+		boolean result = false;
 		String sql = " DELETE FROM Person WHERE ssn = ? ";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setLong(1, id);
+			stmt.setLong(1, obj.getSsn());
 			result = stmt.executeUpdate() > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		return result;
-	}
-
-	/**
-	* The updatePerson function updates the Person table in the database.
-	*
-	* @param id Identify the person that is to be updated
-	* @param obj Get the values of the person object
-	*
-	* @return A boolean value to indicate whether the person was updated in the database or not
-	*/
- 	private boolean updatePerson(long id, Person obj) {
-		 boolean result = false;
-		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, "
-				+ "phoneNo = ?, username = ?, password = ?, role = ?" +
-				" WHERE ssn = ?";
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, obj.getFirstName());
-			stmt.setString(2, obj.getLastName());
-			stmt.setString(3, obj.getEmail());
-			stmt.setString(4, obj.getPhoneNumber());
-			stmt.setString(5, obj.getUsername());
-			stmt.setString(6, obj.getPassword());
-			stmt.setLong(8, id);
-			result = stmt.executeUpdate() > 0;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	/**
-	* The updateAddress function is used to update the address of a person in the database.
-	*
-	* @param id Find the addressId of the person in order to update it
-	* @param obj Get the address object from the person obj
-	*
-	* @return A boolean value to indicate whether the address was updated in the database or not
-	*/
-	private boolean updateAddress(long id, Person obj) throws SQLException {
-		boolean result = false;
-		String sql = "SELECT addressID FROM Person WHERE ssn = ?";
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setLong(1, id);
-
-			ResultSet rs = stmt.executeQuery(); // Finds the address ID from the person ssn
-			if (rs.next()) {
-				long addressID = rs.getLong("addressID");
-				result = new AddressDB().update(addressID, obj.getAddress());
-			}
 		}
 		return result;
 	}
@@ -189,33 +152,11 @@ public class PersonDB implements PersonDataAccessIF {
 			int role = rs.getInt("role");
 			long ssn = rs.getLong("ssn");
 			long addressID = rs.getLong("addressID");
-
 			Address address = getAddress(addressID);
+
 			person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
 		}
 		return person;
-	}
-
-	private boolean insertPerson(Person person) throws SQLException {
-		boolean result = false;
-		long id = createAddress(person.getAddress());
-		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password, addressID) "
-				+
-				"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, person.getFirstName());
-			stmt.setString(2, person.getLastName());
-			stmt.setString(3, person.getEmail());
-			stmt.setLong(4, person.getSsn());
-			stmt.setString(6, person.getPhoneNumber());
-			stmt.setString(7, person.getUsername());
-			stmt.setString(8, person.getPassword());
-			stmt.setLong(9, id);
-			result = stmt.executeUpdate() > 0;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
 	}
 
 	/**

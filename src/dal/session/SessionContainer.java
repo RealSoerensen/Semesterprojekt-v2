@@ -74,17 +74,16 @@ public class SessionContainer implements SessionDataAccessIF {
 
     /**
      * Updates a Session in the container.
-     * 
-     * @param id  The ID of the Session to be updated.
+     *
      * @param obj The Session to be updated.
      *
      * @return True if the Session was updated, false otherwise.
      */
     @Override
-    public boolean update(long id, Session obj) {
+    public boolean update(Session obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getSessionID() == id) {
+            if (container.get(i).getSessionID() == obj.getSessionID()) {
                 container.set(i, obj);
                 result = true;
             }
@@ -95,15 +94,15 @@ public class SessionContainer implements SessionDataAccessIF {
     /**
      * Deletes a Session from the container.
      * 
-     * @param id The ID of the Session to be deleted.
+     * @param obj The Session to be deleted.
      *
      * @return True if the Session was deleted, false otherwise.
      */
     @Override
-    public boolean delete(long id) {
+    public boolean delete(Session obj) {
         boolean result = false;
         for (int i = 0; i < container.size() && !result; i++) {
-            if (container.get(i).getSessionID() == id) {
+            if (container.get(i).getSessionID() == obj.getSessionID()) {
                 container.remove(i);
                 result = true;
             }

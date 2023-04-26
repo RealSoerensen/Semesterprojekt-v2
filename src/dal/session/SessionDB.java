@@ -2,9 +2,13 @@ package dal.session;
 
 import dal.DBConnection;
 import dal.address.AddressDB;
+import dal.address.AddressDataAccessIF;
 import dal.course.CourseDB;
+import dal.course.CourseDataAccessIF;
 import dal.person.PersonDB;
+import dal.person.PersonDataAccessIF;
 import dal.subject.SubjectDB;
+import dal.subject.SubjectDataAccessIF;
 import model.*;
 
 import java.sql.*;
@@ -30,8 +34,7 @@ public class SessionDB implements SessionDataAccessIF {
     @Override
     public boolean create(Session obj) {
         boolean result = false;
-        String sql = " INSERT INTO Session(date, courseID, instructorSsn) " +
-                " VALUES(?, ?, ?) ";
+        String sql = " INSERT INTO Session(date, courseID, instructorSsn) VALUES(?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, obj.getDate());
             stmt.setLong(2, obj.getCourse().getCourseID());
@@ -84,20 +87,19 @@ public class SessionDB implements SessionDataAccessIF {
 
     /**
      * Updates a Session in the database.
-     * @param id The id of the Session to be updated.
      * @param obj The updated Session.
      * @return True if the Session was updated successfully, false otherwise.
      */
     @Override
-    public boolean update(long id, Session obj) {
+    public boolean update(Session obj) {
         boolean result = false;
-        String sql = " UPDATE courseSession SET date = ?, courseID = ?, instructorSsn = ? " +
+        String sql = " UPDATE Session SET date = ?, courseID = ?, instructorSsn = ? " +
                 " WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setTimestamp(1, obj.getDate());
-            stmt.setLong(2, id);
+            stmt.setLong(2, obj.getCourse().getCourseID());
             stmt.setLong(3, obj.getInstructor().getSsn());
-            stmt.setLong(4, id);
+            stmt.setLong(4, obj.getSessionID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,15 +109,15 @@ public class SessionDB implements SessionDataAccessIF {
 
     /**
      * Deletes a Session from the database.
-     * @param id The id of the Session to be deleted.
+     * @param obj The Session to be deleted.
      * @return True if the Session was deleted successfully, false otherwise.
      */
     @Override
-    public boolean delete(long id) throws SQLException {
+    public boolean delete(Session obj) throws SQLException {
         boolean result;
         String sql = " DELETE FROM Session WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setLong(1, obj.getSessionID());
             result = stmt.executeUpdate() > 0;
         }
         return result;
@@ -127,9 +129,8 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Session object.
      */
     private Session createSession(ResultSet rs) throws SQLException {
-        long instructorSsn = rs.getLong("instructorSsn");
         Timestamp date = rs.getTimestamp("date");
-        Person instructor = getInstructor(instructorSsn);
+        Person instructor = getInstructor(rs.getLong("instructorSsn"));
         Course course = getCourse(rs.getLong("courseID"));
         Address address = getAddress(rs.getLong("addressID"));
         Subject subject = getSubject(rs.getLong("subjectID"));
@@ -143,7 +144,7 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Address with the given id.
      */
     private Address getAddress(long addressId) throws SQLException {
-        AddressDB addressDB = new AddressDB();
+        AddressDataAccessIF addressDB = new AddressDB();
         return addressDB.get(addressId);
     }
 
@@ -153,7 +154,7 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Instructor with the given ssn.
      */
     private Person getInstructor(long ssn) throws SQLException {
-        PersonDB instructorDB = new PersonDB();
+        PersonDataAccessIF instructorDB = new PersonDB();
         return instructorDB.get(ssn);
     }
 
@@ -163,7 +164,7 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Subject with the given id.
      */
     private Subject getSubject(long subjectID) throws SQLException {
-        SubjectDB subjectDB = new SubjectDB();
+        SubjectDataAccessIF subjectDB = new SubjectDB();
         return subjectDB.get(subjectID);
     }
 
@@ -173,7 +174,7 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Course with the given id.
      */
     private Course getCourse(long courseID) throws SQLException {
-        CourseDB courseDB = new CourseDB();
+        CourseDataAccessIF courseDB = new CourseDB();
         return courseDB.get(courseID);
     }
 }

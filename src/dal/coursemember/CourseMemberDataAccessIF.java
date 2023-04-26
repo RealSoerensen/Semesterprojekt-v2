@@ -1,9 +1,13 @@
 package dal.coursemember;
 
-import dal.CRUD;
 import model.Course;
-import model.CourseMember;
+import model.Person;
 
-public interface CourseMemberDataAccessIF extends CRUD<CourseMember> {
-    CourseMember getCourseMember(long ssn, Course course);
+import java.util.List;
+
+public interface CourseMemberDataAccessIF {
+    boolean create(Course course, Person member);
+    boolean isPersonIn(Course course, Person person);
+    List<Person> getAll(Course course);
+    boolean remove(Course course, Person member);
 }
