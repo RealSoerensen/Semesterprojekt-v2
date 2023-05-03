@@ -1,6 +1,6 @@
 import dal.person.PersonContainer;
-import gui.LoginWindow;
-import gui.MainWindow;
+import gui.LoginMenu;
+import gui.MainMenu;
 import model.Address;
 import model.Person;
 
@@ -18,6 +18,6 @@ public class Main {
 		Person person2 = new Person("Jonas", "Jørgensen", address1, "Jonas.birch00@gmail.com", "51408590", 3, "Birch", "1", 222);
 		personContainer.create(person1);
 		personContainer.create(person2);
-		new LoginWindow().run();
+		new LoginMenu().run();
 	}
 }

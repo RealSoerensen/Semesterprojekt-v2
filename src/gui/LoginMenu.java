@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginWindow extends JFrame {
+public class LoginMenu extends JFrame {
 
 	private JPanel contentPanel;
 	private JTextField textFieldUsername;
@@ -29,7 +29,7 @@ public class LoginWindow extends JFrame {
 	private PersonController personController;
 	private LoginController loginController;
 
-	private LoginWindow frame;
+	private LoginMenu frame;
 
 
 //	personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
@@ -39,7 +39,7 @@ public class LoginWindow extends JFrame {
 	public void run() {
 		try {
 
-			frame = new LoginWindow();
+			frame = new LoginMenu();
 
 			frame.setVisible(true);
 			
@@ -52,7 +52,7 @@ public class LoginWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LoginWindow() {
+	public LoginMenu() {
 		loginController = LoginController.getInstance();
 		personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
 		
@@ -109,7 +109,7 @@ public class LoginWindow extends JFrame {
 	
 	private void createUser() {
 		// TODO Auto-generated method stub
-		new CreateUserWindow().run();
+		new CreateAccountMenu().run();
 	}
 
 	private void logIn() throws SQLException {
@@ -124,7 +124,7 @@ public class LoginWindow extends JFrame {
 				loginController.setLoggedInPerson(p);
 				System.out.println("Logged in as: " + p.getFirstName());
 
-				new MainWindow().run();
+				new MainMenu().run();
 				this.setVisible(false);
 
 			}

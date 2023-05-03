@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 
-public class MainWindow extends JFrame {
+public class MainMenu extends JFrame {
 
 	private JPanel contentPanel;
 
@@ -23,7 +23,7 @@ public class MainWindow extends JFrame {
 	 */
 	public void run() {
 		try {
-			MainWindow frame = new MainWindow();
+			MainMenu frame = new MainMenu();
 			frame.setVisible(true);
 			frame.setResizable(false);
 			frame.setTitle("Aalborg Gigtforening");
@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow() {
+	public MainMenu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
 		contentPanel = new JPanel();
@@ -66,7 +66,7 @@ public class MainWindow extends JFrame {
 
 		JButton btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> lblTitle.setText("Kurser"));
-		btnCourses.setBounds(10, 108, 144, 37);
+		btnCourses.setBounds(10, 96, 144, 37);
 		menuPanel.add(btnCourses);
 
 

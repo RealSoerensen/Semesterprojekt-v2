@@ -14,7 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 
-public class CreateUserWindow extends JDialog {
+public class CreateAccountMenu extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldFirstName;
@@ -33,7 +33,7 @@ public class CreateUserWindow extends JDialog {
 	 */
 	public void run() {
 		try {
-			CreateUserWindow dialog = new CreateUserWindow();
+			CreateAccountMenu dialog = new CreateAccountMenu();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class CreateUserWindow extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateUserWindow() {
+	public CreateAccountMenu() {
 		setBounds(100, 100, 398, 501);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

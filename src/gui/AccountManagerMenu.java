@@ -7,12 +7,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 
-public class AccountsMenu extends JPanel {
+public class AccountManagerMenu extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	public AccountsMenu() {
+	public AccountManagerMenu() {
 		setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
