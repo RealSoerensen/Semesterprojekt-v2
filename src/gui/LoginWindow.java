@@ -32,15 +32,12 @@ public class LoginWindow extends JFrame {
 	private LoginWindow frame;
 
 
+//	personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
 	/**
 	 * Launch the application.
 	 */
 	public void run() {
 		try {
-
-			personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
-			loginController = LoginController.getInstance();
-			
 
 			frame = new LoginWindow();
 
@@ -56,6 +53,9 @@ public class LoginWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginWindow() {
+		loginController = LoginController.getInstance();
+		personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 420, 302);
 		contentPanel = new JPanel();
@@ -109,7 +109,7 @@ public class LoginWindow extends JFrame {
 	
 	private void createUser() {
 		// TODO Auto-generated method stub
-		
+		new CreateUserWindow().run();
 	}
 
 	private void logIn() throws SQLException {

@@ -66,18 +66,8 @@ public class MainWindow extends JFrame {
 
 		JButton btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> lblTitle.setText("Kurser"));
-		btnCourses.setBounds(10, 144, 144, 37);
+		btnCourses.setBounds(10, 108, 144, 37);
 		menuPanel.add(btnCourses);
-
-		JButton btnInstructors = new JButton("Intruktører");
-		btnInstructors.addActionListener(e -> lblTitle.setText("Intruktører"));
-		btnInstructors.setBounds(10, 192, 144, 37);
-		menuPanel.add(btnInstructors);
-
-		JButton btnMembers = new JButton("Kursister");
-		btnMembers.addActionListener(e -> lblTitle.setText("Kursister"));
-		btnMembers.setBounds(10, 240, 144, 37);
-		menuPanel.add(btnMembers);
 
 
 
@@ -85,7 +75,7 @@ public class MainWindow extends JFrame {
 		JLabel lblMenu = new JLabel("Menu");
 		lblMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblMenu.setBounds(10, 48, 144, 49);
+		lblMenu.setBounds(10, 36, 144, 49);
 		menuPanel.add(lblMenu);
 
 		JPanel panelContact = new JPanel();
@@ -138,7 +128,7 @@ public class MainWindow extends JFrame {
 		JPanel panelMainWindowAdmin = new JPanel();
 		panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
-		panelMainWindowAdmin.setBounds(0, 219, 164, 133);
+		panelMainWindowAdmin.setBounds(0, 205, 164, 154);
 		menuPanel.add(panelMainWindowAdmin);
 		panelMainWindowAdmin.setLayout(null);
 		
