@@ -3,13 +3,17 @@ package controller;
 import java.sql.SQLException;
 import java.util.List;
 
+
 import dal.address.AddressDataAccessIF;
 import dal.person.PersonDataAccessIF;
 import model.Address;
+import dal.person.PersonContainer;
 import model.Person;
 
 public class PersonController {
 
+	PersonContainer pc = PersonContainer.getInstance();
+	
 	private PersonDataAccessIF personDB;
 	private AddressDataAccessIF addressDB;
 	
@@ -72,5 +76,6 @@ public class PersonController {
 
 	public boolean deleteAddress(Address address) throws SQLException {
 		return getAddressDB().delete(address);
+
 	}
 }

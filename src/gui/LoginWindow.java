@@ -25,18 +25,28 @@ public class LoginWindow extends JFrame {
 	private JPanel contentPanel;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
+
 	private PersonController personController;
 	private LoginController loginController;
+
+	private LoginWindow frame;
+
 
 	/**
 	 * Launch the application.
 	 */
 	public void run() {
 		try {
+
 			personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
 			loginController = LoginController.getInstance();
-			LoginWindow frame = new LoginWindow();
+			
+
+			frame = new LoginWindow();
+
 			frame.setVisible(true);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -95,22 +105,30 @@ public class LoginWindow extends JFrame {
 		contentPanel.add(lblPassword);
 	}
 
+	
+	
 	private void createUser() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	private void logIn() throws SQLException {
 		// TODO Auto-generated method stub
 		List<Person> persons = personController.getAllPersons();
+
 		String usernameResult = textFieldUsername.getText();
-		String passwordResult = Arrays.toString(passwordField.getPassword());
+		String passwordResult = new String(passwordField.getPassword());
 
 		for (Person p : persons) {
 			if (usernameResult.equalsIgnoreCase(p.getUsername()) && passwordResult.equalsIgnoreCase(p.getPassword())) {
 				loginController.setLoggedInPerson(p);
 				System.out.println("Logged in as: " + p.getFirstName());
+
+				new MainWindow().run();
+				this.setVisible(false);
+
 			}
+			
 		}
 	}
 }

@@ -10,6 +10,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 
 public class MainWindow extends JFrame {
@@ -77,10 +79,13 @@ public class MainWindow extends JFrame {
 		btnMembers.setBounds(10, 240, 144, 37);
 		menuPanel.add(btnMembers);
 
+
+
+	
 		JLabel lblMenu = new JLabel("Menu");
 		lblMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblMenu.setBounds(10, 84, 144, 49);
+		lblMenu.setBounds(10, 48, 144, 49);
 		menuPanel.add(lblMenu);
 
 		JPanel panelContact = new JPanel();
@@ -129,6 +134,32 @@ public class MainWindow extends JFrame {
 		JButton btnLogOut = new JButton("Log ud");
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
+
+		JPanel panelMainWindowAdmin = new JPanel();
+		panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
+		panelMainWindowAdmin.setBounds(0, 219, 164, 133);
+		menuPanel.add(panelMainWindowAdmin);
+		panelMainWindowAdmin.setLayout(null);
+		
+		JButton btnAccounts = new JButton("Kontoer");
+		btnAccounts.setBounds(10, 39, 144, 37);
+		panelMainWindowAdmin.add(btnAccounts);
+		
+		JLabel lblAdmin = new JLabel("Admin");
+		lblAdmin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAdmin.setBounds(10, 11, 144, 17);
+		panelMainWindowAdmin.add(lblAdmin);
+		btnAccounts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblTitle.setText("Kontoer");
+			}
+		});
+		
+		
+		
+		
 
 		JPanel contentPanel = new JPanel();
 		contentPanel.setBounds(184, 106, 619, 514);
