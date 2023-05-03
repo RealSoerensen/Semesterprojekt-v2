@@ -6,6 +6,7 @@ import java.util.List;
 import dal.address.AddressDataAccessIF;
 import dal.person.PersonDataAccessIF;
 import model.Address;
+import model.Course;
 import model.Person;
 
 public class PersonController {
@@ -18,59 +19,58 @@ public class PersonController {
 		setAddressDB(addressDataAccess);
 	}
 
-	private PersonDataAccessIF getPersonDB() {
-		return personDB;
-	}
-
 	private void setPersonDB(PersonDataAccessIF personDB) {
 		this.personDB = personDB;
 	}
-
-	private AddressDataAccessIF getAddressDB() {
-		return addressDB;
-	}
-
 	private void setAddressDB(AddressDataAccessIF addressDB) {
 		this.addressDB = addressDB;
 	}
 
 	public boolean createPerson(Person person) throws SQLException {
-		return getPersonDB().create(person);
+		return personDB.create(person);
 	}
 
 	public Person getPerson(long personID) throws SQLException {
-		return getPersonDB().get(personID);
+		return personDB.get(personID);
 	}
 
 	public List<Person> getAllPersons() throws SQLException {
-		return getPersonDB().getAll();
+		return personDB.getAll();
 	}
 
 	public boolean updatePerson(Person person) throws SQLException {
-		return getPersonDB().update(person);
+		return personDB.update(person);
 	}
 
 	public boolean deletePerson(Person person) throws SQLException {
-		return getPersonDB().delete(person);
+		return personDB.delete(person);
 	}
 
 	public boolean createAddress(Address address) throws SQLException {
-		return getAddressDB().create(address);
+		return addressDB.create(address);
 	}
 
 	public Address getAddress(long addressID) throws SQLException {
-		return getAddressDB().get(addressID);
+		return addressDB.get(addressID);
 	}
 
 	public List<Address> getAllAddresses() throws SQLException {
-		return getAddressDB().getAll();
+		return addressDB.getAll();
 	}
 
 	public boolean updateAddress(Address address) throws SQLException {
-		return getAddressDB().update(address);
+		return addressDB.update(address);
 	}
 
 	public boolean deleteAddress(Address address) throws SQLException {
-		return getAddressDB().delete(address);
+		return addressDB.delete(address);
+	}
+
+	public void removeAllPersons() throws SQLException {
+		List<Person> allPersons = getAllPersons();
+		while(!allPersons.isEmpty()) {
+			deletePerson(allPersons.get(0));
+			allPersons = getAllPersons();
+		}
 	}
 }

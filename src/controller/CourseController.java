@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import dal.course.CourseDataAccessIF;
+import dal.coursemember.CourseMemberDataAccessIF;
 import dal.session.SessionDataAccessIF;
 import dal.sessionmember.SessionMemberDB;
 import dal.sessionmember.SessionMemberDataAccessIF;
@@ -11,11 +12,13 @@ import model.*;
 
 public class CourseController {
 	private CourseDataAccessIF courseDB;
+	private CourseMemberDataAccessIF courseMemberDB;
 	private SessionDataAccessIF sessionDB;
 	private SessionMemberDataAccessIF sessionMemberDB;
 
-	public CourseController(CourseDataAccessIF courseDataAccess, SessionDataAccessIF sessionDataAccess, SessionMemberDataAccessIF sessionMemberDataAccess) {
+	public CourseController(CourseDataAccessIF courseDataAccess, CourseMemberDataAccessIF courseMemberDataAccess, SessionDataAccessIF sessionDataAccess, SessionMemberDataAccessIF sessionMemberDataAccess) {
 		setCourseDB(courseDataAccess);
+		setCourseMemberDB(courseMemberDataAccess);
 		setSessionDB(sessionDataAccess);
 		setSessionMemberDB(sessionMemberDataAccess);
 	}
@@ -26,6 +29,14 @@ public class CourseController {
 
 	private void setCourseDB(CourseDataAccessIF courseDB) {
 		this.courseDB = courseDB;
+	}
+
+	private CourseMemberDataAccessIF getCourseMemberDB() {
+		return courseMemberDB;
+	}
+
+	private void setCourseMemberDB(CourseMemberDataAccessIF courseMemberDB) {
+		this.courseMemberDB = courseMemberDB;
 	}
 
 	private SessionDataAccessIF getSessionDB(){
@@ -62,6 +73,18 @@ public class CourseController {
 
 	public boolean removeCourse(Course course) throws SQLException {
 		return getCourseDB().delete(course);
+	}
+
+	public boolean createCourseMember(Course course, Person member) {
+		return getCourseMemberDB().create(course, member);
+	}
+
+	public boolean removeCourseMember(Course course, Person member) {
+		return getCourseMemberDB().remove(course, member);
+	}
+
+	public List<Person> getAllCourseMembers(Course course) {
+		return getCourseMemberDB().getAll(course);
 	}
 
 	public boolean createSession(Session session) throws SQLException {
@@ -103,15 +126,31 @@ public class CourseController {
 		return getSessionDB().delete(session);
 	}
 
-	public boolean createSessionMember(Session session, Person member) throws SQLException {
+	public boolean createSessionMember(Session session, Person member) {
 		return getSessionMemberDB().create(session, member);
 	}
 
-	public List<Person> getAllSessionMembers(Session session) throws SQLException {
+	public List<Person> getAllSessionMembers(Session session) {
 		return getSessionMemberDB().getAll(session);
 	}
 
-	public boolean removeSessionMember(Session session, Person person) throws SQLException {
+	public boolean removeSessionMember(Session session, Person person) {
 		return getSessionMemberDB().remove(session, person);
+	}
+
+	public void deleteAllCourses() throws SQLException {
+		List<Course> allCourses = getAllCourses();
+		while(!allCourses.isEmpty()) {
+			removeCourse(allCourses.get(0));
+			allCourses = getAllCourses();
+		}
+	}
+
+	public void deleteAllSessions() throws SQLException {
+		List<Session> allSessions = getAllSessions();
+		while(!allSessions.isEmpty()) {
+			removeSession(allSessions.get(0));
+			allSessions = getAllSessions();
+		}
 	}
 }

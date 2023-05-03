@@ -1,7 +1,9 @@
 package test;
 
+import controller.PersonController;
 import dal.DBConnection;
 import dal.DBUtils;
+import dal.address.AddressContainer;
 import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
 import model.Address;
@@ -14,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.SQLException;
 
 public class PersonTest {
-    private final PersonDataAccessIF personDB;
+    private final PersonController personController;
 
     public PersonTest() {
-        personDB = PersonContainer.getInstance();
+        personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
     }
 
     @Test
@@ -27,7 +29,7 @@ public class PersonTest {
         Person person = new Person("John", "Doe", address, "email", "phone",  1, "username", "password", 1303014586);
 
         //Act
-        boolean result = personDB.create(person);
+        boolean result = personController.createPerson(person);
 
         //Assert
         assertTrue(result);
@@ -40,8 +42,8 @@ public class PersonTest {
         Person person = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
 
         //Act
-        personDB.create(person);
-        Person result = personDB.get(1303014586);
+        personController.createPerson(person);
+        Person result = personController.getPerson(1303014586);
 
         //Assert
         assertEquals(person.getSsn(), result.getSsn());
@@ -49,11 +51,6 @@ public class PersonTest {
 
     @AfterEach
     public void tearDown() throws SQLException {
-        new DBUtils().resetDB();
-    }
-
-    @AfterAll
-    public static void tearDownAll() throws SQLException {
-        DBConnection.getInstance().closeConnection();
+        personController.removeAllPersons();
     }
 }
