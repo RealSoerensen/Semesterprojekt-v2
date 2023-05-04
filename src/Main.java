@@ -19,5 +19,6 @@ public class Main {
 		personContainer.create(person1);
 		personContainer.create(person2);
 		new LoginMenu().run();
+		
 	}
 }

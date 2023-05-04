@@ -125,7 +125,8 @@ public class LoginMenu extends JFrame {
 				System.out.println("Logged in as: " + p.getFirstName());
 
 				new MainMenu().run();
-				this.setVisible(false);
+				dispose();
+				
 
 			}
 			

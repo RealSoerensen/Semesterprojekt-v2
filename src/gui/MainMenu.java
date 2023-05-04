@@ -7,6 +7,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -17,6 +20,9 @@ import java.awt.BorderLayout;
 public class MainMenu extends JFrame {
 
 	private JPanel contentPanel;
+	private JPanel panelFill;
+	private MainMenu frame;
+	private AccountManagerMenu AMM;
 
 	/**
 	 * Launch the application.
@@ -36,6 +42,8 @@ public class MainMenu extends JFrame {
 	 * Create the frame.
 	 */
 	public MainMenu() {
+		setName("Bruh");
+		AMM = new AccountManagerMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
 		contentPanel = new JPanel();
@@ -122,6 +130,12 @@ public class MainMenu extends JFrame {
 		menuPanel.add(lblLoggedInAs);
 
 		JButton btnLogOut = new JButton("Log ud");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new LoginMenu().run();
+				dispose();
+			}
+		});
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
 
@@ -141,9 +155,20 @@ public class MainMenu extends JFrame {
 		lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdmin.setBounds(10, 11, 144, 17);
 		panelMainWindowAdmin.add(lblAdmin);
+		
+		JButton btnMyAccount = new JButton("Min Konto");
+		btnMyAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblTitle.setText("Min Konto");
+				
+			}
+		});
+		btnMyAccount.setBounds(10, 144, 144, 37);
+		menuPanel.add(btnMyAccount);
 		btnAccounts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblTitle.setText("Kontoer");
+
 			}
 		});
 		
@@ -151,8 +176,11 @@ public class MainMenu extends JFrame {
 		
 		
 
-		JPanel contentPanel = new JPanel();
-		contentPanel.setBounds(184, 106, 619, 514);
-		this.contentPanel.add(contentPanel);
+		JPanel panelFill = new JPanel();
+		panelFill.setBounds(184, 106, 619, 514);
+		this.contentPanel.add(panelFill);
 	}
+	
+
 }
+

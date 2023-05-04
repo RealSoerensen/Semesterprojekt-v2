@@ -14,7 +14,7 @@ public class AccountManagerMenu extends JPanel {
 	 */
 	public AccountManagerMenu() {
 		setLayout(null);
-		
+		setName("AccountManagerMenu");
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 11, 599, 492);
 		add(tabbedPane);

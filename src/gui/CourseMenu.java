@@ -59,6 +59,10 @@ public class CourseMenu extends JPanel {
 		btnCreateCourse.setBounds(10, 11, 180, 33);
 		panelAdmin.add(btnCreateCourse);
 		
+		JButton btnDeleteCourse = new JButton("Slet Kursus");
+		btnDeleteCourse.setBounds(10, 96, 180, 33);
+		panelAdmin.add(btnDeleteCourse);
+		
 		JButton btnViewSessions = new JButton("Se Sessioner");
 		btnViewSessions.setBounds(430, 153, 179, 33);
 		add(btnViewSessions);
