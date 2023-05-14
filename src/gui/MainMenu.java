@@ -16,14 +16,22 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 
 public class MainMenu extends JFrame {
 
 	private JPanel contentPanel;
 	private JPanel panelFill;
 	private MainMenu frame;
-	private AccountManagerMenu AMM;
+	private JPanel mainPanel;
+	private CardLayout cardLayout = new CardLayout();
+	private AccountMenu accountMenu = new AccountMenu();
+	private AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
+	private CourseMenu courseMenu = new CourseMenu();
 
+	public static final String ACCOUNT_PANEL = "account panel";
+	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
+	public static final String COURSE_PANEL = "course panel";
 	/**
 	 * Launch the application.
 	 */
@@ -43,7 +51,6 @@ public class MainMenu extends JFrame {
 	 */
 	public MainMenu() {
 		setName("Bruh");
-		AMM = new AccountManagerMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
 		contentPanel = new JPanel();
@@ -74,6 +81,7 @@ public class MainMenu extends JFrame {
 
 		JButton btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> lblTitle.setText("Kurser"));
+		btnCourses.addActionListener(e -> switchPanelToCourseMenu());
 		btnCourses.setBounds(10, 96, 144, 37);
 		menuPanel.add(btnCourses);
 
@@ -146,7 +154,7 @@ public class MainMenu extends JFrame {
 		menuPanel.add(panelMainWindowAdmin);
 		panelMainWindowAdmin.setLayout(null);
 		
-		JButton btnAccounts = new JButton("Kontoer");
+		JButton btnAccounts = new JButton("Alle Konti");
 		btnAccounts.setBounds(10, 39, 144, 37);
 		panelMainWindowAdmin.add(btnAccounts);
 		
@@ -160,15 +168,15 @@ public class MainMenu extends JFrame {
 		btnMyAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblTitle.setText("Min Konto");
-				
+				switchPanelToAccountMenu();
 			}
 		});
 		btnMyAccount.setBounds(10, 144, 144, 37);
 		menuPanel.add(btnMyAccount);
 		btnAccounts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblTitle.setText("Kontoer");
-
+				lblTitle.setText("Alle Konti");
+				switchPanelToAccountManagerMenu();
 			}
 		});
 		
@@ -178,9 +186,29 @@ public class MainMenu extends JFrame {
 
 		JPanel panelFill = new JPanel();
 		panelFill.setBounds(184, 106, 619, 514);
-		this.contentPanel.add(panelFill);
+		contentPanel.add(panelFill);
+		mainPanel = panelFill;
+		mainPanel.setLayout(cardLayout);
+		mainPanel.add(new JPanel());
+		mainPanel.add(courseMenu, COURSE_PANEL);
+		mainPanel.add(accountMenu, ACCOUNT_PANEL);
+		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
+		
+		
+		
+	}
+	public void switchPanelToCourseMenu() {
+		cardLayout.show(mainPanel, COURSE_PANEL);
 	}
 	
+	public void switchPanelToAccountMenu() {
+	cardLayout.show(mainPanel, ACCOUNT_PANEL);
+	
+	}
+
+	public void switchPanelToAccountManagerMenu() {
+	cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
+	}
 
 }
 

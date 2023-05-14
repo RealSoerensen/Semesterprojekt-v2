@@ -38,14 +38,6 @@ public class CourseMenu extends JPanel {
 		btnLeaveCourse.setBounds(430, 197, 179, 33);
 		add(btnLeaveCourse);
 		
-		JButton btnEnrollCourse = new JButton("Tilmeld Kursus");
-		btnEnrollCourse.setToolTipText("");
-		btnEnrollCourse.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnEnrollCourse.setForeground(UIManager.getColor("Button.background"));
-		btnEnrollCourse.setBackground(UIManager.getColor("Button.background"));
-		btnEnrollCourse.setBounds(430, 109, 179, 33);
-		add(btnEnrollCourse);
-		
 		JPanel panelAdmin = new JPanel();
 		panelAdmin.setBounds(419, 336, 200, 167);
 		add(panelAdmin);
@@ -66,6 +58,10 @@ public class CourseMenu extends JPanel {
 		JButton btnViewSessions = new JButton("Se Sessioner");
 		btnViewSessions.setBounds(430, 153, 179, 33);
 		add(btnViewSessions);
+		
+		JButton btnEnrollCourse = new JButton("Tilmeld Kursus");
+		btnEnrollCourse.setBounds(430, 109, 179, 33);
+		add(btnEnrollCourse);
 
 	}
 }
