@@ -148,4 +148,12 @@ public class CourseController {
 		numberOfMembersEnrolled = allMembers.size();
 		return numberOfMembersEnrolled;
 	}
+
+	public void deleteAllCourses() {
+		getCourseDB().deleteAll();
+	}
+
+	public void deleteAllSessions() {
+		getSessionDB().deleteAll();
+	}
 }

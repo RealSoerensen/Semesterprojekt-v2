@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
 
 public class CourseTest {
@@ -20,20 +21,14 @@ public class CourseTest {
     private final PersonController personController;
 
     public CourseTest() {
-        CourseContainer courseContainer = CourseContainer.getInstance();
-        CourseMemberContainer courseMemberContainer = CourseMemberContainer.getInstance();
-        SessionContainer sessionContainer = SessionContainer.getInstance();
-        SessionMemberContainer sessionMemberContainer = SessionMemberContainer.getInstance();
-        courseController = new CourseController(courseContainer, courseMemberContainer, sessionContainer, sessionMemberContainer);
-        PersonContainer personContainer = PersonContainer.getInstance();
-        AddressContainer addressContainer = AddressContainer.getInstance();
-        personController = new PersonController(personContainer, addressContainer);
+        courseController = new CourseController();
+        personController = new PersonController();
     }
 
     @Test
     public void testCreateCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
 
         //Act
         boolean result = courseController.createCourse(course);
@@ -45,7 +40,7 @@ public class CourseTest {
     @Test
     public void testGetCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
 
         //Act
         courseController.createCourse(course);
@@ -58,8 +53,8 @@ public class CourseTest {
     @Test
     public void testUpdateCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
-        Course updatedCourse = new Course(1, "Updated Name", 20.00, "Updated Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course updatedCourse = new Course(1, "Updated Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
 
         //Act
         courseController.createCourse(course);
@@ -72,7 +67,7 @@ public class CourseTest {
     @Test
     public void testDeleteCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
 
         //Act
         courseController.createCourse(course);
@@ -85,9 +80,9 @@ public class CourseTest {
     @Test
     public void testGetAllCourses() throws SQLException {
         //Arrange
-        Course course1 = new Course(1, "Test Name", 20.00, "Test Description", "5");
-        Course course2 = new Course(2, "Test Name", 20.00, "Test Description", "5");
-        Course course3 = new Course(3, "Test Name", 20.00, "Test Description", "5");
+        Course course1 = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course2 = new Course(2, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course3 = new Course(3, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
 
         //Act
         courseController.createCourse(course1);
@@ -102,9 +97,9 @@ public class CourseTest {
     @Test
     public void testEnrollMember() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
-        Person person = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
+        Person person = new Person("John", "Doe", address, "email", "phone", 1,  "password", 1303014586);
 
         //Act
         courseController.createCourse(course);
@@ -118,9 +113,9 @@ public class CourseTest {
     @Test
     public void testUnenrollMember() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
-        Person person = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
+        Person person = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
 
         //Act
         courseController.createCourse(course);
@@ -134,11 +129,11 @@ public class CourseTest {
     @Test
     public void testGetAllCourseMembers() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", "5");
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
-        Person person1 = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
-        Person person2 = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
-        Person person3 = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
+        Person person1 = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
+        Person person2 = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
+        Person person3 = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
 
         //Act
         courseController.createCourse(course);

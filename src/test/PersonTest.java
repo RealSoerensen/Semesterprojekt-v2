@@ -19,7 +19,7 @@ public class PersonTest {
     private final PersonController personController;
 
     public PersonTest() {
-        personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
+        personController = new PersonController();
     }
 
     @Test

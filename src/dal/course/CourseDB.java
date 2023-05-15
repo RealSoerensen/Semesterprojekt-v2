@@ -138,4 +138,14 @@ public class CourseDB implements CourseDataAccessIF {
         }
         return result;
     }
+
+    @Override
+    public void deleteAll() {
+        String sql = " DELETE * FROM course ";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

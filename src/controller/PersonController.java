@@ -5,14 +5,13 @@ import java.util.List;
 
 import dal.address.AddressContainer;
 import dal.address.AddressDataAccessIF;
+import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
 import model.Address;
 import model.Course;
 import model.Person;
 
 public class PersonController {
-
-	PersonContainer pc = PersonContainer.getInstance();
 	private PersonDataAccessIF personDB;
 	private AddressDataAccessIF addressDB;
 
@@ -22,7 +21,7 @@ public class PersonController {
 	}
 
 	public boolean isSsnUnique(long ssn) {
-		return pc.isSsnUnique(ssn);
+		return personDB.isSsnUnique(ssn);
 	}
 
 	private void setPersonDB(PersonDataAccessIF personDB) {

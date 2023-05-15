@@ -109,4 +109,9 @@ public class SessionContainer implements SessionDataAccessIF {
         }
         return result;
     }
+
+    @Override
+    public void deleteAll() {
+        container.clear();
+    }
 }

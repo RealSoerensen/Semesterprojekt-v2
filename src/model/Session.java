@@ -1,16 +1,16 @@
 package model;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 public class Session {
 	private long sessionID;
-	private Timestamp date;
+	private Date date;
 	private Person instructor;
 	private Course course;
 	private Address address;
 	private Subject subject;
 
-	public Session(long sessionID, Timestamp date, Person instructor, Course course, Address address, Subject subject) {
+	public Session(long sessionID, Date date, Person instructor, Course course, Address address, Subject subject) {
 		this.sessionID = sessionID;
 		this.date = date;
 		this.instructor = instructor;
@@ -19,7 +19,7 @@ public class Session {
 		this.subject = subject;
 	}
 
-	public Session(Timestamp date, Person instructor, Course course, Address address, Subject subject) {
+	public Session(Date date, Person instructor, Course course, Address address, Subject subject) {
 		this.date = date;
 		this.instructor = instructor;
 		this.course = course;
@@ -27,11 +27,11 @@ public class Session {
 		this.subject = subject;
 	}
 
-	public Timestamp getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
