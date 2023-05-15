@@ -12,8 +12,6 @@ import model.Person;
 
 public class PersonController {
 
-	PersonContainer pc = PersonContainer.getInstance();
-	
 	private PersonDataAccessIF personDB;
 	private AddressDataAccessIF addressDB;
 	

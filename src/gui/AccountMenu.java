@@ -1,9 +1,10 @@
 package gui;
 
+import controller.LoginController;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
-import java.awt.CardLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
@@ -13,19 +14,14 @@ import java.awt.event.ActionEvent;
 
 public class AccountMenu extends JPanel {
 
-//	private CardLayout cardLayout = new CardLayout();
-//	private EditAccountMenu editAccountMenu = new EditAccountMenu();
-//	public static final String EDIT_ACCOUNT_PANEL = "edit account panel";
-//	public static final String ACCOUNT_PANEL = "account panel";
-	
+	LoginController loginController = LoginController.getInstance();
+
 	/**
 	 * Create the panel.
 	 */
 	public AccountMenu() {
 		setLayout(null);
-//		add(editAccountMenu, EDIT_ACCOUNT_PANEL);
-//		cardLayout.show(this, ACCOUNT_PANEL);
-		
+
 		JLabel lblYourInformation = new JLabel("Dine Oplysninger");
 		lblYourInformation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblYourInformation.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -103,16 +99,11 @@ public class AccountMenu extends JPanel {
 		JButton btnEditInfo = new JButton("Rediger Oplysninger");
 		btnEditInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				switchPanelToEditAccountMenu();
+				EditAccountMenu.run(loginController.getPerson());
 			}
 		});
 		btnEditInfo.setBounds(225, 427, 176, 65);
 		add(btnEditInfo);
 
 	}
-	
-//	public void switchPanelToEditAccountMenu() {
-//		
-//		cardLayout.show(this, EDIT_ACCOUNT_PANEL);
-//	}
 }

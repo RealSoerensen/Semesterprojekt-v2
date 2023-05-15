@@ -1,7 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,23 +9,7 @@ import java.awt.Font;
 
 public class SessionMenu extends JFrame {
 
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SessionMenu frame = new SessionMenu();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JPanel contentPanel;
 
 	/**
 	 * Create the frame.
@@ -35,28 +17,28 @@ public class SessionMenu extends JFrame {
 	public SessionMenu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 646, 427);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel = new JPanel();
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		setContentPane(contentPanel);
+		contentPanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 454, 366);
-		contentPane.add(scrollPane);
+		contentPanel.add(scrollPane);
 		
 		JButton btnViewInfo = new JButton("Se Oplysninger");
 		btnViewInfo.setBounds(474, 11, 146, 39);
-		contentPane.add(btnViewInfo);
+		contentPanel.add(btnViewInfo);
 		
 		JButton btnCloseWindow = new JButton("Luk Vindue");
 		btnCloseWindow.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnCloseWindow.setBounds(474, 311, 146, 66);
-		contentPane.add(btnCloseWindow);
+		contentPanel.add(btnCloseWindow);
 		
 		JPanel panelAdmin = new JPanel();
 		panelAdmin.setBounds(463, 137, 167, 163);
-		contentPane.add(panelAdmin);
+		contentPanel.add(panelAdmin);
 		panelAdmin.setLayout(null);
 		
 		JButton btnCreateNewSession = new JButton("Opret Ny Session");
