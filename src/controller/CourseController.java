@@ -3,9 +3,13 @@ package controller;
 import java.sql.SQLException;
 import java.util.List;
 
+import dal.course.CourseContainer;
 import dal.course.CourseDataAccessIF;
+import dal.coursemember.CourseMemberContainer;
 import dal.coursemember.CourseMemberDataAccessIF;
+import dal.session.SessionContainer;
 import dal.session.SessionDataAccessIF;
+import dal.sessionmember.SessionMemberContainer;
 import dal.sessionmember.SessionMemberDB;
 import dal.sessionmember.SessionMemberDataAccessIF;
 import model.*;
@@ -16,11 +20,11 @@ public class CourseController {
 	private SessionDataAccessIF sessionDB;
 	private SessionMemberDataAccessIF sessionMemberDB;
 
-	public CourseController(CourseDataAccessIF courseDataAccess, CourseMemberDataAccessIF courseMemberDataAccess, SessionDataAccessIF sessionDataAccess, SessionMemberDataAccessIF sessionMemberDataAccess) {
-		setCourseDB(courseDataAccess);
-		setCourseMemberDB(courseMemberDataAccess);
-		setSessionDB(sessionDataAccess);
-		setSessionMemberDB(sessionMemberDataAccess);
+	public CourseController() {
+		setCourseDB(CourseContainer.getInstance());
+		setCourseMemberDB(CourseMemberContainer.getInstance());
+		setSessionDB(SessionContainer.getInstance());
+		setSessionMemberDB(SessionMemberContainer.getInstance());
 	}
 
 	private CourseDataAccessIF getCourseDB() {
@@ -138,19 +142,10 @@ public class CourseController {
 		return getSessionMemberDB().remove(session, person);
 	}
 
-	public void deleteAllCourses() throws SQLException {
-		List<Course> allCourses = getAllCourses();
-		while(!allCourses.isEmpty()) {
-			removeCourse(allCourses.get(0));
-			allCourses = getAllCourses();
-		}
-	}
-
-	public void deleteAllSessions() throws SQLException {
-		List<Session> allSessions = getAllSessions();
-		while(!allSessions.isEmpty()) {
-			removeSession(allSessions.get(0));
-			allSessions = getAllSessions();
-		}
+	public int getNumberOfMembersEnrolled(Course course) {
+		int numberOfMembersEnrolled = 0;
+		List<Person> allMembers = getCourseMemberDB().getAll(course);
+		numberOfMembersEnrolled = allMembers.size();
+		return numberOfMembersEnrolled;
 	}
 }

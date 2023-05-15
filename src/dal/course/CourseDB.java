@@ -29,13 +29,14 @@ public class CourseDB implements CourseDataAccessIF {
     @Override
     public boolean create(Course obj) {
         boolean result = false;
-        String sql = " INSERT INTO course(name, price, description, period) " +
+        String sql = " INSERT INTO course(name, price, description, startDate, endDate) " +
                 " VALUES(?, ?, ?, ?) ";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, obj.getName());
             stmt.setDouble(2, obj.getPrice());
             stmt.setString(3, obj.getDescription());
-            stmt.setString(4, obj.getPeriod());
+            stmt.setDate(4, obj.getStartDate());
+            stmt.setDate(5, obj.getEndDate());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,7 +64,8 @@ public class CourseDB implements CourseDataAccessIF {
                     courseRS.getString("name"),
                     courseRS.getDouble("price"),
                     courseRS.getString("description"),
-                    courseRS.getString("period")
+                    courseRS.getDate("startDate"),
+                    courseRS.getDate("endDate")
             );
         }
         return course;
@@ -87,7 +89,8 @@ public class CourseDB implements CourseDataAccessIF {
                     courseRS.getString("name"),
                     courseRS.getDouble("price"),
                     courseRS.getString("description"),
-                    courseRS.getString("period")
+                    courseRS.getDate("startDate"),
+                    courseRS.getDate("endDate")
             );
             courses.add(course);
         }
@@ -96,21 +99,20 @@ public class CourseDB implements CourseDataAccessIF {
 
     /**
      * Updates a Course in the database.
-     * @param id The id of the Course to be updated.
      * @param obj The Course to be updated.
      * @return True if the Course was updated successfully, false otherwise.
      */
     @Override
     public boolean update(Course obj) {
         boolean result = false;
-        String sql = " UPDATE course SET name = ?, price = ?, description = ?, period = ? " +
+        String sql = " UPDATE course SET name = ?, price = ?, description = ?, startDate = ?, endDate = ? " +
                 " WHERE courseID = ? ";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, obj.getName());
             stmt.setDouble(2, obj.getPrice());
             stmt.setString(3, obj.getDescription());
-            stmt.setString(4, obj.getPeriod());
-            stmt.setLong(5, obj.getCourseID());
+            stmt.setDate(4, obj.getStartDate());
+            stmt.setDate(5, obj.getEndDate());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
