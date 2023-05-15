@@ -6,20 +6,19 @@ import dal.person.PersonContainer;
 import model.Person;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.sql.SQLException;
 
 public class EditAccountMenu extends JFrame {
 
-	private EditAccountMenu frame;
+	private static EditAccountMenu frame;
 	private JPanel contentPanel;
 	private static PersonController personController;
+
 	public static void run(Person person) {
 		try {
 			personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
-			EditAccountMenu frame = new EditAccountMenu(person);
+			frame = new EditAccountMenu(person);
 			frame.setVisible(true);
 			frame.setResizable(false);
 			frame.setTitle("Aalborg Gigtforening");
