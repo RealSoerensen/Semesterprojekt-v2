@@ -4,13 +4,11 @@ import model.Person;
 import model.Session;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class SessionMemberContainer implements SessionMemberDataAccessIF {
     private static SessionMemberContainer instance;
-    private final List<Person> personList = new ArrayList<>();
-    private final HashMap<Session, List<Person>> container;
+    private final List<SessionMember> container;
 
     /**
      * Constructor for SessionMemberContainer class.
@@ -19,7 +17,7 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
      * Use getInstance() to get the instance of the SessionMemberContainer.
      */
     private SessionMemberContainer() {
-    	container = new HashMap<>();
+    	container = new ArrayList<>();
     }
 
     /**
@@ -38,23 +36,36 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     @Override
     public boolean create(Session session, Person member) {
         boolean result = false;
-        if (container.containsKey(session)) {
-            personList.add(member);
-            result = true;
+        SessionMember sessionMember = new SessionMember(session, member);
+        for(int i = 0; i < container.size() && !result; i++) {
+            Session currentSession = container.get(i).session();
+            Person currentMember = container.get(i).member();
+            if (!(currentSession.equals(session) && currentMember.equals(member))) {
+                container.add(sessionMember);
+                result = true;
+            }
         }
         return result;
     }
 
     @Override
     public boolean isPersonIn(Session session, Person person) {
-        return false;
+        boolean result = false;
+        for(int i = 0; i < container.size() && !result; i++) {
+            if(container.get(i).session().equals(session) && container.get(i).member().equals(person)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
     public List<Person> getAll(Session session) {
         List<Person> members = new ArrayList<>();
-        if (container.containsKey(session)) {
-            members = container.get(session);
+        for (SessionMember sessionMember : container) {
+            if (sessionMember.session().equals(session)) {
+                members.add(sessionMember.member());
+            }
         }
         return members;
     }
@@ -62,11 +73,15 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     @Override
     public boolean remove(Session session, Person member) {
         boolean result = false;
-        if (container.containsKey(session)) {
-            personList.remove(member);
-            result = true;
+        for(int i = 0; i < container.size() && !result; i++) {
+            if(container.get(i).session().equals(session) && container.get(i).member().equals(member)) {
+                container.remove(i);
+                result = true;
+            }
         }
         return result;
     }
+}
 
+record SessionMember(Session session, Person member) {
 }

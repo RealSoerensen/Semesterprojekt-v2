@@ -4,11 +4,12 @@ import model.Course;
 import model.Person;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CourseMemberContainer implements CourseMemberDataAccessIF{
     private static CourseMemberContainer instance;
-    private final List<Person> container;
+    private final List<CourseMember> container;
 
     /**
      * Constructor for SessionMemberContainer class.
@@ -34,21 +35,52 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
 
     @Override
     public boolean create(Course course, Person member) {
-        return false;
+        boolean result = false;
+        CourseMember newCourseMember = new CourseMember(course, member);
+        if(!isPersonIn(course, member)) {
+            container.add(newCourseMember);
+            result = true;
+        }
+        return result;
     }
 
     @Override
     public boolean isPersonIn(Course course, Person person) {
-        return false;
+        Person result = null;
+        CourseMember newCourseMember = new CourseMember(course, person);
+        for(int i = 0; i < container.size() && result == null; i++) {
+            CourseMember courseMember = container.get(i);
+            if(newCourseMember.equals(courseMember)) {
+                result = courseMember.member();
+            }
+        }
+        return result != null;
     }
 
     @Override
     public List<Person> getAll(Course course) {
-        return null;
+        List<Person> result = new ArrayList<>();
+        for (CourseMember courseMember : container) {
+            if (courseMember.course().equals(course)) {
+                result.add(courseMember.member());
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean remove(Course course, Person member) {
-        return false;
+        boolean result = false;
+        for(int i = 0; i < container.size() && !result; i++) {
+            CourseMember courseMember = container.get(i);
+            if(courseMember.course().equals(course) && courseMember.member().equals(member)) {
+                container.remove(i);
+                result = true;
+            }
+        }
+        return result;
     }
+}
+
+record CourseMember(Course course, Person member) {
 }

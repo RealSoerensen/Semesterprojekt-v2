@@ -1,25 +1,31 @@
 package model;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 public class Course {
 	private long courseID;
 	private String name;
 	private double price;
 	private String description;
-	private String period;
+	private Date startDate;
+	private Date endDate;
 
-	public Course(String name, double price, String description, String period) {
+	public Course(String name, double price, String description, Date startDate, Date endDate) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
-		this.period = period;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 
-	public Course(long courseID, String name, double price, String description, String period) {
+	public Course(long courseID, String name, double price, String description, Date startDate, Date endDate) {
 		this.courseID = courseID;
 		this.name = name;
 		this.price = price;
 		this.description = description;
-		this.period = period;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 
 	public double getPrice() {
@@ -28,14 +34,6 @@ public class Course {
 
 	public void setPrice(double price) {
 		this.price = price;
-	}
-
-	public String getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(String period) {
-		this.period = period;
 	}
 
 	public String getName() {
@@ -60,5 +58,21 @@ public class Course {
 
 	public void setCourseID(long courseID) {
 		this.courseID = courseID;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }
