@@ -8,7 +8,6 @@ import dal.address.AddressDataAccessIF;
 import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
 import model.Address;
-import model.Course;
 import model.Person;
 
 public class PersonController {

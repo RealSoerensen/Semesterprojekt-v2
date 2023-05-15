@@ -1,92 +1,134 @@
 package gui;
 
 import controller.CourseController;
+import controller.LoginController;
 import model.Course;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CourseMenu extends JPanel {
-	private JTable table;
-	CourseController courseController = new CourseController();
+	private final JTable table;
+	final CourseController courseController = new CourseController();
 
 	/**
 	 * Create the panel.
 	 */
-	public CourseMenu() throws SQLException {
+	public CourseMenu(MainMenu mainMenu) throws SQLException {
 		setLayout(null);
+		setSize(626, 515);
 
 		JScrollPane scrollPaneCourses = new JScrollPane();
 		scrollPaneCourses.setBounds(10, 11, 410, 492);
 		add(scrollPaneCourses);
 
-		DefaultTableModel model = new DefaultTableModel();
-		table = new JTable(model);
-		model.addColumn("Navn");
-		model.addColumn("Beskrivelse");
-		model.addColumn("Pris");
-		model.addColumn("Tilmeldte");
+		List<Course> courses = courseController.getAllCourses();
+		Object[][] data = new Object[courses.size()][6];
 
-		List<Course> courses = getAllCourses();
+		for (int i = 0; i < courses.size(); i++) {
+			Course course = courses.get(i);
+			data[i][0] = course;
+			data[i][1] = course.getName();
+			data[i][2] = course.getPrice();
+			data[i][3] = courseController.getAllCourseMembers(course).size();
+			data[i][4] = course.getStartDate();
+			data[i][5] = course.getEndDate();
 
-		for (Course course : courses) {
-			Object[] row = { course.getName(), course.getDescription(), course.getPrice(),
-					courseController.getNumberOfMembersEnrolled(course) };
-			model.addRow(row);
 		}
-		table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+		String[] columnNames = {
+				"Kursus", "Navn", "Pris", "Tilmeldte", "Starts dato", "Slut dato"
+		};
+
+		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
 			@Override
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				int row = table.rowAtPoint(evt.getPoint());
-				if (row >= 0) {
-					System.out.println(table.getValueAt(row, 0));
-				}
+			public boolean isCellEditable(int row, int column) {
+				return false;
 			}
-		});
+		};
+		table = new JTable(model);
+		// Get the column model
+		TableColumnModel columnModel = table.getColumnModel();
+		// Hide the first column
+		TableColumn column = columnModel.getColumn(0);
+		columnModel.removeColumn(column);
 		scrollPaneCourses.setViewportView(table);
 
-		JButton btnLeaveCourse = new JButton("Frameld Kursus");
-		btnLeaveCourse.setBounds(430, 197, 179, 33);
-		add(btnLeaveCourse);
-
-		JPanel panelAdmin = new JPanel();
-		panelAdmin.setBounds(419, 336, 200, 167);
-		add(panelAdmin);
-		panelAdmin.setLayout(null);
-
-		JButton btnEditCourse = new JButton("Rediger Kursus");
-		btnEditCourse.setBounds(10, 52, 180, 33);
-		panelAdmin.add(btnEditCourse);
-
-		JButton btnCreateCourse = new JButton("Opret Kursus");
-		btnCreateCourse.addActionListener(e -> {
-			openCreateCoursePopup();
-		});
-		btnCreateCourse.setBounds(10, 11, 180, 33);
-		panelAdmin.add(btnCreateCourse);
-
-		JButton btnDeleteCourse = new JButton("Slet Kursus");
-		btnDeleteCourse.setBounds(10, 96, 180, 33);
-		panelAdmin.add(btnDeleteCourse);
-
 		JButton btnViewSessions = new JButton("Se Sessioner");
-		btnViewSessions.setBounds(430, 153, 179, 33);
+		btnViewSessions.addActionListener(e -> {
+			Course course = (Course) table.getModel().getValueAt(table.getSelectedRow(), 0);
+			if (course == null) {
+				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
+			} else {
+				mainMenu.course = course;
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+			}
+		});
+		btnViewSessions.setBounds(430, 11, 186, 48);
 		add(btnViewSessions);
 
-		JButton btnEnrollCourse = new JButton("Tilmeld Kursus");
-		btnEnrollCourse.setBounds(430, 109, 179, 33);
+		JButton btnEnrollCourse = new JButton("Tilmeld");
+		btnEnrollCourse.addActionListener(e -> {
+		});
+		btnEnrollCourse.setBounds(430, 70, 186, 48);
 		add(btnEnrollCourse);
-	}
 
-	private void openCreateCoursePopup() {
-		CreateCourseMenu popup = new CreateCourseMenu();
-		popup.run();
-	}
+		JButton btnLeaveCourse = new JButton("Frameld");
+		btnLeaveCourse.addActionListener(e -> {
+		});
+		btnLeaveCourse.setBounds(430, 129, 186, 48);
+		add(btnLeaveCourse);
 
-	private List<Course> getAllCourses() throws SQLException {
-		return courseController.getAllCourses();
+		System.out.println(LoginController.getInstance().getPerson().getRole());
+		if(LoginController.getInstance().getPerson().getRole() > 2) {
+
+			JPanel panelAdmin = new JPanel();
+			panelAdmin.setBounds(430, 222, 94, 112);
+			add(panelAdmin);
+			panelAdmin.setLayout(null);
+
+			JButton btnEditCourse = new JButton("Rediger");
+			btnEditCourse.addActionListener(e -> {
+				Course course = (Course) table.getModel().getValueAt(table.getSelectedRow(), 0);
+				if(course == null) {
+					JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
+				} else {
+					mainMenu.course = course;
+					mainMenu.cardLayout.show(mainMenu.mainPanel, "edit course panel");
+				}
+			});
+			btnEditCourse.setBounds(0, 45, 94, 23);
+			panelAdmin.add(btnEditCourse);
+
+			JButton btnCreateCourse = new JButton("Opret");
+			btnCreateCourse.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "create course panel"));
+			btnCreateCourse.setBounds(0, 11, 94, 23);
+			panelAdmin.add(btnCreateCourse);
+
+			JButton btnDeleteCourse = new JButton("Slet");
+			btnDeleteCourse.addActionListener(e -> {
+				Course course = table.getSelectedRow() == 0 ? null : courses.get(table.getSelectedRow());
+				if(course == null) {
+					JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
+					return;
+				}
+				try {
+					int result = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil slette dette kursus?", "Slet Kursus", JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						courseController.removeCourse(course);
+						mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
+						JOptionPane.showMessageDialog(null, "Kursus slettet");
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
+				}
+			});
+			btnDeleteCourse.setBounds(0, 79, 94, 23);
+			panelAdmin.add(btnDeleteCourse);
+		}
 	}
 }

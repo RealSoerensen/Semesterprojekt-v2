@@ -6,8 +6,6 @@ import javax.swing.border.EmptyBorder;
 
 import controller.LoginController;
 import controller.PersonController;
-import dal.address.AddressContainer;
-import dal.person.PersonContainer;
 import model.Person;
 
 import javax.swing.JTextField;
@@ -17,19 +15,15 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 public class LoginMenu extends JFrame {
 
-	private JPanel contentPanel;
-	private JTextField textFieldUsername;
-	private JPasswordField passwordField;
+	private final JTextField textFieldUsername;
+	private final JPasswordField passwordField;
 
-	private PersonController personController;
-	private LoginController loginController;
-
-	private LoginMenu frame;
+	private final PersonController personController;
+	private final LoginController loginController;
 
 
 //	personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
@@ -39,7 +33,7 @@ public class LoginMenu extends JFrame {
 	public void run() {
 		try {
 
-			frame = new LoginMenu();
+			LoginMenu frame = new LoginMenu();
 
 			frame.setVisible(true);
 			
@@ -58,7 +52,7 @@ public class LoginMenu extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 420, 302);
-		contentPanel = new JPanel();
+		JPanel contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPanel);
@@ -120,16 +114,13 @@ public class LoginMenu extends JFrame {
 		String passwordResult = new String(passwordField.getPassword());
 
 		for (Person p : persons) {
-			if (usernameResult.equalsIgnoreCase(Long.toString(p.getSsn())) && passwordResult.equalsIgnoreCase(p.getPassword())) {
+			if (usernameResult.equals(Long.toString(p.getSsn())) && passwordResult.equals(p.getPassword())) {
 				loginController.setLoggedInPerson(p);
 				System.out.println("Logged in as: " + p.getFirstName());
 
 				new MainMenu().run();
 				dispose();
-				
-
 			}
-			
 		}
 	}
 }

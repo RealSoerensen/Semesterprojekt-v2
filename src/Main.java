@@ -1,13 +1,9 @@
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 import controller.CourseController;
 import controller.PersonController;
-import dal.address.AddressContainer;
-import dal.person.PersonContainer;
 import gui.LoginMenu;
-import gui.MainMenu;
 import model.*;
 
 public class Main {

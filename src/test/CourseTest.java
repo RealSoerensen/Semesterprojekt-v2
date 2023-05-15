@@ -2,12 +2,6 @@ package test;
 
 import controller.CourseController;
 import controller.PersonController;
-import dal.address.AddressContainer;
-import dal.course.CourseContainer;
-import dal.coursemember.CourseMemberContainer;
-import dal.person.PersonContainer;
-import dal.session.SessionContainer;
-import dal.sessionmember.SessionMemberContainer;
 import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -147,7 +141,7 @@ public class CourseTest {
     }
 
     @AfterEach
-    public void tearDown() throws SQLException {
+    public void tearDown() {
         courseController.deleteAllCourses();
         courseController.deleteAllSessions();
     }

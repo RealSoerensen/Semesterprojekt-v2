@@ -2,8 +2,6 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 

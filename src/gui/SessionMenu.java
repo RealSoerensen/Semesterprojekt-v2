@@ -1,56 +1,71 @@
 package gui;
 
-import javax.swing.JFrame;
+import model.Course;
+
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-import java.awt.Font;
+import java.awt.*;
 
-public class SessionMenu extends JFrame {
-
-	private JPanel contentPanel;
-
+public class SessionMenu extends JPanel {
+	
 	/**
 	 * Create the frame.
 	 */
-	public SessionMenu() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 646, 427);
-		contentPanel = new JPanel();
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+	public SessionMenu(MainMenu mainMenu, Course course) {
+		setLayout(null);
+		setSize(626, 515);
 
-		setContentPane(contentPanel);
-		contentPanel.setLayout(null);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 454, 366);
-		contentPanel.add(scrollPane);
+		JScrollPane scrollPaneCourses = new JScrollPane();
+		scrollPaneCourses.setBounds(10, 11, 410, 492);
+		add(scrollPaneCourses);
 		
 		JButton btnViewInfo = new JButton("Se Oplysninger");
-		btnViewInfo.setBounds(474, 11, 146, 39);
-		contentPanel.add(btnViewInfo);
+		btnViewInfo.addActionListener(e -> {
+		});
+		btnViewInfo.setBounds(430, 111, 186, 39);
+		add(btnViewInfo);
 		
-		JButton btnCloseWindow = new JButton("Luk Vindue");
-		btnCloseWindow.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnCloseWindow.setBounds(474, 311, 146, 66);
-		contentPanel.add(btnCloseWindow);
+		JButton btnBack = new JButton("Tilbage");
+		btnBack.addActionListener(e -> {
+		});
+		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnBack.setBounds(430, 458, 186, 46);
+		add(btnBack);
 		
 		JPanel panelAdmin = new JPanel();
-		panelAdmin.setBounds(463, 137, 167, 163);
-		contentPanel.add(panelAdmin);
+		panelAdmin.setBounds(430, 284, 186, 163);
+		add(panelAdmin);
 		panelAdmin.setLayout(null);
 		
 		JButton btnCreateNewSession = new JButton("Opret Ny Session");
-		btnCreateNewSession.setBounds(10, 11, 146, 39);
+		btnCreateNewSession.addActionListener(e -> {
+		});
+		btnCreateNewSession.setBounds(10, 11, 166, 39);
 		panelAdmin.add(btnCreateNewSession);
 		
 		JButton btnEditSession = new JButton("Rediger Session");
-		btnEditSession.setBounds(10, 61, 146, 39);
+		btnEditSession.addActionListener(e -> {
+		});
+		btnEditSession.setBounds(10, 61, 166, 39);
 		panelAdmin.add(btnEditSession);
 		
 		JButton btnDeleteSession = new JButton("Slet Session");
-		btnDeleteSession.setBounds(10, 111, 146, 39);
+		btnDeleteSession.addActionListener(e -> {
+		});
+		btnDeleteSession.setBounds(10, 111, 166, 39);
 		panelAdmin.add(btnDeleteSession);
+		
+		JButton btnJoinSession = new JButton("Tilmeld session");
+		btnJoinSession.addActionListener(e -> {
+		});
+		btnJoinSession.setBounds(430, 11, 186, 39);
+		add(btnJoinSession);
+		
+		JButton btnLeaveSession = new JButton("Meld afbud");
+		btnLeaveSession.addActionListener(e -> {
+		});
+		btnLeaveSession.setBounds(430, 61, 186, 39);
+		add(btnLeaveSession);
 	}
 }

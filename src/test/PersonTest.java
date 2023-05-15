@@ -1,14 +1,8 @@
 package test;
 
 import controller.PersonController;
-import dal.DBConnection;
-import dal.DBUtils;
-import dal.address.AddressContainer;
-import dal.person.PersonContainer;
-import dal.person.PersonDataAccessIF;
 import model.Address;
 import model.Person;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

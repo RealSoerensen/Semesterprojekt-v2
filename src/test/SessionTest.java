@@ -124,7 +124,7 @@ public class SessionTest {
     }
 
     @AfterEach
-    public void tearDown() throws SQLException {
+    public void tearDown() {
         courseController.deleteAllCourses();
         courseController.deleteAllSessions();
     }

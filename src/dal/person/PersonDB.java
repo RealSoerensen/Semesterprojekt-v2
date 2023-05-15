@@ -32,7 +32,7 @@ public class PersonDB implements PersonDataAccessIF {
 	* @return A boolean value to indicate whether the person was inserted into the database or not
 	*/
 	@Override
-	public boolean create(Person obj) throws SQLException {
+	public boolean create(Person obj) {
 		boolean result = false;
 		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, password, addressID) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";

@@ -10,7 +10,6 @@ import dal.coursemember.CourseMemberDataAccessIF;
 import dal.session.SessionContainer;
 import dal.session.SessionDataAccessIF;
 import dal.sessionmember.SessionMemberContainer;
-import dal.sessionmember.SessionMemberDB;
 import dal.sessionmember.SessionMemberDataAccessIF;
 import model.*;
 
@@ -143,7 +142,7 @@ public class CourseController {
 	}
 
 	public int getNumberOfMembersEnrolled(Course course) {
-		int numberOfMembersEnrolled = 0;
+		int numberOfMembersEnrolled;
 		List<Person> allMembers = getCourseMemberDB().getAll(course);
 		numberOfMembersEnrolled = allMembers.size();
 		return numberOfMembersEnrolled;

@@ -1,5 +1,8 @@
 package gui;
 
+import controller.LoginController;
+import model.Course;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -7,32 +10,30 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.sql.SQLException;
 
 public class MainMenu extends JFrame {
 
-	private JPanel contentPanel;
 	private JPanel panelFill;
 	private MainMenu frame;
-	private JPanel mainPanel;
-	private CardLayout cardLayout = new CardLayout();
-	private AccountMenu accountMenu = new AccountMenu();
-	private AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
-	private CourseMenu courseMenu = new CourseMenu();
-
+	public final JPanel mainPanel;
+	public Course course;
+	public final CardLayout cardLayout = new CardLayout();
 	public static final String ACCOUNT_PANEL = "account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
+	public static final String CREATE_COURSE_PANEL = "create course panel";
+	public static final String EDIT_COURSE_PANEL = "edit course panel";
+	public static final String SESSION_PANEL = "session panel";
+	public static final String CREATE_SESSION_PANEL = "create session panel";
+	public static final String EDIT_SESSION_PANEL = "edit session panel";
+	private final JLabel lblTitle;
 
 	/**
 	 * Launch the application.
@@ -55,7 +56,7 @@ public class MainMenu extends JFrame {
 		setName("Bruh");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
-		contentPanel = new JPanel();
+		JPanel contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPanel);
@@ -68,7 +69,7 @@ public class MainMenu extends JFrame {
 		contentPanel.add(titlePanel);
 		titlePanel.setLayout(null);
 
-		JLabel lblTitle = new JLabel("");
+		lblTitle = new JLabel("");
 		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setBounds(10, 11, 773, 50);
@@ -82,7 +83,6 @@ public class MainMenu extends JFrame {
 		menuPanel.setLayout(null);
 
 		JButton btnCourses = new JButton("Kurser");
-		btnCourses.addActionListener(e -> lblTitle.setText("Kurser"));
 		btnCourses.addActionListener(e -> switchPanelToCourseMenu());
 		btnCourses.setBounds(10, 96, 144, 37);
 		menuPanel.add(btnCourses);
@@ -137,69 +137,78 @@ public class MainMenu extends JFrame {
 		menuPanel.add(lblLoggedInAs);
 
 		JButton btnLogOut = new JButton("Log ud");
-		btnLogOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new LoginMenu().run();
-				dispose();
-			}
+		btnLogOut.addActionListener(e -> {
+			new LoginMenu().run();
+			dispose();
 		});
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
 
-		JPanel panelMainWindowAdmin = new JPanel();
-		panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
-		panelMainWindowAdmin.setBounds(0, 205, 164, 154);
-		menuPanel.add(panelMainWindowAdmin);
-		panelMainWindowAdmin.setLayout(null);
 
-		JButton btnAccounts = new JButton("Alle Konti");
-		btnAccounts.setBounds(10, 39, 144, 37);
-		panelMainWindowAdmin.add(btnAccounts);
+		if (LoginController.getInstance().getPerson().getRole() > 1) {
+			JPanel panelMainWindowAdmin = new JPanel();
+			panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
+			panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
+			panelMainWindowAdmin.setBounds(0, 205, 164, 154);
+			menuPanel.add(panelMainWindowAdmin);
+			panelMainWindowAdmin.setLayout(null);
 
-		JLabel lblAdmin = new JLabel("Admin");
-		lblAdmin.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdmin.setBounds(10, 11, 144, 17);
-		panelMainWindowAdmin.add(lblAdmin);
+			JButton btnAccounts = new JButton("Alle Konti");
+			btnAccounts.addActionListener(e -> switchPanelToAccountManagerMenu());
+			btnAccounts.setBounds(10, 39, 144, 37);
+			panelMainWindowAdmin.add(btnAccounts);
+
+			JLabel lblAdmin = new JLabel("Admin");
+			lblAdmin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAdmin.setBounds(10, 11, 144, 17);
+			panelMainWindowAdmin.add(lblAdmin);
+		}
+
 
 		JButton btnMyAccount = new JButton("Min Konto");
-		btnMyAccount.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblTitle.setText("Min Konto");
-				switchPanelToAccountMenu();
-			}
-		});
+		btnMyAccount.addActionListener(e -> switchPanelToAccountMenu());
 		btnMyAccount.setBounds(10, 144, 144, 37);
 		menuPanel.add(btnMyAccount);
-		btnAccounts.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblTitle.setText("Alle Konti");
-				switchPanelToAccountManagerMenu();
-			}
-		});
 
 		JPanel panelFill = new JPanel();
 		panelFill.setBounds(184, 106, 619, 514);
 		contentPanel.add(panelFill);
+
 		mainPanel = panelFill;
 		mainPanel.setLayout(cardLayout);
 		mainPanel.add(new JPanel());
+		CourseMenu courseMenu = new CourseMenu(this);
 		mainPanel.add(courseMenu, COURSE_PANEL);
+		CreateCourseMenu createCourseMenu = new CreateCourseMenu(this);
+		mainPanel.add(createCourseMenu, CREATE_COURSE_PANEL);
+		EditCourseMenu editCourseMenu = new EditCourseMenu(this, course);
+		mainPanel.add(editCourseMenu, EDIT_COURSE_PANEL);
+		SessionMenu sessionMenu = new SessionMenu(this, course);
+		mainPanel.add(sessionMenu, SESSION_PANEL);
+		CreateSessionMenu createSessionMenu = new CreateSessionMenu(this, course);
+		mainPanel.add(createSessionMenu, CREATE_SESSION_PANEL);
+		EditSessionMenu editSessionMenu = new EditSessionMenu(this, course);
+		mainPanel.add(editSessionMenu, EDIT_SESSION_PANEL);
+		AccountMenu accountMenu = new AccountMenu();
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
+		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
+		switchPanelToCourseMenu();
 	}
 
 	public void switchPanelToCourseMenu() {
+		lblTitle.setText("Kurser");
 		cardLayout.show(mainPanel, COURSE_PANEL);
 	}
 
 	public void switchPanelToAccountMenu() {
+		lblTitle.setText("Min Konto");
 		cardLayout.show(mainPanel, ACCOUNT_PANEL);
-
 	}
 
 	public void switchPanelToAccountManagerMenu() {
+		lblTitle.setText("Alle Konti");
 		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
 	}
 }

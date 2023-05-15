@@ -8,82 +8,67 @@ import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
 
-public class CreateCourseMenu extends JDialog {
-    CourseController courseController = new CourseController();
-    public void run() {
-        try {
-            CreateCourseMenu dialog = new CreateCourseMenu();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+public class CreateCourseMenu extends JPanel {
+    final CourseController courseController = new CourseController();
 
-    public CreateCourseMenu(){
-        setBounds(100, 100, 300, 500);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(null);
-
-        JPanel panel = new JPanel();
-        panel.setBounds(0, 0, 284, 461);
-        getContentPane().add(panel);
-        panel.setLayout(null);
+    public CreateCourseMenu(MainMenu mainMenu) {
+        setLayout(null);
+        setSize(626, 515);
 
         JLabel lblCourseName = new JLabel("Navn:");
         lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseName.setBounds(10, 11, 250, 20);
-        panel.add(lblCourseName);
+        lblCourseName.setBounds(10, 11, 205, 20);
+        add(lblCourseName);
 
         JTextField txtCourseName = new JTextField();
-        txtCourseName.setBounds(10, 42, 250, 20);
-        panel.add(txtCourseName);
+        txtCourseName.setBounds(10, 42, 205, 20);
+        add(txtCourseName);
         txtCourseName.setColumns(10);
 
         JLabel lblCourseDescription = new JLabel("Beskrivelse:");
         lblCourseDescription.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseDescription.setBounds(10, 73, 250, 20);
-        panel.add(lblCourseDescription);
+        lblCourseDescription.setBounds(10, 73, 205, 20);
+        add(lblCourseDescription);
 
         JTextArea txtCourseDescription = new JTextArea();
-        txtCourseDescription.setBounds(10, 104, 250, 100);
-        panel.add(txtCourseDescription);
+        txtCourseDescription.setBounds(10, 104, 205, 82);
+        add(txtCourseDescription);
 
         JLabel lblCoursePrice = new JLabel("Pris:");
         lblCoursePrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCoursePrice.setBounds(10, 215, 250, 20);
-        panel.add(lblCoursePrice);
+        lblCoursePrice.setBounds(225, 11, 217, 20);
+        add(lblCoursePrice);
 
         JTextField txtCoursePrice = new JTextField();
-        txtCoursePrice.setBounds(10, 246, 250, 20);
-        panel.add(txtCoursePrice);
+        txtCoursePrice.setBounds(225, 42, 217, 20);
+        add(txtCoursePrice);
         txtCoursePrice.setColumns(10);
 
         JLabel lblCourseStartDate = new JLabel("Start Dato (DD/MM/YEAR)");
         lblCourseStartDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseStartDate.setBounds(10, 277, 250, 20);
-        panel.add(lblCourseStartDate);
+        lblCourseStartDate.setBounds(221, 73, 221, 20);
+        add(lblCourseStartDate);
 
         JTextField txtCourseStartDate = new JTextField();
-        txtCourseStartDate.setBounds(10, 308, 250, 20);
-        panel.add(txtCourseStartDate);
+        txtCourseStartDate.setBounds(221, 104, 221, 20);
+        add(txtCourseStartDate);
         txtCourseStartDate.setColumns(10);
 
         JLabel lblCourseEndDate = new JLabel("Slut Dato (DD/MM/YEAR)");
         lblCourseEndDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseEndDate.setBounds(10, 339, 250, 20);
-        panel.add(lblCourseEndDate);
+        lblCourseEndDate.setBounds(221, 135, 221, 20);
+        add(lblCourseEndDate);
 
         JTextField txtCourseEndDate = new JTextField();
-        txtCourseEndDate.setBounds(10, 370, 250, 20);
-        panel.add(txtCourseEndDate);
+        txtCourseEndDate.setBounds(223, 166, 219, 20);
+        add(txtCourseEndDate);
         txtCourseEndDate.setColumns(10);
 
         JButton btnBack = new JButton();
-        btnBack.addActionListener(e -> dispose());
+        btnBack.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel"));
         btnBack.setText("Tilbage");
-        btnBack.setBounds(10, 400, 120, 20);
-        panel.add(btnBack);
+        btnBack.setBounds(95, 255, 120, 34);
+        add(btnBack);
 
         JButton btnCreateCourse = new JButton();
         btnCreateCourse.addActionListener(e -> {
@@ -135,7 +120,7 @@ public class CreateCourseMenu extends JDialog {
             try {
                 if(courseController.createCourse(newCourse)){
                     JOptionPane.showMessageDialog(f, "Kursus oprettet");
-                    dispose();
+                    mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
                 } else {
                     JOptionPane.showMessageDialog(f, "Fejl: Kursus kunne ikke oprettes");
                 }
@@ -144,14 +129,20 @@ public class CreateCourseMenu extends JDialog {
             }
         });
         btnCreateCourse.setText("Opret Kursus");
-        btnCreateCourse.setBounds(154, 400, 120, 20);
-        panel.add(btnCreateCourse);
+        btnCreateCourse.setBounds(225, 255, 120, 34);
+        add(btnCreateCourse);
     }
 
     private static int[] StringArrToIntArr(String[] s) {
         int[] result = new int[s.length];
         for (int i = 0; i < s.length; i++) {
-            result[i] = Integer.parseInt(s[i]);
+            int newInt = Integer.parseInt(s[i]);
+            if(i == 0){
+                newInt -= 1900;
+            } else if(i == 1){
+                newInt--;
+            }
+            result[i] = newInt;
         }
         return result;
     }

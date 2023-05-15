@@ -19,24 +19,22 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class CreateAccountMenu extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textFieldFirstName;
-	private JTextField textFieldLastName;
-	private JTextField textFieldEmail;
-	private JTextField textFieldPhone;
-	private JPasswordField passwordFieldPassword;
-	private JPasswordField passwordFieldConfirmPassword;
-	private JTextField textFieldSSN;
-	private JTextField textFieldPostalCode;
-	private JTextField textFieldCity;
-	private JTextField textFieldRoadName;
-	private JTextField textFieldRoadNumber;
+	private final JTextField textFieldFirstName;
+	private final JTextField textFieldLastName;
+	private final JTextField textFieldEmail;
+	private final JTextField textFieldPhone;
+	private final JPasswordField passwordFieldPassword;
+	private final JTextField textFieldSSN;
+	private final JTextField textFieldPostalCode;
+	private final JTextField textFieldCity;
+	private final JTextField textFieldRoadName;
+	private final JTextField textFieldRoadNumber;
+	private final JPasswordField passwordFieldConfirmPassword;
 
 	/**
 	 * Launch the application.
@@ -97,21 +95,21 @@ public class CreateAccountMenu extends JDialog {
 		lblPhone.setBounds(10, 145, 105, 14);
 		contentPanel.add(lblPhone);
 		
-		passwordFieldPassword = new JPasswordField();
-		passwordFieldPassword.setBounds(178, 176, 194, 20);
-		contentPanel.add(passwordFieldPassword);
-		
 		JLabel lblPassword = new JLabel("Adgangskode");
 		lblPassword.setBounds(10, 176, 105, 14);
 		contentPanel.add(lblPassword);
+
+		passwordFieldPassword = new JPasswordField();
+		passwordFieldPassword.setBounds(178, 176, 194, 20);
+		contentPanel.add(passwordFieldPassword);
+
+		JLabel lblConfirmPassword = new JLabel("Bekræft Adgangskode");
+		lblConfirmPassword.setBounds(10, 207, 150, 14);
+		contentPanel.add(lblConfirmPassword);
 		
 		passwordFieldConfirmPassword = new JPasswordField();
 		passwordFieldConfirmPassword.setBounds(178, 207, 194, 20);
 		contentPanel.add(passwordFieldConfirmPassword);
-		
-		JLabel lblConfirmPassword = new JLabel("Bekræft Adgangskode");
-		lblConfirmPassword.setBounds(10, 207, 150, 14);
-		contentPanel.add(lblConfirmPassword);
 		
 		textFieldSSN = new JTextField();
 		textFieldSSN.setColumns(10);
@@ -179,21 +177,15 @@ public class CreateAccountMenu extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						createAccount();
-					}
-				});
+				okButton.addActionListener(e -> createAccount());
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						new LoginMenu().run();
-						dispose();
-					}
+				cancelButton.addActionListener(e -> {
+					new LoginMenu().run();
+					dispose();
 				});
 				buttonPane.add(cancelButton);
 			}
@@ -205,18 +197,19 @@ public class CreateAccountMenu extends JDialog {
 		boolean viableAccount = true;
 		PersonController personController = new PersonController();
 		
-		String firstName = "" + textFieldFirstName.getText();
-		String lastName = "" + textFieldLastName.getText();
-		String email = "" + textFieldEmail.getText();
-		String phoneNumber = "" + textFieldPhone.getText();
-		String password = "" + String.valueOf(passwordFieldConfirmPassword.getPassword());
-		String ssn = "" + textFieldSSN.getText();
-		String zipcode = "" + textFieldPostalCode.getText();
-		String city = "" + textFieldCity.getText();
-		String houseNumber = "" + textFieldRoadNumber.getText();
-		String street = "" + textFieldRoadName.getText();
+		String firstName = textFieldFirstName.getText();
+		String lastName = textFieldLastName.getText();
+		String email = textFieldEmail.getText();
+		String phoneNumber = textFieldPhone.getText();
+		String password = String.valueOf(passwordFieldPassword.getPassword());
+		String confirmPassword = String.valueOf(passwordFieldConfirmPassword.getPassword());
+		String ssn = textFieldSSN.getText();
+		String zipcode = textFieldPostalCode.getText();
+		String city = textFieldCity.getText();
+		String houseNumber = textFieldRoadNumber.getText();
+		String street = textFieldRoadName.getText();
 		
-		if(!password.equals(password)) {
+		if(!password.equals(confirmPassword)) {
 			errorMessage += "\nAdgangskoderne er ikke ens";
 			viableAccount = false;
 		}
@@ -235,7 +228,7 @@ public class CreateAccountMenu extends JDialog {
 			errorMessage += "\nDit efternavn er ugyldigt";
 			viableAccount = false;
 		}
-		if(email.isEmpty() || email.length() > 50 || !email.contains("@")) {
+		if(email.length() > 50 || !email.contains("@")) {
 			errorMessage += "\nDin email er ugyldig";
 			viableAccount = false;
 		}
@@ -243,7 +236,7 @@ public class CreateAccountMenu extends JDialog {
 			errorMessage += "\nDit telefonnummer er ugyldigt";
 			viableAccount = false;
 		}
-		else if(!isStringNumber(phoneNumber)) {
+		else if(isStringNotNumber(phoneNumber)) {
 			errorMessage += "\nDit telefonnummer er ugyldigt";
 			viableAccount = false;
 		}
@@ -254,7 +247,7 @@ public class CreateAccountMenu extends JDialog {
 		if(zipcode.isEmpty() || zipcode.length() > 16) {
 			errorMessage += "\nUgyldig Post nummer";
 			viableAccount = false;
-		} else if(!isStringNumber(zipcode)) {
+		} else if(isStringNotNumber(zipcode)) {
 			errorMessage += "\nUgyldig Post nummer";
 			viableAccount = false;
 		}
@@ -274,14 +267,12 @@ public class CreateAccountMenu extends JDialog {
 			Address address = new Address(zipcode, city, street, houseNumber);
 			Person person = new Person(firstName, lastName, address, email, phoneNumber, 1, password, Long.parseLong(ssn));
 			System.out.println("Person would be created but it is commented out");
-			/*
 			try {
 				personController.createPerson(person);
 				personController.createAddress(address);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			*/
 			new LoginMenu().run();
 			dispose();
 		} else {
@@ -289,13 +280,13 @@ public class CreateAccountMenu extends JDialog {
 		}
 	}
 	
-	private boolean isStringNumber(String string) {
+	private boolean isStringNotNumber(String string) {
 		boolean isStringNumber = true;
 		try {
 			Integer.parseInt(string);
 		} catch (NumberFormatException e) {
 			isStringNumber = false;
 		}
-		return isStringNumber;
+		return !isStringNumber;
 	}
 }

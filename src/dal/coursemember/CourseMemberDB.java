@@ -1,19 +1,13 @@
 package dal.coursemember;
 
 import dal.DBConnection;
-import dal.course.CourseDB;
-import dal.course.CourseDataAccessIF;
-import dal.person.PersonDB;
-import dal.person.PersonDataAccessIF;
 import model.Course;
 import model.Person;
-import model.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CourseMemberDB implements CourseMemberDataAccessIF {
