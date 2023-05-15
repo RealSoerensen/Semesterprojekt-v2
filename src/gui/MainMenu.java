@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.sql.SQLException;
 
 public class MainMenu extends JFrame {
 
@@ -32,6 +33,7 @@ public class MainMenu extends JFrame {
 	public static final String ACCOUNT_PANEL = "account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
+
 	/**
 	 * Launch the application.
 	 */
@@ -49,7 +51,7 @@ public class MainMenu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainMenu() {
+	public MainMenu() throws SQLException {
 		setName("Bruh");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
@@ -85,9 +87,6 @@ public class MainMenu extends JFrame {
 		btnCourses.setBounds(10, 96, 144, 37);
 		menuPanel.add(btnCourses);
 
-
-
-	
 		JLabel lblMenu = new JLabel("Menu");
 		lblMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 32));
@@ -153,17 +152,17 @@ public class MainMenu extends JFrame {
 		panelMainWindowAdmin.setBounds(0, 205, 164, 154);
 		menuPanel.add(panelMainWindowAdmin);
 		panelMainWindowAdmin.setLayout(null);
-		
+
 		JButton btnAccounts = new JButton("Alle Konti");
 		btnAccounts.setBounds(10, 39, 144, 37);
 		panelMainWindowAdmin.add(btnAccounts);
-		
+
 		JLabel lblAdmin = new JLabel("Admin");
 		lblAdmin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdmin.setBounds(10, 11, 144, 17);
 		panelMainWindowAdmin.add(lblAdmin);
-		
+
 		JButton btnMyAccount = new JButton("Min Konto");
 		btnMyAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -179,10 +178,6 @@ public class MainMenu extends JFrame {
 				switchPanelToAccountManagerMenu();
 			}
 		});
-		
-		
-		
-		
 
 		JPanel panelFill = new JPanel();
 		panelFill.setBounds(184, 106, 619, 514);
@@ -193,22 +188,18 @@ public class MainMenu extends JFrame {
 		mainPanel.add(courseMenu, COURSE_PANEL);
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
-		
-		
-		
 	}
+
 	public void switchPanelToCourseMenu() {
 		cardLayout.show(mainPanel, COURSE_PANEL);
 	}
-	
+
 	public void switchPanelToAccountMenu() {
-	cardLayout.show(mainPanel, ACCOUNT_PANEL);
-	
+		cardLayout.show(mainPanel, ACCOUNT_PANEL);
+
 	}
 
 	public void switchPanelToAccountManagerMenu() {
-	cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
+		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
 	}
-
 }
-
