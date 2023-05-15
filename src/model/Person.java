@@ -7,18 +7,16 @@ public class Person {
     private String email;
     private String phoneNumber;
     private int role;
-    private String username;
     private String password;
     private long ssn;
 
-    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String username, String password, long ssn) {
+    public Person(String firstName, String lastName, Address address, String email, String phoneNumber, int role, String password, long ssn) {
     	this.firstName = firstName;
     	this.lastName = lastName;
     	this.address = address;
     	this.email = email;
         this.role = role;
     	this.phoneNumber = phoneNumber;
-    	this.username = username;
     	this.password = password;
     	this.ssn = ssn;
     }
@@ -69,14 +67,6 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {

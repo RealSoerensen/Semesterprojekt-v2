@@ -24,7 +24,7 @@ public class PersonTest {
     public void testCreatePerson() throws SQLException {
         //Arrange
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
-        Person person = new Person("John", "Doe", address, "email", "phone",  1, "username", "password", 1303014586);
+        Person person = new Person("John", "Doe", address, "email", "phone",  1, "password", 1303014586);
 
         //Act
         boolean result = personDB.create(person);
@@ -37,7 +37,7 @@ public class PersonTest {
     public void testGetPerson() throws SQLException {
         //Arrange
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
-        Person person = new Person("John", "Doe", address, "email", "phone", 1, "username", "password", 1303014586);
+        Person person = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
 
         //Act
         personDB.create(person);

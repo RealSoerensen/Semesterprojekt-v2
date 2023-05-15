@@ -7,12 +7,21 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.PersonController;
+import model.Address;
+import model.Person;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class CreateAccountMenu extends JDialog {
 
@@ -21,8 +30,9 @@ public class CreateAccountMenu extends JDialog {
 	private JTextField textFieldLastName;
 	private JTextField textFieldEmail;
 	private JTextField textFieldPhone;
-	private JTextField textFieldUsername;
 	private JPasswordField passwordFieldPassword;
+	private JPasswordField passwordFieldConfirmPassword;
+	private JTextField textFieldSSN;
 	private JTextField textFieldPostalCode;
 	private JTextField textFieldCity;
 	private JTextField textFieldRoadName;
@@ -45,7 +55,7 @@ public class CreateAccountMenu extends JDialog {
 	 * Create the dialog.
 	 */
 	public CreateAccountMenu() {
-		setBounds(100, 100, 398, 501);
+		setBounds(100, 100, 400, 580);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -71,11 +81,6 @@ public class CreateAccountMenu extends JDialog {
 		textFieldPhone.setBounds(178, 142, 194, 20);
 		contentPanel.add(textFieldPhone);
 		
-		textFieldUsername = new JTextField();
-		textFieldUsername.setColumns(10);
-		textFieldUsername.setBounds(178, 173, 194, 20);
-		contentPanel.add(textFieldUsername);
-		
 		JLabel lblFirstName = new JLabel("Fornavn");
 		lblFirstName.setBounds(10, 52, 105, 14);
 		contentPanel.add(lblFirstName);
@@ -92,36 +97,49 @@ public class CreateAccountMenu extends JDialog {
 		lblPhone.setBounds(10, 145, 105, 14);
 		contentPanel.add(lblPhone);
 		
-		JLabel lblUsername = new JLabel("Brugernavn");
-		lblUsername.setBounds(10, 176, 105, 14);
-		contentPanel.add(lblUsername);
-		
 		passwordFieldPassword = new JPasswordField();
-		passwordFieldPassword.setBounds(178, 204, 194, 20);
+		passwordFieldPassword.setBounds(178, 176, 194, 20);
 		contentPanel.add(passwordFieldPassword);
 		
 		JLabel lblPassword = new JLabel("Adgangskode");
-		lblPassword.setBounds(10, 207, 105, 14);
+		lblPassword.setBounds(10, 176, 105, 14);
 		contentPanel.add(lblPassword);
 		
+		passwordFieldConfirmPassword = new JPasswordField();
+		passwordFieldConfirmPassword.setBounds(178, 207, 194, 20);
+		contentPanel.add(passwordFieldConfirmPassword);
+		
+		JLabel lblConfirmPassword = new JLabel("Bekræft Adgangskode");
+		lblConfirmPassword.setBounds(10, 207, 150, 14);
+		contentPanel.add(lblConfirmPassword);
+		
+		textFieldSSN = new JTextField();
+		textFieldSSN.setColumns(10);
+		textFieldSSN.setBounds(178, 235, 194, 20);
+		contentPanel.add(textFieldSSN);
+		
+		JLabel lblSSN = new JLabel("CPR-Nummer");
+		lblSSN.setBounds(10, 235, 150, 14);
+		contentPanel.add(lblSSN);
+		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 235, 350, 2);
+		separator.setBounds(10, 301, 350, 2);
 		contentPanel.add(separator);
 		
 		JLabel lblPostalCode = new JLabel("Postnummer");
-		lblPostalCode.setBounds(10, 292, 105, 14);
+		lblPostalCode.setBounds(10, 354, 105, 14);
 		contentPanel.add(lblPostalCode);
 		
 		JLabel lblCity = new JLabel("By");
-		lblCity.setBounds(10, 323, 105, 14);
+		lblCity.setBounds(10, 385, 105, 14);
 		contentPanel.add(lblCity);
 		
 		JLabel lblRoadName = new JLabel("Vejnavn");
-		lblRoadName.setBounds(10, 354, 105, 14);
+		lblRoadName.setBounds(10, 417, 105, 14);
 		contentPanel.add(lblRoadName);
 		
 		JLabel lblRoadNumber = new JLabel("Vejnummer");
-		lblRoadNumber.setBounds(10, 385, 105, 14);
+		lblRoadNumber.setBounds(10, 448, 105, 14);
 		contentPanel.add(lblRoadNumber);
 		
 		JLabel lblCreateUserText = new JLabel("Opret Bruger");
@@ -133,27 +151,27 @@ public class CreateAccountMenu extends JDialog {
 		JLabel lblAddressText = new JLabel("Adresse");
 		lblAddressText.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAddressText.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblAddressText.setBounds(10, 246, 362, 20);
+		lblAddressText.setBounds(10, 320, 362, 20);
 		contentPanel.add(lblAddressText);
 		
 		textFieldPostalCode = new JTextField();
 		textFieldPostalCode.setColumns(10);
-		textFieldPostalCode.setBounds(178, 289, 194, 20);
+		textFieldPostalCode.setBounds(178, 351, 194, 20);
 		contentPanel.add(textFieldPostalCode);
 		
 		textFieldCity = new JTextField();
 		textFieldCity.setColumns(10);
-		textFieldCity.setBounds(178, 320, 194, 20);
+		textFieldCity.setBounds(178, 382, 194, 20);
 		contentPanel.add(textFieldCity);
 		
 		textFieldRoadName = new JTextField();
 		textFieldRoadName.setColumns(10);
-		textFieldRoadName.setBounds(178, 351, 194, 20);
+		textFieldRoadName.setBounds(178, 413, 194, 20);
 		contentPanel.add(textFieldRoadName);
 		
 		textFieldRoadNumber = new JTextField();
 		textFieldRoadNumber.setColumns(10);
-		textFieldRoadNumber.setBounds(178, 382, 194, 20);
+		textFieldRoadNumber.setBounds(178, 448, 194, 20);
 		contentPanel.add(textFieldRoadNumber);
 		{
 			JPanel buttonPane = new JPanel();
@@ -161,15 +179,123 @@ public class CreateAccountMenu extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						createAccount();
+					}
+				});
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						new LoginMenu().run();
+						dispose();
+					}
+				});
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+	private void createAccount() {
+		String errorMessage = "Følgende fejl findes:";
+		boolean viableAccount = true;
+		PersonController personController = new PersonController();
+		
+		String firstName = "" + textFieldFirstName.getText();
+		String lastName = "" + textFieldLastName.getText();
+		String email = "" + textFieldEmail.getText();
+		String phoneNumber = "" + textFieldPhone.getText();
+		String password = "" + String.valueOf(passwordFieldConfirmPassword.getPassword());
+		String ssn = "" + textFieldSSN.getText();
+		String zipcode = "" + textFieldPostalCode.getText();
+		String city = "" + textFieldCity.getText();
+		String houseNumber = "" + textFieldRoadNumber.getText();
+		String street = "" + textFieldRoadName.getText();
+		
+		if(!password.equals(password)) {
+			errorMessage += "\nAdgangskoderne er ikke ens";
+			viableAccount = false;
+		}
+		if(ssn.isEmpty() || ssn.contains(" ")) {
+			errorMessage += "\nDit CPR-Nummer er ugyldidgt";
+		} 
+		else if(!personController.isSsnUnique(Long.parseLong(ssn))) {
+			errorMessage += "\nDu har allerede en bruger";
+			viableAccount = false;
+		}
+		if(firstName.isEmpty() || firstName.length() > 20) {
+			errorMessage += "\nDit navn er ugyldidgt";
+			viableAccount = false;
+		}
+		if(lastName.isEmpty() || lastName.length() > 32) {
+			errorMessage += "\nDit efternavn er ugyldigt";
+			viableAccount = false;
+		}
+		if(email.isEmpty() || email.length() > 50 || !email.contains("@")) {
+			errorMessage += "\nDin email er ugyldig";
+			viableAccount = false;
+		}
+		if(phoneNumber.isEmpty() || phoneNumber.length() > 10) {
+			errorMessage += "\nDit telefonnummer er ugyldigt";
+			viableAccount = false;
+		}
+		else if(!isStringNumber(phoneNumber)) {
+			errorMessage += "\nDit telefonnummer er ugyldigt";
+			viableAccount = false;
+		}
+		if(password.length() < 8 || password.length() > 16) {
+			errorMessage += "\nDit kodeord er ugyldigt. Længden skal være på mindst 8 og højst 16";
+			viableAccount = false;
+		}
+		if(zipcode.isEmpty() || zipcode.length() > 16) {
+			errorMessage += "\nUgyldig Post nummer";
+			viableAccount = false;
+		} else if(!isStringNumber(zipcode)) {
+			errorMessage += "\nUgyldig Post nummer";
+			viableAccount = false;
+		}
+		if(city.isEmpty() || city.length() > 24) {
+			errorMessage += "\nUgyldig by navn";
+			viableAccount = false;
+		}
+		if(street.isEmpty() || street.length() > 32) {
+			errorMessage += "\nUgyldig vej navn";
+			viableAccount = false;
+		}
+		if(houseNumber.isEmpty() || houseNumber.length() > 8) {
+			errorMessage += "\nUgyldig vej nummer";
+			viableAccount = false;
+		}
+		if(viableAccount) {
+			Address address = new Address(zipcode, city, street, houseNumber);
+			Person person = new Person(firstName, lastName, address, email, phoneNumber, 1, password, Long.parseLong(ssn));
+			System.out.println("Person would be created but it is commented out");
+			/*
+			try {
+				personController.createPerson(person);
+				personController.createAddress(address);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			*/
+			new LoginMenu().run();
+			dispose();
+		} else {
+			JOptionPane.showMessageDialog(contentPanel, errorMessage);
+		}
+	}
+	
+	private boolean isStringNumber(String string) {
+		boolean isStringNumber = true;
+		try {
+			Integer.parseInt(string);
+		} catch (NumberFormatException e) {
+			isStringNumber = false;
+		}
+		return isStringNumber;
 	}
 }

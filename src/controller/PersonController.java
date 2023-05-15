@@ -3,7 +3,7 @@ package controller;
 import java.sql.SQLException;
 import java.util.List;
 
-
+import dal.address.AddressContainer;
 import dal.address.AddressDataAccessIF;
 import dal.person.PersonDataAccessIF;
 import model.Address;
@@ -13,13 +13,16 @@ import model.Person;
 public class PersonController {
 
 	PersonContainer pc = PersonContainer.getInstance();
-	
 	private PersonDataAccessIF personDB;
 	private AddressDataAccessIF addressDB;
 	
-	public PersonController(PersonDataAccessIF personDataAccess, AddressDataAccessIF addressDataAccess) {
-		setPersonDB(personDataAccess);
-		setAddressDB(addressDataAccess);
+	public PersonController() {
+		personDB = PersonContainer.getInstance();
+		addressDB = AddressContainer.getInstance();
+	}
+	
+	public boolean isSsnUnique(long ssn) {
+		return pc.isSsnUnique(ssn);
 	}
 
 	private PersonDataAccessIF getPersonDB() {

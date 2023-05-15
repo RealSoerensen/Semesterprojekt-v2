@@ -14,8 +14,8 @@ public class Main {
 		
 		//Create members, instructors and administrators
 		PersonContainer personContainer = PersonContainer.getInstance();
-		Person person1 = new Person("Patrick", "Sørensen", address1, "UwULover@gmail.com", "112", 3, "uwu", "0", 111);
-		Person person2 = new Person("Jonas", "Jørgensen", address1, "Jonas.birch00@gmail.com", "51408590", 3, "Birch", "1", 222);
+		Person person1 = new Person("Patrick", "Sørensen", address1, "UwULover@gmail.com", "112", 3, "0", 111);
+		Person person2 = new Person("Jonas", "Jørgensen", address1, "Jonas.birch00@gmail.com", "51408590", 3, "1", 222);
 		personContainer.create(person1);
 		personContainer.create(person2);
 		new LoginMenu().run();

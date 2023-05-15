@@ -54,7 +54,7 @@ public class LoginMenu extends JFrame {
 	 */
 	public LoginMenu() {
 		loginController = LoginController.getInstance();
-		personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
+		personController = new PersonController();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 420, 302);
@@ -108,7 +108,7 @@ public class LoginMenu extends JFrame {
 	
 	
 	private void createUser() {
-		// TODO Auto-generated method stub
+		dispose();
 		new CreateAccountMenu().run();
 	}
 
@@ -120,7 +120,7 @@ public class LoginMenu extends JFrame {
 		String passwordResult = new String(passwordField.getPassword());
 
 		for (Person p : persons) {
-			if (usernameResult.equalsIgnoreCase(p.getUsername()) && passwordResult.equalsIgnoreCase(p.getPassword())) {
+			if (usernameResult.equalsIgnoreCase(Long.toString(p.getSsn())) && passwordResult.equalsIgnoreCase(p.getPassword())) {
 				loginController.setLoggedInPerson(p);
 				System.out.println("Logged in as: " + p.getFirstName());
 
