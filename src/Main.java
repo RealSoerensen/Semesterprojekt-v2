@@ -1,12 +1,14 @@
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
+import controller.CourseController;
 import controller.PersonController;
 import dal.address.AddressContainer;
 import dal.person.PersonContainer;
 import gui.LoginMenu;
 import gui.MainMenu;
-import model.Address;
-import model.Person;
+import model.*;
 
 public class Main {
 
@@ -27,20 +29,20 @@ public class Main {
 		
 		
 		//Create members, instructors and administrators
-		PersonController personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
+		PersonController personController = new PersonController();
 		
-		Person person1 = new Person("Patrick", "Sørensen", address1, "UwULover@gmail.com", "112", 3, "uwu", "0", 1111);
-		Person person2 = new Person("Jonas", "Jørgensen", address2, "Jonas.birch00@gmail.com", "51408590", 3, "Birch", "1", 9999);
-		Person person3 = new Person("Svend", "Damsgaard", address3, "svendmaster@gmail.com", "11111111", 3, "Svend", "0", 3333);
+		Person person1 = new Person("Patrick", "Sørensen", address1, "UwULover@gmail.com", "112", 3, "0", 1111);
+		Person person2 = new Person("Jonas", "Jørgensen", address2, "Jonas.birch00@gmail.com", "51408590", 3, "1", 9999);
+		Person person3 = new Person("Svend", "Damsgaard", address3, "svendmaster@gmail.com", "11111111", 3, "0", 3333);
 		
-		Person person4 = new Person("Filip", "Nymann", address4, "filipnymann@hotmail.com", "88888888", 2, "Filip", "2", 7777);
-		Person person5 = new Person("Nicklas", "Aagaard", address5, "nicklasspillerkata@hotmail.com", "25252525", 2, "Nicklas", "2", 5555);
+		Person person4 = new Person("Filip", "Nymann", address4, "filipnymann@hotmail.com", "88888888", 2,"2", 7777);
+		Person person5 = new Person("Nicklas", "Aagaard", address5, "nicklasspillerkata@hotmail.com", "25252525", 2, "2", 5555);
 		
-		Person person6 = new Person("Britta", "Mokaisen", address6, "mokaidrikker@gmail.com", "11411414", 1, "Mokai", "0", 9878);
-		Person person7 = new Person("Jannik", "Bøllesen", address7, "nordjyde123@live.dk", "69646567", 1, "Brød", "0", 5687);
-		Person person8 = new Person("Mogens", "Hansen", address8, "hjemløsherre1525@gmail.com", "11223344", 1, "Homelessdude", "0", 5547);
-		Person person9 = new Person("Bente", "Mortensen", address9, "mortensen.bente@hotmail.com", "99887766", 1, "Bente", "0", 6658);
-		Person person10 = new Person("Ollie", "Osbourne", address10, "osbourne@live.dk", "55566688", 1, "Osbourne", "0", 6659);
+		Person person6 = new Person("Britta", "Mokaisen", address6, "mokaidrikker@gmail.com", "11411414", 1,  "0", 9878);
+		Person person7 = new Person("Jannik", "Bøllesen", address7, "nordjyde123@live.dk", "69646567", 1,  "0", 5687);
+		Person person8 = new Person("Mogens", "Hansen", address8, "hjemløsherre1525@gmail.com", "11223344", 1,  "0", 5547);
+		Person person9 = new Person("Bente", "Mortensen", address9, "mortensen.bente@hotmail.com", "99887766", 1,  "0", 6658);
+		Person person10 = new Person("Ollie", "Osbourne", address10, "osbourne@live.dk", "55566688", 1,  "0", 6659);
 		
 		
 		personController.createPerson(person1);
@@ -53,7 +55,101 @@ public class Main {
 		personController.createPerson(person8);
 		personController.createPerson(person9);
 		personController.createPerson(person10);
-		
+
+		CourseController courseController = new CourseController();
+
+		//Create courses
+		Course course1 = new Course("Svømning", 10, "Svømning for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+		Course course2 = new Course("Fodbold", 20, "Fodbold for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+		Course course3 = new Course("Håndbold", 30, "Håndbold for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+		Course course4 = new Course("Tennis", 40, "Tennis for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+		Course course5 = new Course("Badminton", 50, "Badminton for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+		Course course6 = new Course("Golf", 60, "Golf for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+
+		//Create sessions
+		Subject subject1 = new Subject("Svømning", "Svømning for begyndere");
+		Session session1 = new Session(new Date(2022, 7,2), person1, course1, address1, subject1);
+
+		Subject subject2 = new Subject("Fodbold", "Fodbold for begyndere");
+		Session session2 = new Session(new Date(2022, 7,2), person1, course2, address1, subject2);
+
+		Subject subject3 = new Subject("Håndbold", "Håndbold for begyndere");
+		Session session3 = new Session(new Date(2022, 7,2), person1, course3, address1, subject3);
+
+		Subject subject4 = new Subject("Tennis", "Tennis for begyndere");
+		Session session4 = new Session(new Date(2022, 7,2), person1, course4, address1, subject4);
+
+		Subject subject5 = new Subject("Badminton", "Badminton for begyndere");
+		Session session5 = new Session(new Date(2022, 7,2), person1, course5, address1, subject5);
+
+		Subject subject6 = new Subject("Golf", "Golf for begyndere");
+		Session session6 = new Session(new Date(2022, 7,2), person1, course6, address1, subject6);
+
+
+		courseController.createCourse(course1);
+		courseController.createCourse(course2);
+		courseController.createCourse(course3);
+		courseController.createCourse(course4);
+		courseController.createCourse(course5);
+		courseController.createCourse(course6);
+
+		//Create course members
+		courseController.createCourseMember(course1, person1);
+		courseController.createCourseMember(course1, person2);
+		courseController.createCourseMember(course1, person3);
+		courseController.createCourseMember(course1, person4);
+		courseController.createCourseMember(course1, person5);
+		courseController.createCourseMember(course1, person6);
+		courseController.createCourseMember(course1, person7);
+		courseController.createCourseMember(course1, person8);
+		courseController.createCourseMember(course1, person9);
+
+		courseController.createCourseMember(course2, person1);
+		courseController.createCourseMember(course2, person2);
+		courseController.createCourseMember(course2, person3);
+		courseController.createCourseMember(course2, person4);
+
+		courseController.createCourseMember(course3, person1);
+		courseController.createCourseMember(course3, person2);
+		courseController.createCourseMember(course3, person3);
+		courseController.createCourseMember(course3, person4);
+		courseController.createCourseMember(course3, person5);
+		courseController.createCourseMember(course3, person6);
+
+		courseController.createCourseMember(course4, person1);
+		courseController.createCourseMember(course4, person2);
+		courseController.createCourseMember(course4, person3);
+
+		courseController.createCourseMember(course5, person1);
+
+		courseController.createCourseMember(course6, person1);
+		courseController.createCourseMember(course6, person2);
+
+
+		//Create sessions
+		courseController.createSession(session1);
+		courseController.createSession(session2);
+		courseController.createSession(session3);
+		courseController.createSession(session4);
+		courseController.createSession(session5);
+		courseController.createSession(session6);
+
+		//Create session members
+		courseController.createSessionMember(session1, person1);
+		courseController.createSessionMember(session1, person2);
+
+		courseController.createSessionMember(session2, person1);
+		courseController.createSessionMember(session2, person2);
+
+		courseController.createSessionMember(session3, person1);
+		courseController.createSessionMember(session3, person2);
+
+		courseController.createSessionMember(session4, person1);
+		courseController.createSessionMember(session4, person2);
+
+		courseController.createSessionMember(session5, person1);
+
+		courseController.createSessionMember(session6, person1);
 
 		new LoginMenu().run();
 		
