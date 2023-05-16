@@ -84,4 +84,9 @@ public class Person {
     public void setSsn(int ssn) {
         this.ssn = ssn;
     }
+
+    @Override
+    public String toString() {
+    	return firstName + " " + lastName;
+    }
 }

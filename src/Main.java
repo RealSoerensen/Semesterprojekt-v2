@@ -62,24 +62,22 @@ public class Main {
 		Course course5 = new Course("Badminton", 50, "Badminton for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
 		Course course6 = new Course("Golf", 60, "Golf for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
 
-		//Create sessions
+		//Create subjects
 		Subject subject1 = new Subject("Svømning", "Svømning for begyndere");
-		Session session1 = new Session(new Date(2022, 7,2), person1, course1, address1, subject1);
-
 		Subject subject2 = new Subject("Fodbold", "Fodbold for begyndere");
-		Session session2 = new Session(new Date(2022, 7,2), person1, course2, address1, subject2);
-
 		Subject subject3 = new Subject("Håndbold", "Håndbold for begyndere");
-		Session session3 = new Session(new Date(2022, 7,2), person1, course3, address1, subject3);
-
 		Subject subject4 = new Subject("Tennis", "Tennis for begyndere");
-		Session session4 = new Session(new Date(2022, 7,2), person1, course4, address1, subject4);
-
 		Subject subject5 = new Subject("Badminton", "Badminton for begyndere");
-		Session session5 = new Session(new Date(2022, 7,2), person1, course5, address1, subject5);
-
 		Subject subject6 = new Subject("Golf", "Golf for begyndere");
-		Session session6 = new Session(new Date(2022, 7,2), person1, course6, address1, subject6);
+
+		//Create sessions
+		Session session1 = new Session(new Date(123, 4, 4), person4, course1, address1, subject1);
+		Session session2 = new Session(new Date(123, 4, 4), person4, course2, address2, subject2);
+		Session session3 = new Session(new Date(123, 4, 4), person4, course3, address3, subject3);
+		Session session4 = new Session(new Date(123, 4, 4), person4, course4, address4, subject4);
+		Session session5 = new Session(new Date(123, 4, 4), person4, course5, address5, subject5);
+		Session session6 = new Session(new Date(123, 4, 4), person4, course6, address6, subject6);
+
 
 
 		courseController.createCourse(course1);
@@ -114,6 +112,13 @@ public class Main {
 		courseController.createCourseMember(course6, person1);
 		courseController.createCourseMember(course6, person2);
 
+		// Create subjects
+		courseController.createSubject(subject1);
+		courseController.createSubject(subject2);
+		courseController.createSubject(subject3);
+		courseController.createSubject(subject4);
+		courseController.createSubject(subject5);
+		courseController.createSubject(subject6);
 
 		//Create sessions
 		courseController.createSession(session1);

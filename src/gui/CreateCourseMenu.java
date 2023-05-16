@@ -54,7 +54,7 @@ public class CreateCourseMenu extends JPanel {
         add(txtCourseStartDate);
         txtCourseStartDate.setColumns(10);
 
-        JLabel lblCourseEndDate = new JLabel("Slut Dato (DD/MM/YEAR)");
+        JLabel lblCourseEndDate = new JLabel("Slut Dato (DD-MM-YYYY)");
         lblCourseEndDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblCourseEndDate.setBounds(325, 245, 221, 20);
         add(lblCourseEndDate);
@@ -93,7 +93,7 @@ public class CreateCourseMenu extends JPanel {
 
             Date startDate;
             try {
-                int[] date = StringArrToIntArr(stringStartDate.split("/"));
+                int[] date = courseController.StringArrToIntArr(stringStartDate.split("-"));
                 startDate = new Date(date[2], date[1], date[0]);
             } catch (IndexOutOfBoundsException _ignore) {
                 JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
@@ -105,7 +105,7 @@ public class CreateCourseMenu extends JPanel {
 
             Date endDate;
             try {
-                int[] date = StringArrToIntArr(stringStartDate.split("/"));
+                int[] date = courseController.StringArrToIntArr(stringStartDate.split("-"));
                 endDate = new Date(date[2], date[1], date[0]);
             } catch (IndexOutOfBoundsException _ignore) {
                 JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
@@ -119,6 +119,8 @@ public class CreateCourseMenu extends JPanel {
             try {
                 if(courseController.createCourse(newCourse)){
                     JOptionPane.showMessageDialog(null, "Kursus oprettet");
+                    CourseMenu courseMenu = new CourseMenu(mainMenu);
+                    mainMenu.mainPanel.add(courseMenu, "course panel");
                     mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
                 } else {
                     JOptionPane.showMessageDialog(null, "Fejl: Kursus kunne ikke oprettes");
@@ -130,19 +132,5 @@ public class CreateCourseMenu extends JPanel {
         btnCreateCourse.setText("Opret Kursus");
         btnCreateCourse.setBounds(325, 364, 120, 34);
         add(btnCreateCourse);
-    }
-
-    private static int[] StringArrToIntArr(String[] s) {
-        int[] result = new int[s.length];
-        for (int i = 0; i < s.length; i++) {
-            int newInt = Integer.parseInt(s[i]);
-            if(i == 0){
-                newInt -= 1900;
-            } else if(i == 1){
-                newInt--;
-            }
-            result[i] = newInt;
-        }
-        return result;
     }
 }
