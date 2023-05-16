@@ -4,37 +4,25 @@ import controller.LoginController;
 import model.Course;
 import model.Person;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import java.awt.Color;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.sql.SQLException;
 
 public class MainMenu extends JFrame {
-
-	private JPanel panelFill;
-	private MainMenu frame;
 	public final JPanel mainPanel;
-	public Course course;
+	public Person user = LoginController.getInstance().getPerson();
 	public final CardLayout cardLayout = new CardLayout();
 	public static final String ACCOUNT_PANEL = "account panel";
 	public static final String EDIT_ACCOUNT_PANEL = "edit account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
-	public static final String CREATE_COURSE_PANEL = "create course panel";
-	public static final String EDIT_COURSE_PANEL = "edit course panel";
-	public static final String SESSION_PANEL = "session panel";
-	public static final String CREATE_SESSION_PANEL = "create session panel";
-	public static final String EDIT_SESSION_PANEL = "edit session panel";
 	private final JLabel lblTitle;
 
 	/**
@@ -86,13 +74,13 @@ public class MainMenu extends JFrame {
 
 		JButton btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> switchPanelToCourseMenu());
-		btnCourses.setBounds(10, 96, 144, 37);
+		btnCourses.setBounds(10, 112, 144, 37);
 		menuPanel.add(btnCourses);
 
 		JLabel lblMenu = new JLabel("Menu");
 		lblMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblMenu.setBounds(10, 36, 144, 49);
+		lblMenu.setBounds(10, 52, 144, 49);
 		menuPanel.add(lblMenu);
 
 		JPanel panelContact = new JPanel();
@@ -134,8 +122,8 @@ public class MainMenu extends JFrame {
 		lblLoggedInAsText.setBounds(10, 11, 144, 14);
 		menuPanel.add(lblLoggedInAsText);
 
-		JLabel lblLoggedInAs = new JLabel("");
-		lblLoggedInAs.setBounds(10, 36, 144, 37);
+		JLabel lblLoggedInAs = new JLabel(LoginController.getInstance().getPerson().getFirstName());
+		lblLoggedInAs.setBounds(10, 36, 144, 14);
 		menuPanel.add(lblLoggedInAs);
 
 		JButton btnLogOut = new JButton("Log ud");
@@ -145,7 +133,6 @@ public class MainMenu extends JFrame {
 		});
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
-
 
 		if (LoginController.getInstance().getPerson().getRole() > 1) {
 			JPanel panelMainWindowAdmin = new JPanel();
@@ -167,10 +154,9 @@ public class MainMenu extends JFrame {
 			panelMainWindowAdmin.add(lblAdmin);
 		}
 
-
 		JButton btnMyAccount = new JButton("Min Konto");
 		btnMyAccount.addActionListener(e -> switchPanelToAccountMenu());
-		btnMyAccount.setBounds(10, 144, 144, 37);
+		btnMyAccount.setBounds(10, 160, 144, 37);
 		menuPanel.add(btnMyAccount);
 
 		JPanel panelFill = new JPanel();
@@ -180,6 +166,7 @@ public class MainMenu extends JFrame {
 		mainPanel = panelFill;
 		mainPanel.setLayout(cardLayout);
 		mainPanel.add(new JPanel());
+
 		CourseMenu courseMenu = new CourseMenu(this);
 		mainPanel.add(courseMenu, COURSE_PANEL);
 		CreateCourseMenu createCourseMenu = new CreateCourseMenu(this);
@@ -198,21 +185,37 @@ public class MainMenu extends JFrame {
 		mainPanel.add(editAccountMenu, EDIT_ACCOUNT_PANEL);
 		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
+
 		switchPanelToCourseMenu();
 	}
 
 	public void switchPanelToCourseMenu() {
 		lblTitle.setText("Kurser");
-		cardLayout.show(mainPanel, COURSE_PANEL);
+
+		CourseMenu courseMenu = null;
+		try {
+			courseMenu = new CourseMenu(this);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Der skete en fejl ved hentning af kurser.");
+		}
+
+		if (courseMenu != null) {
+			mainPanel.add(courseMenu, COURSE_PANEL);
+			cardLayout.show(mainPanel, COURSE_PANEL);
+		}
 	}
 
 	public void switchPanelToAccountMenu() {
 		lblTitle.setText("Min Konto");
+		AccountMenu accountMenu = new AccountMenu(this);
+		mainPanel.add(accountMenu, ACCOUNT_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_PANEL);
 	}
 
 	public void switchPanelToAccountManagerMenu() {
 		lblTitle.setText("Alle Konti");
+		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
+		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
 	}
 }

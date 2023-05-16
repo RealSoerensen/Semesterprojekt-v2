@@ -17,62 +17,61 @@ public class CreateCourseMenu extends JPanel {
 
         JLabel lblCourseName = new JLabel("Navn:");
         lblCourseName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseName.setBounds(10, 11, 205, 20);
+        lblCourseName.setBounds(26, 120, 205, 20);
         add(lblCourseName);
 
         JTextField txtCourseName = new JTextField();
-        txtCourseName.setBounds(10, 42, 205, 20);
+        txtCourseName.setBounds(26, 151, 269, 20);
         add(txtCourseName);
         txtCourseName.setColumns(10);
 
         JLabel lblCourseDescription = new JLabel("Beskrivelse:");
         lblCourseDescription.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseDescription.setBounds(10, 73, 205, 20);
+        lblCourseDescription.setBounds(26, 182, 205, 20);
         add(lblCourseDescription);
 
         JTextArea txtCourseDescription = new JTextArea();
-        txtCourseDescription.setBounds(10, 104, 205, 82);
+        txtCourseDescription.setBounds(26, 213, 269, 126);
         add(txtCourseDescription);
 
         JLabel lblCoursePrice = new JLabel("Pris:");
         lblCoursePrice.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCoursePrice.setBounds(225, 11, 217, 20);
+        lblCoursePrice.setBounds(325, 120, 217, 20);
         add(lblCoursePrice);
 
         JTextField txtCoursePrice = new JTextField();
-        txtCoursePrice.setBounds(225, 42, 217, 20);
+        txtCoursePrice.setBounds(325, 151, 269, 20);
         add(txtCoursePrice);
         txtCoursePrice.setColumns(10);
 
         JLabel lblCourseStartDate = new JLabel("Start Dato (DD/MM/YEAR)");
         lblCourseStartDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseStartDate.setBounds(221, 73, 221, 20);
+        lblCourseStartDate.setBounds(325, 182, 221, 20);
         add(lblCourseStartDate);
 
         JTextField txtCourseStartDate = new JTextField();
-        txtCourseStartDate.setBounds(221, 104, 221, 20);
+        txtCourseStartDate.setBounds(325, 215, 269, 20);
         add(txtCourseStartDate);
         txtCourseStartDate.setColumns(10);
 
         JLabel lblCourseEndDate = new JLabel("Slut Dato (DD/MM/YEAR)");
         lblCourseEndDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblCourseEndDate.setBounds(221, 135, 221, 20);
+        lblCourseEndDate.setBounds(325, 245, 221, 20);
         add(lblCourseEndDate);
 
         JTextField txtCourseEndDate = new JTextField();
-        txtCourseEndDate.setBounds(223, 166, 219, 20);
+        txtCourseEndDate.setBounds(325, 276, 269, 20);
         add(txtCourseEndDate);
         txtCourseEndDate.setColumns(10);
 
         JButton btnBack = new JButton();
         btnBack.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel"));
         btnBack.setText("Tilbage");
-        btnBack.setBounds(95, 255, 120, 34);
+        btnBack.setBounds(175, 364, 120, 34);
         add(btnBack);
 
         JButton btnCreateCourse = new JButton();
         btnCreateCourse.addActionListener(e -> {
-            JFrame f = new JFrame();
             String name = txtCourseName.getText();
             String description = txtCourseDescription.getText();
             String stringPrice = txtCoursePrice.getText();
@@ -80,7 +79,7 @@ public class CreateCourseMenu extends JPanel {
             String stringEndDate = txtCourseEndDate.getText();
 
             if(name.equals("") || stringPrice.equals("") || stringStartDate.equals("") || stringEndDate.equals("")) {
-                JOptionPane.showMessageDialog(f, "Fejl: Navn, Pris, Starts dato og Sluts dao kan ikke være tomt");
+                JOptionPane.showMessageDialog(null, "Fejl: Navn, Pris, Starts dato og Sluts dao kan ikke være tomt");
                 return;
             }
 
@@ -88,7 +87,7 @@ public class CreateCourseMenu extends JPanel {
             try {
                 price = Double.parseDouble(stringPrice);
             } catch (Exception e1) {
-                JOptionPane.showMessageDialog(f, e1.getMessage());
+                JOptionPane.showMessageDialog(null, e1.getMessage());
                 return;
             }
 
@@ -97,10 +96,10 @@ public class CreateCourseMenu extends JPanel {
                 int[] date = StringArrToIntArr(stringStartDate.split("/"));
                 startDate = new Date(date[2], date[1], date[0]);
             } catch (IndexOutOfBoundsException _ignore) {
-                JOptionPane.showMessageDialog(f, "Fejl: Dato er skrevet forkert ind");
+                JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
                 return;
             } catch (Exception e2) {
-                JOptionPane.showMessageDialog(f, e2);
+                JOptionPane.showMessageDialog(null, e2);
                 return;
             }
 
@@ -109,27 +108,27 @@ public class CreateCourseMenu extends JPanel {
                 int[] date = StringArrToIntArr(stringStartDate.split("/"));
                 endDate = new Date(date[2], date[1], date[0]);
             } catch (IndexOutOfBoundsException _ignore) {
-                JOptionPane.showMessageDialog(f, "Fejl: Dato er skrevet forkert ind");
+                JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
                 return;
             } catch (Exception e2) {
-                JOptionPane.showMessageDialog(f, e2);
+                JOptionPane.showMessageDialog(null, e2);
                 return;
             }
 
             Course newCourse = new Course(name, price, description, startDate, endDate);
             try {
                 if(courseController.createCourse(newCourse)){
-                    JOptionPane.showMessageDialog(f, "Kursus oprettet");
+                    JOptionPane.showMessageDialog(null, "Kursus oprettet");
                     mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
                 } else {
-                    JOptionPane.showMessageDialog(f, "Fejl: Kursus kunne ikke oprettes");
+                    JOptionPane.showMessageDialog(null, "Fejl: Kursus kunne ikke oprettes");
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(f, ex.getMessage());
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         });
         btnCreateCourse.setText("Opret Kursus");
-        btnCreateCourse.setBounds(225, 255, 120, 34);
+        btnCreateCourse.setBounds(325, 364, 120, 34);
         add(btnCreateCourse);
     }
 

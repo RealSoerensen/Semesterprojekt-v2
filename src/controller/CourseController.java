@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dal.course.CourseContainer;
@@ -111,14 +112,14 @@ public class CourseController {
 	}
 
 	public List<Session> getAllSessionsFromCourse(Course course) throws SQLException {
+		List<Session> sessions = new ArrayList<>();
 		List<Session> allSessions = getAllSessions();
-		for(int i = 0; i < allSessions.size(); i++) {
-			if(!allSessions.get(i).getCourse().equals(course)) {
-				allSessions.remove(i);
-				i--;
+		for (Session allSession : allSessions) {
+			if (allSession.getCourse().equals(course)) {
+				sessions.add(allSession);
 			}
 		}
-		return allSessions;
+		return sessions;
 	}
 
 	public boolean updateSession(Session session) throws SQLException {
@@ -130,7 +131,15 @@ public class CourseController {
 	}
 
 	public boolean createSessionMember(Session session, Person member) {
-		return getSessionMemberDB().create(session, member);
+		Course course = session.getCourse();
+		List<Person> personList = getAllCourseMembers(course);
+		boolean isMember = personList.contains(member);
+		if (isMember) {
+			return getSessionMemberDB().create(session, member);
+		} else {
+			return false;
+		}
+
 	}
 
 	public List<Person> getAllSessionMembers(Session session) {
@@ -146,6 +155,20 @@ public class CourseController {
 		List<Person> allMembers = getCourseMemberDB().getAll(course);
 		numberOfMembersEnrolled = allMembers.size();
 		return numberOfMembersEnrolled;
+	}
+
+	public List<Session> getEnrolledSessions(Person person, Course course) throws SQLException {
+		List<Session> enrolledSessions = new ArrayList<>();
+		List<Session> allSessions = getAllSessionsFromCourse(course);
+		for (Session currentSession : allSessions) {
+			List<Person> allSessionMembers = getAllSessionMembers(currentSession);
+			for (Person currentSessionMember : allSessionMembers) {
+				if (currentSessionMember.equals(person)) {
+					enrolledSessions.add(currentSession);
+				}
+			}
+		}
+		return enrolledSessions;
 	}
 
 	public void deleteAllCourses() {
