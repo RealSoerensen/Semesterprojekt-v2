@@ -92,20 +92,14 @@ public class Main {
 		//Create course members
 		courseController.createCourseMember(course1, person1);
 		courseController.createCourseMember(course1, person2);
-		courseController.createCourseMember(course1, person3);
 		courseController.createCourseMember(course1, person4);
 		courseController.createCourseMember(course1, person5);
-		courseController.createCourseMember(course1, person6);
-		courseController.createCourseMember(course1, person7);
 		courseController.createCourseMember(course1, person8);
 		courseController.createCourseMember(course1, person9);
 
-		courseController.createCourseMember(course2, person1);
 		courseController.createCourseMember(course2, person2);
-		courseController.createCourseMember(course2, person3);
 		courseController.createCourseMember(course2, person4);
 
-		courseController.createCourseMember(course3, person1);
 		courseController.createCourseMember(course3, person2);
 		courseController.createCourseMember(course3, person3);
 		courseController.createCourseMember(course3, person4);
@@ -113,7 +107,6 @@ public class Main {
 		courseController.createCourseMember(course3, person6);
 
 		courseController.createCourseMember(course4, person1);
-		courseController.createCourseMember(course4, person2);
 		courseController.createCourseMember(course4, person3);
 
 		courseController.createCourseMember(course5, person1);

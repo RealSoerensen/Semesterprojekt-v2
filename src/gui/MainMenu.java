@@ -4,37 +4,25 @@ import controller.LoginController;
 import model.Course;
 import model.Person;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import java.awt.Color;
 
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.sql.SQLException;
 
 public class MainMenu extends JFrame {
-
-	private JPanel panelFill;
-	private MainMenu frame;
 	public final JPanel mainPanel;
-	public Course course;
+	public Person user = LoginController.getInstance().getPerson();
 	public final CardLayout cardLayout = new CardLayout();
 	public static final String ACCOUNT_PANEL = "account panel";
 	public static final String EDIT_ACCOUNT_PANEL = "edit account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
-	public static final String CREATE_COURSE_PANEL = "create course panel";
-	public static final String EDIT_COURSE_PANEL = "edit course panel";
-	public static final String SESSION_PANEL = "session panel";
-	public static final String CREATE_SESSION_PANEL = "create session panel";
-	public static final String EDIT_SESSION_PANEL = "edit session panel";
 	private final JLabel lblTitle;
 
 	/**
@@ -146,7 +134,6 @@ public class MainMenu extends JFrame {
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
 
-
 		if (LoginController.getInstance().getPerson().getRole() > 1) {
 			JPanel panelMainWindowAdmin = new JPanel();
 			panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
@@ -167,7 +154,6 @@ public class MainMenu extends JFrame {
 			panelMainWindowAdmin.add(lblAdmin);
 		}
 
-
 		JButton btnMyAccount = new JButton("Min Konto");
 		btnMyAccount.addActionListener(e -> switchPanelToAccountMenu());
 		btnMyAccount.setBounds(10, 160, 144, 37);
@@ -180,39 +166,36 @@ public class MainMenu extends JFrame {
 		mainPanel = panelFill;
 		mainPanel.setLayout(cardLayout);
 		mainPanel.add(new JPanel());
-		CourseMenu courseMenu = new CourseMenu(this);
-		mainPanel.add(courseMenu, COURSE_PANEL);
-		CreateCourseMenu createCourseMenu = new CreateCourseMenu(this);
-		mainPanel.add(createCourseMenu, CREATE_COURSE_PANEL);
-		EditCourseMenu editCourseMenu = new EditCourseMenu(this, course);
-		mainPanel.add(editCourseMenu, EDIT_COURSE_PANEL);
-		SessionMenu sessionMenu = new SessionMenu(this, course);
-		mainPanel.add(sessionMenu, SESSION_PANEL);
-		CreateSessionMenu createSessionMenu = new CreateSessionMenu(this, course);
-		mainPanel.add(createSessionMenu, CREATE_SESSION_PANEL);
-		EditSessionMenu editSessionMenu = new EditSessionMenu(this, course);
-		mainPanel.add(editSessionMenu, EDIT_SESSION_PANEL);
-		AccountMenu accountMenu = new AccountMenu(this);
-		mainPanel.add(accountMenu, ACCOUNT_PANEL);
-		EditAccountMenu editAccountMenu = new EditAccountMenu();
-		mainPanel.add(editAccountMenu, EDIT_ACCOUNT_PANEL);
-		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
-		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		switchPanelToCourseMenu();
 	}
 
 	public void switchPanelToCourseMenu() {
 		lblTitle.setText("Kurser");
-		cardLayout.show(mainPanel, COURSE_PANEL);
+
+		CourseMenu courseMenu = null;
+		try {
+			courseMenu = new CourseMenu(this);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Der skete en fejl ved hentning af kurser.");
+		}
+
+		if (courseMenu != null) {
+			mainPanel.add(courseMenu, COURSE_PANEL);
+			cardLayout.show(mainPanel, COURSE_PANEL);
+		}
 	}
 
 	public void switchPanelToAccountMenu() {
 		lblTitle.setText("Min Konto");
+		AccountMenu accountMenu = new AccountMenu();
+		mainPanel.add(accountMenu, ACCOUNT_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_PANEL);
 	}
 
 	public void switchPanelToAccountManagerMenu() {
 		lblTitle.setText("Alle Konti");
+		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
+		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
 	}
 }
