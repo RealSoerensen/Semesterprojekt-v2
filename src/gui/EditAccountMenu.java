@@ -1,5 +1,6 @@
 package gui;
 
+import controller.LoginController;
 import controller.PersonController;
 import model.Person;
 
@@ -16,7 +17,9 @@ public class EditAccountMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public EditAccountMenu(Person person) {
+	public EditAccountMenu() {
+		Person person = LoginController.getInstance().getPerson();
+		
 		setName("Bruh");
 		setSize(626, 515);
 		setLayout(null);
@@ -138,6 +141,6 @@ public class EditAccountMenu extends JPanel {
 		JLabel lblMin = new JLabel("Personlige oplysninger");
 		lblMin.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		lblMin.setBounds(10, 82, 285, 39);
-		contentPanel.add(lblMin);
+		add(lblMin);
 	}
 }

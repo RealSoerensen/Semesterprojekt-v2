@@ -2,6 +2,7 @@ package gui;
 
 import controller.LoginController;
 import model.Course;
+import model.Person;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,6 +27,7 @@ public class MainMenu extends JFrame {
 	public Course course;
 	public final CardLayout cardLayout = new CardLayout();
 	public static final String ACCOUNT_PANEL = "account panel";
+	public static final String EDIT_ACCOUNT_PANEL = "edit account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
 	public static final String CREATE_COURSE_PANEL = "create course panel";
@@ -190,8 +192,10 @@ public class MainMenu extends JFrame {
 		mainPanel.add(createSessionMenu, CREATE_SESSION_PANEL);
 		EditSessionMenu editSessionMenu = new EditSessionMenu(this, course);
 		mainPanel.add(editSessionMenu, EDIT_SESSION_PANEL);
-		AccountMenu accountMenu = new AccountMenu();
+		AccountMenu accountMenu = new AccountMenu(this);
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
+		EditAccountMenu editAccountMenu = new EditAccountMenu();
+		mainPanel.add(editAccountMenu, EDIT_ACCOUNT_PANEL);
 		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		switchPanelToCourseMenu();

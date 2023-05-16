@@ -1,6 +1,7 @@
 package gui;
 
 import controller.LoginController;
+import model.Person;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -17,7 +18,9 @@ public class AccountMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AccountMenu() {
+	public AccountMenu(MainMenu mainMenu) {
+		Person user = loginController.getPerson();
+		
 		setLayout(null);
 		setSize(626, 515);
 
@@ -28,7 +31,7 @@ public class AccountMenu extends JPanel {
 		add(lblYourInformation);
 		
 		JLabel lblNameText = new JLabel("Navn:");
-		lblNameText.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNameText.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblNameText.setBounds(10, 74, 50, 20);
 		add(lblNameText);
 		
@@ -42,51 +45,36 @@ public class AccountMenu extends JPanel {
 		add(separator_1);
 		
 		JLabel lblEmailText = new JLabel("Email:");
-		lblEmailText.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblEmailText.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblEmailText.setBounds(10, 136, 50, 20);
 		add(lblEmailText);
 		
 		JLabel lblPhoneText = new JLabel("Telefon:");
-		lblPhoneText.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblPhoneText.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblPhoneText.setBounds(10, 198, 252, 20);
 		add(lblPhoneText);
 		
 		JLabel lblAddressText = new JLabel("Adresse");
-		lblAddressText.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblAddressText.setFont(new Font("Tahoma", Font.BOLD, 25));
 		lblAddressText.setBounds(284, 78, 101, 20);
 		add(lblAddressText);
 		
-		JLabel lblPostalCode = new JLabel("0000");
+		JLabel lblPostalCode = new JLabel(user.getAddress().getZipCode() + " " + user.getAddress().getCity() + ", " + user.getAddress().getStreet() + " " + user.getAddress().getHouseNumber());
 		lblPostalCode.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPostalCode.setBounds(285, 113, 145, 20);
 		add(lblPostalCode);
 		
-		JLabel lblCity = new JLabel("City");
-		lblCity.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblCity.setBounds(284, 144, 146, 20);
-		add(lblCity);
-		
-		JLabel lblRoadname = new JLabel("Road");
-		lblRoadname.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblRoadname.setBounds(284, 175, 146, 20);
-		add(lblRoadname);
-		
-		JLabel lblHouseNumber = new JLabel("Number");
-		lblHouseNumber.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblHouseNumber.setBounds(284, 206, 146, 20);
-		add(lblHouseNumber);
-		
-		JLabel lblName = new JLabel("Anders Andersen");
+		JLabel lblName = new JLabel(user.getFirstName() + " " + user.getLastName());
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblName.setBounds(10, 105, 237, 20);
 		add(lblName);
 		
-		JLabel lblEmail = new JLabel("AndersAndersen@gmail.com");
+		JLabel lblEmail = new JLabel(user.getEmail());
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblEmail.setBounds(10, 167, 254, 20);
 		add(lblEmail);
 		
-		JLabel lblPhone = new JLabel("11111111");
+		JLabel lblPhone = new JLabel(user.getPhoneNumber());
 		lblPhone.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPhone.setBounds(10, 225, 252, 20);
 		add(lblPhone);
@@ -95,19 +83,14 @@ public class AccountMenu extends JPanel {
 		separator_2.setBounds(-68, 256, 600, 2);
 		add(separator_2);
 		
-		JButton btnEditInfo = new JButton("Rediger Oplysninger");
-		btnEditInfo.addActionListener(e -> {
-			// TODO: implement edit account
-		});
-		btnEditInfo.setBounds(224, 266, 129, 23);
+		JButton btnEditInfo = new JButton("Rediger Konto");
+		btnEditInfo.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account menu"));
+		btnEditInfo.setBounds(224, 266, 180, 23);
 		add(btnEditInfo);
 		
 		JButton btnBack = new JButton("Tilbage");
-		btnBack.addActionListener(e -> {
-			// TODO: Implement back button
-		});
+		btnBack.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel"));
 		btnBack.setBounds(86, 266, 129, 23);
 		add(btnBack);
-
 	}
 }
