@@ -47,14 +47,14 @@ public class SessionMenu extends JPanel {
 			data[i][0] = session;
 			data[i][1] = session.getSubject().getName();
 			data[i][2] = session.getDate();
-			data[i][4] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
-			data[i][3] = courseController.getAllSessionMembers(session).size();
+			data[i][3] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
+			data[i][4] = courseController.getAllSessionMembers(session).size();
 			data[i][5] = session.getAddress().getStreet() + " " + session.getAddress().getHouseNumber() + ", " + session.getAddress().getZipCode() + " " + session.getAddress().getCity();
 			data[i][6] = isEnrolled(course, session);
 		}
 
 		String[] columnNames = {
-				"SessionObject", "Fag", "Dato", "Instruktør", "Dato", "Adresse", "Tilmeldt"
+				"SessionObject", "Fag", "Dato", "Instruktør", "Tilmeldte", "Adresse", "Tilmeldt"
 		};
 
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
@@ -91,14 +91,14 @@ public class SessionMenu extends JPanel {
 		add(btnBack);
 
 		JPanel panelAdmin = new JPanel();
-		panelAdmin.setBounds(483, 284, 133, 163);
+		panelAdmin.setBounds(483, 284, 143, 163);
 		add(panelAdmin);
 		panelAdmin.setLayout(null);
 
 		panelAdmin.setVisible(person.getRole() > 2);
 		JButton btnCreateNewSession = new JButton("Opret Ny Session");
 		btnCreateNewSession.addActionListener(e -> {
-			CreateSessionMenu createSessionMenu = new CreateSessionMenu(mainMenu);
+			CreateSessionMenu createSessionMenu = new CreateSessionMenu(mainMenu, course);
 			mainMenu.mainPanel.add(createSessionMenu, "create session panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "create session panel");
 		});

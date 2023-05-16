@@ -39,5 +39,9 @@ public class Subject {
 	public void setSubjectID(long subjectID) {
 		this.subjectID = subjectID;
 	}
-    
+	@Override
+	public String toString() {
+		return getName();
+		
+	}
 }

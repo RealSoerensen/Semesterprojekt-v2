@@ -138,7 +138,6 @@ public class CourseMenu extends JPanel {
 		btnLeaveCourse.setBounds(523, 129, 93, 48);
 		add(btnLeaveCourse);
 
-		System.out.println(LoginController.getInstance().getPerson().getRole());
 		JPanel panelAdmin = new JPanel();
 		panelAdmin.setBounds(523, 324, 93, 179);
 		add(panelAdmin);

@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dal.address.AddressContainer;
@@ -78,4 +79,15 @@ public class PersonController {
 			allPersons = getAllPersons();
 		}
 	}
+
+    public List<Person> getAllInstructors() throws SQLException {
+		List<Person> instructors = new ArrayList<>();
+		List<Person> allPersons = getAllPersons();
+		for(Person person : allPersons) {
+			if(person.getRole() == 2) {
+				instructors.add(person);
+			}
+		}
+		return instructors;
+    }
 }

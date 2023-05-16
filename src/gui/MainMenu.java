@@ -8,11 +8,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-import java.awt.Color;
+import java.awt.*;
 
-import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 
 public class MainMenu extends JFrame {
@@ -99,13 +101,24 @@ public class MainMenu extends JFrame {
 		panelContact.add(panelContactInfo, BorderLayout.CENTER);
 		panelContactInfo.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblContactEmail = new JLabel("gokaalborgmb@outlook.com");
+		String email = "gokaalborgmb@outlook.com";
+		JLabel lblContactEmail = new JLabel(email);
+		lblContactEmail.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					Desktop.getDesktop().mail(new URI("mailto:" + email + "?subject=Hello"));
+				} catch (URISyntaxException | IOException ex) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke åbne mail programmet");
+				}
+			}
+		});
 		lblContactEmail.setForeground(Color.WHITE);
 		lblContactEmail.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		lblContactEmail.setHorizontalAlignment(SwingConstants.CENTER);
 		panelContactInfo.add(lblContactEmail, BorderLayout.NORTH);
 
-		JLabel lblContactPhone = new JLabel("98 17 84 36");
+		JLabel lblContactPhone = new JLabel("+45 98 17 84 36");
 		lblContactPhone.setForeground(Color.WHITE);
 		lblContactPhone.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		lblContactPhone.setHorizontalAlignment(SwingConstants.CENTER);
