@@ -169,20 +169,8 @@ public class MainMenu extends JFrame {
 
 		CourseMenu courseMenu = new CourseMenu(this);
 		mainPanel.add(courseMenu, COURSE_PANEL);
-		CreateCourseMenu createCourseMenu = new CreateCourseMenu(this);
-		mainPanel.add(createCourseMenu, CREATE_COURSE_PANEL);
-		EditCourseMenu editCourseMenu = new EditCourseMenu(this, course);
-		mainPanel.add(editCourseMenu, EDIT_COURSE_PANEL);
-		SessionMenu sessionMenu = new SessionMenu(this, course);
-		mainPanel.add(sessionMenu, SESSION_PANEL);
-		CreateSessionMenu createSessionMenu = new CreateSessionMenu(this, course);
-		mainPanel.add(createSessionMenu, CREATE_SESSION_PANEL);
-		EditSessionMenu editSessionMenu = new EditSessionMenu(this, course);
-		mainPanel.add(editSessionMenu, EDIT_SESSION_PANEL);
 		AccountMenu accountMenu = new AccountMenu(this);
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
-		EditAccountMenu editAccountMenu = new EditAccountMenu(this, accountMenu);
-		mainPanel.add(editAccountMenu, EDIT_ACCOUNT_PANEL);
 		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 

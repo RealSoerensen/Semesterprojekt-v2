@@ -88,7 +88,11 @@ public class AccountMenu extends JPanel {
 		add(separator_2);
 		
 		JButton btnEditInfo = new JButton("Rediger Konto");
-		btnEditInfo.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel"));
+		btnEditInfo.addActionListener(e -> {
+			EditAccountMenu editAccountMenu = new EditAccountMenu(mainMenu, user);
+			mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
+			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
+		});
 		btnEditInfo.setBounds(224, 266, 180, 23);
 		add(btnEditInfo);
 		

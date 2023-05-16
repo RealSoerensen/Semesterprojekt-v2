@@ -15,8 +15,7 @@ public class EditAccountMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public EditAccountMenu(MainMenu mainMenu, AccountMenu accountMenu) {
-		Person person = LoginController.getInstance().getPerson();
+	public EditAccountMenu(MainMenu mainMenu, Person person) {
 		personController = new PersonController();
 		
 		setName("Bruh");
@@ -104,8 +103,10 @@ public class EditAccountMenu extends JPanel {
 				
 				personController.updatePerson(person);
 				personController.updateAddress(person.getAddress());
-				
-				accountMenu.initialize();
+
+				AccountMenu accountMenu = new AccountMenu(mainMenu);
+				mainMenu.mainPanel.add(accountMenu, "account menu panel");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "account menu panel");
 			} catch (SQLException ex) {
 				throw new RuntimeException(ex);
 			}
