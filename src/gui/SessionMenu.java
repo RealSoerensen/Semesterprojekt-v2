@@ -150,22 +150,22 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) table.getModel().getValueAt(table.getSelectedRow(), 0);
-			if(courseController.createSessionMember(session, person)){
-				JOptionPane.showMessageDialog(null, "Tilmeldt session");
-				// Delayed creation of SessionMenu
-				SessionMenu sessionMenu = null;
-				try {
-					sessionMenu = new SessionMenu(mainMenu, course);
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Fejl: Kan ikke opdatere session-menu");
-				}
-
-				if (sessionMenu != null) {
-					mainMenu.mainPanel.add(sessionMenu, "session panel");
-					mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
-				}
-			} else {
+			if (!courseController.createSessionMember(session, person)) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
+				return;
+			}
+			JOptionPane.showMessageDialog(null, "Tilmeldt session");
+			// Delayed creation of SessionMenu
+			SessionMenu sessionMenu = null;
+			try {
+				sessionMenu = new SessionMenu(mainMenu, course);
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Fejl: Kan ikke opdatere session-menu");
+			}
+
+			if (sessionMenu != null) {
+				mainMenu.mainPanel.add(sessionMenu, "session panel");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
 			}
 		});
 		btnJoinSession.setBounds(493, 11, 123, 39);

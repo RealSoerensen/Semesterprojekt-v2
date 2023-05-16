@@ -95,7 +95,13 @@ public class CourseController {
 		return getCourseMemberDB().create(course, member);
 	}
 
-	public boolean removeCourseMember(Course course, Person member) {
+	public boolean removeCourseMember(Course course, Person member) throws SQLException {
+		List<Session> sessions = getSessionDB().getAll();
+		for (Session currentSession : sessions) {
+			if (currentSession.getCourse().equals(course)) {
+				getSessionMemberDB().remove(currentSession, member);
+			}
+		}
 		return getCourseMemberDB().remove(course, member);
 	}
 
@@ -143,14 +149,13 @@ public class CourseController {
 	}
 
 	public boolean createSessionMember(Session session, Person member) {
+		boolean success = false;
 		Course course = session.getCourse();
 		List<Person> personList = getAllCourseMembers(course);
-		boolean isMember = personList.contains(member);
-		if (isMember) {
-			return getSessionMemberDB().create(session, member);
-		} else {
-			return false;
+		if (personList.contains(member)) {
+			success = getSessionMemberDB().create(session, member);
 		}
+		return success;
 
 	}
 
