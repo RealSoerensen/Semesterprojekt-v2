@@ -20,7 +20,6 @@ public class MainMenu extends JFrame {
 	public Person user = LoginController.getInstance().getPerson();
 	public final CardLayout cardLayout = new CardLayout();
 	public static final String ACCOUNT_PANEL = "account panel";
-	public static final String EDIT_ACCOUNT_PANEL = "edit account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
 	private final JLabel lblTitle;
