@@ -117,7 +117,6 @@ public class LoginMenu extends JFrame {
 			if (usernameResult.equals(Long.toString(p.getSsn())) && passwordResult.equals(p.getPassword())) {
 				loginController.setLoggedInPerson(p);
 				System.out.println("Logged in as: " + p.getFirstName());
-
 				new MainMenu().run();
 				dispose();
 			}
