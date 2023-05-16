@@ -194,7 +194,7 @@ public class MainMenu extends JFrame {
 		mainPanel.add(editSessionMenu, EDIT_SESSION_PANEL);
 		AccountMenu accountMenu = new AccountMenu(this);
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
-		EditAccountMenu editAccountMenu = new EditAccountMenu();
+		EditAccountMenu editAccountMenu = new EditAccountMenu(this, accountMenu);
 		mainPanel.add(editAccountMenu, EDIT_ACCOUNT_PANEL);
 		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);

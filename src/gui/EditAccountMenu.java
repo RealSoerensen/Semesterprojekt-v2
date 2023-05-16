@@ -10,15 +10,14 @@ import java.sql.SQLException;
 
 public class EditAccountMenu extends JPanel {
 
-	private static EditAccountMenu frame;
-	private JPanel contentPanel;
 	private static PersonController personController;
 
 	/**
 	 * Create the panel.
 	 */
-	public EditAccountMenu() {
+	public EditAccountMenu(MainMenu mainMenu, AccountMenu accountMenu) {
 		Person person = LoginController.getInstance().getPerson();
+		personController = new PersonController();
 		
 		setName("Bruh");
 		setSize(626, 515);
@@ -94,8 +93,19 @@ public class EditAccountMenu extends JPanel {
 		btnDoneEditInfo.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnDoneEditInfo.addActionListener(e -> {
 			try {
+				person.setFirstName(txtFirstName.getText());
+				person.setLastName(txtLastName.getText());
+				person.setEmail(txtEmail.getText());
+				person.setPhoneNumber(txtPhone.getText());
+				person.getAddress().setCity(txtCity.getText());
+				person.getAddress().setHouseNumber(txtHouseNumber.getText());
+				person.getAddress().setStreet(txtRoadname.getText());
+				person.getAddress().setZipCode(txtPostalCode.getText());
+				
 				personController.updatePerson(person);
 				personController.updateAddress(person.getAddress());
+				
+				accountMenu.initialize();
 			} catch (SQLException ex) {
 				throw new RuntimeException(ex);
 			}
@@ -132,15 +142,10 @@ public class EditAccountMenu extends JPanel {
 		
 		JButton btnBack = new JButton("Tilbage");
 		btnBack.addActionListener(e -> {
-			// TODO: implement back btn
+			mainMenu.switchPanelToAccountMenu();
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBack.setBounds(320, 452, 143, 52);
 		add(btnBack);
-		
-		JLabel lblMin = new JLabel("Personlige oplysninger");
-		lblMin.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblMin.setBounds(10, 82, 285, 39);
-		add(lblMin);
 	}
 }

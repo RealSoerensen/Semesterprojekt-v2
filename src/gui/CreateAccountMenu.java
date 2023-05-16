@@ -266,7 +266,6 @@ public class CreateAccountMenu extends JDialog {
 		if(viableAccount) {
 			Address address = new Address(zipcode, city, street, houseNumber);
 			Person person = new Person(firstName, lastName, address, email, phoneNumber, 1, password, Long.parseLong(ssn));
-			System.out.println("Person would be created but it is commented out");
 			try {
 				personController.createPerson(person);
 				personController.createAddress(address);

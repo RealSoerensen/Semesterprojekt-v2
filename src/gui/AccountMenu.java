@@ -13,14 +13,18 @@ import javax.swing.JButton;
 
 public class AccountMenu extends JPanel {
 
-	LoginController loginController = LoginController.getInstance();
+	Person user = LoginController.getInstance().getPerson();
+	private MainMenu mainMenu;
 
 	/**
 	 * Create the panel.
 	 */
 	public AccountMenu(MainMenu mainMenu) {
-		Person user = loginController.getPerson();
-		
+		this.mainMenu = mainMenu;
+		initialize();
+	}
+	
+	public void initialize() {
 		setLayout(null);
 		setSize(626, 515);
 
@@ -84,7 +88,7 @@ public class AccountMenu extends JPanel {
 		add(separator_2);
 		
 		JButton btnEditInfo = new JButton("Rediger Konto");
-		btnEditInfo.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account menu"));
+		btnEditInfo.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel"));
 		btnEditInfo.setBounds(224, 266, 180, 23);
 		add(btnEditInfo);
 		
