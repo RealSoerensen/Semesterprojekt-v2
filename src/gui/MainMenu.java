@@ -187,7 +187,7 @@ public class MainMenu extends JFrame {
 
 	public void switchPanelToAccountMenu() {
 		lblTitle.setText("Min Konto");
-		AccountMenu accountMenu = new AccountMenu();
+		AccountMenu accountMenu = new AccountMenu(this);
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_PANEL);
 	}
