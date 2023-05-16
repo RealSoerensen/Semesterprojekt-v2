@@ -84,13 +84,13 @@ public class MainMenu extends JFrame {
 
 		JButton btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> switchPanelToCourseMenu());
-		btnCourses.setBounds(10, 96, 144, 37);
+		btnCourses.setBounds(10, 112, 144, 37);
 		menuPanel.add(btnCourses);
 
 		JLabel lblMenu = new JLabel("Menu");
 		lblMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblMenu.setBounds(10, 36, 144, 49);
+		lblMenu.setBounds(10, 52, 144, 49);
 		menuPanel.add(lblMenu);
 
 		JPanel panelContact = new JPanel();
@@ -132,8 +132,8 @@ public class MainMenu extends JFrame {
 		lblLoggedInAsText.setBounds(10, 11, 144, 14);
 		menuPanel.add(lblLoggedInAsText);
 
-		JLabel lblLoggedInAs = new JLabel("");
-		lblLoggedInAs.setBounds(10, 36, 144, 37);
+		JLabel lblLoggedInAs = new JLabel(LoginController.getInstance().getPerson().getFirstName());
+		lblLoggedInAs.setBounds(10, 36, 144, 14);
 		menuPanel.add(lblLoggedInAs);
 
 		JButton btnLogOut = new JButton("Log ud");
@@ -168,7 +168,7 @@ public class MainMenu extends JFrame {
 
 		JButton btnMyAccount = new JButton("Min Konto");
 		btnMyAccount.addActionListener(e -> switchPanelToAccountMenu());
-		btnMyAccount.setBounds(10, 144, 144, 37);
+		btnMyAccount.setBounds(10, 160, 144, 37);
 		menuPanel.add(btnMyAccount);
 
 		JPanel panelFill = new JPanel();
