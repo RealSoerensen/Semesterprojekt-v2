@@ -48,6 +48,7 @@ public class CreateSessionMenu extends JPanel {
 		}
 
 		JComboBox<Person> comboBoxInstructors = new JComboBox<>();
+		comboBoxInstructors.addItem(null);
 		for (Person instructor : instructors) {
 			comboBoxInstructors.addItem(instructor);
 		}
@@ -55,16 +56,17 @@ public class CreateSessionMenu extends JPanel {
     	add(comboBoxInstructors);
 
 		List<Subject> subjects = new ArrayList<>();
-		try{
+		try {
 			subjects = courseController.getAllSubjects();
-		} catch (SQLException e){
-			JOptionPane.showMessageDialog(null, "Kunne ikke hente fag");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Kunne ikke hente fagene");
 		}
 
     	JComboBox<Subject> comboBoxSubjects = new JComboBox<>();
 		for(Subject subject : subjects) {
 			comboBoxSubjects.addItem(subject);
 		}
+		comboBoxSubjects.addItem(null);
     	comboBoxSubjects.setBounds(322, 141, 156, 22);
     	add(comboBoxSubjects);
     	

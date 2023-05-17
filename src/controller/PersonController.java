@@ -16,8 +16,8 @@ public class PersonController {
 	private AddressDataAccessIF addressDB;
 
 	public PersonController() {
-		personDB = PersonContainer.getInstance();
-		addressDB = AddressContainer.getInstance();
+		setPersonDB(PersonContainer.getInstance());
+		setAddressDB(AddressContainer.getInstance());
 	}
 
 	public boolean isSsnUnique(long ssn) {
@@ -49,6 +49,7 @@ public class PersonController {
 	}
 
 	public boolean deletePerson(Person person) throws SQLException {
+		addressDB.delete(person.getAddress());
 		return personDB.delete(person);
 	}
 
