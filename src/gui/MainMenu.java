@@ -1,7 +1,6 @@
 package gui;
 
 import controller.LoginController;
-import model.Course;
 import model.Person;
 
 import javax.swing.*;
@@ -19,7 +18,7 @@ import java.sql.SQLException;
 
 public class MainMenu extends JFrame {
 	public final JPanel mainPanel;
-	public Person user = LoginController.getInstance().getPerson();
+	public final Person user = LoginController.getInstance().getPerson();
 	public final CardLayout cardLayout = new CardLayout();
 	public static final String ACCOUNT_PANEL = "account panel";
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
@@ -43,7 +42,7 @@ public class MainMenu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainMenu() throws SQLException {
+	public MainMenu() {
 		setName("Bruh");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
@@ -179,30 +178,22 @@ public class MainMenu extends JFrame {
 		mainPanel.setLayout(cardLayout);
 		mainPanel.add(new JPanel());
 
-		CourseMenu courseMenu = new CourseMenu(this);
-		mainPanel.add(courseMenu, COURSE_PANEL);
-		AccountMenu accountMenu = new AccountMenu(this);
-		mainPanel.add(accountMenu, ACCOUNT_PANEL);
-		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
-		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
-
 		switchPanelToCourseMenu();
 	}
 
 	public void switchPanelToCourseMenu() {
 		lblTitle.setText("Kurser");
 
-		CourseMenu courseMenu = null;
+		CourseMenu courseMenu;
 		try {
 			courseMenu = new CourseMenu(this);
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Der skete en fejl ved hentning af kurser.");
+			return;
 		}
 
-		if (courseMenu != null) {
-			mainPanel.add(courseMenu, COURSE_PANEL);
-			cardLayout.show(mainPanel, COURSE_PANEL);
-		}
+		mainPanel.add(courseMenu, COURSE_PANEL);
+		cardLayout.show(mainPanel, COURSE_PANEL);
 	}
 
 	public void switchPanelToAccountMenu() {
@@ -214,7 +205,13 @@ public class MainMenu extends JFrame {
 
 	public void switchPanelToAccountManagerMenu() {
 		lblTitle.setText("Alle Konti");
-		AccountManagerMenu accountManagerMenu = new AccountManagerMenu();
+		AccountManagerMenu accountManagerMenu;
+		try {
+			accountManagerMenu = new AccountManagerMenu(this);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Der skete en fejl ved hentning af kontoer.");
+			return;
+		}
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
 	}

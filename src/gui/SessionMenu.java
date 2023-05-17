@@ -1,39 +1,35 @@
 package gui;
 
-import controller.LoginController;
-import controller.PersonController;
 import model.Course;
 import model.Person;
 import model.Session;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import controller.CourseController;
-
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
+import model.Subject;
 
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class SessionMenu extends JPanel {
 
 	private final JTable table;
+	private Object[][] sessionData;
 	private final CourseController courseController = new CourseController();
 	private final Person person;
+	private final Course course;
+
 	/**
 	 * Create the frame.
 	 */
 	public SessionMenu(MainMenu mainMenu, Course course) throws SQLException {
 		person = mainMenu.user;
+		this.course = course;
 		setLayout(null);
 		setSize(626, 515);
 
@@ -41,53 +37,22 @@ public class SessionMenu extends JPanel {
 		scrollPaneCourses.setBounds(10, 11, 473, 492);
 		add(scrollPaneCourses);
 
-		List<Session> sessions = courseController.getAllSessionsFromCourse(course);
-		Object[][] data = new Object[sessions.size()][8];
-
-		for (int i = 0; i < sessions.size(); i++) {
-			Session session = sessions.get(i);
-			data[i][0] = session;
-			data[i][1] = session.getSubject().getName();
-			data[i][2] = session.getDate();
-			data[i][3] = session.getTime();
-			data[i][4] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
-			data[i][5] = courseController.getAllSessionMembers(session).size();
-			data[i][6] = session.getAddress().getStreet() + " " + session.getAddress().getHouseNumber() + ", " + session.getAddress().getZipCode() + " " + session.getAddress().getCity();
-			data[i][7] = isEnrolled(course, session);
-		}
-
-		String[] columnNames = {
-				"SessionObject", "Fag", "Dato", "Tid", "Instruktør", "Tilmeldte", "Adresse", "Tilmeldt"
-		};
-
-		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-		table = new JTable(model);
-		// Get the column model
-		TableColumnModel columnModel = table.getColumnModel();
-		// Hide the first column
-		TableColumn column = columnModel.getColumn(0);
-		columnModel.removeColumn(column);
+		table = new JTable();
+		refreshTable(courseController.getAllSessionsFromCourse(course));
 		scrollPaneCourses.setViewportView(table);
 
 		JButton btnBack = new JButton("Tilbage");
 		btnBack.addActionListener(e -> {
-			CourseMenu courseMenu = null;
+			CourseMenu courseMenu;
 			try {
 				courseMenu = new CourseMenu(mainMenu);
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Fejl: Kan ikke åbne Kursus-menu");
+				return;
 			}
 
-			if(courseMenu != null) {
-				mainMenu.mainPanel.add(courseMenu, "course panel");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
-			}
-
+			mainMenu.mainPanel.add(courseMenu, "course panel");
+			mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnBack.setBounds(493, 458, 123, 46);
@@ -99,7 +64,7 @@ public class SessionMenu extends JPanel {
 		panelAdmin.setLayout(null);
 
 		panelAdmin.setVisible(person.getRole() > 2);
-		JButton btnCreateNewSession = new JButton("Opret Ny Session");
+		JButton btnCreateNewSession = new JButton("Opret Session");
 		btnCreateNewSession.addActionListener(e -> {
 			CreateSessionMenu createSessionMenu = new CreateSessionMenu(mainMenu, course);
 			mainMenu.mainPanel.add(createSessionMenu, "create session panel");
@@ -115,7 +80,7 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Vælg en session at tilmelde dig");
 				return;
 			}
-			Session session = (Session) table.getModel().getValueAt(table.getSelectedRow(), 0);
+			Session session = (Session) sessionData[selectedRow][0];
 			EditSessionMenu editSessionMenu = new EditSessionMenu(mainMenu, session);
 			mainMenu.mainPanel.add(editSessionMenu, "edit session panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit session panel");
@@ -128,29 +93,23 @@ public class SessionMenu extends JPanel {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(null, "Vælg en session at slette");
-			} else {
-				Session session = (Session) table.getModel().getValueAt(table.getSelectedRow(), 0);
-				try {
-					courseController.removeSession(session);
-					JOptionPane.showMessageDialog(null, "Session slettet");
-					SessionMenu sessionMenu = new SessionMenu(mainMenu, course);
-					mainMenu.mainPanel.add(sessionMenu, "session panel");
-					mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
-
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				return;
 			}
+			Session session = (Session) sessionData[selectedRow][0];
+			try {
+				courseController.removeSession(session);
+				JOptionPane.showMessageDialog(null, "Session slettet");
+				refreshTable(courseController.getAllSessionsFromCourse(course));
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
 		});
 		btnDeleteSession.setBounds(10, 161, 124, 39);
 		panelAdmin.add(btnDeleteSession);
-		
-		JButton btnCreateSubject = new JButton("Opret Nyt Fag");
-		btnCreateSubject.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
 
-			}
-		});
+		JButton btnCreateSubject = new JButton("Opret Fag");
+		btnCreateSubject.addActionListener(e -> createNewSubjectPopup());
 		btnCreateSubject.setBounds(10, 61, 124, 39);
 		panelAdmin.add(btnCreateSubject);
 
@@ -161,23 +120,16 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Vælg en session at tilmelde dig");
 				return;
 			}
-			Session session = (Session) table.getModel().getValueAt(table.getSelectedRow(), 0);
+			Session session = (Session) sessionData[selectedRow][0];
 			if (!courseController.createSessionMember(session, person)) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
 				return;
 			}
 			JOptionPane.showMessageDialog(null, "Tilmeldt session");
-			// Delayed creation of SessionMenu
-			SessionMenu sessionMenu = null;
 			try {
-				sessionMenu = new SessionMenu(mainMenu, course);
+				refreshTable(courseController.getAllSessionsFromCourse(course));
 			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Kan ikke opdatere session-menu");
-			}
-
-			if (sessionMenu != null) {
-				mainMenu.mainPanel.add(sessionMenu, "session panel");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
 		});
 		btnJoinSession.setBounds(493, 11, 123, 39);
@@ -188,34 +140,107 @@ public class SessionMenu extends JPanel {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(null, "Vælg en session at melde afbud til");
-			} else {
-				Session session = (Session) table.getModel().getValueAt(table.getSelectedRow(), 0);
-				if(courseController.removeSessionMember(session, person)){
-					JOptionPane.showMessageDialog(null, "Afmeldt session");
-					// Delayed creation of SessionMenu
-					SessionMenu sessionMenu = null;
-					try {
-						sessionMenu = new SessionMenu(mainMenu, course);
-					} catch (SQLException ex) {
-						JOptionPane.showMessageDialog(null, "Fejl: Kan ikke opdatere session-menu");
-					}
-
-					if (sessionMenu != null) {
-						mainMenu.mainPanel.add(sessionMenu, "session panel");
-						mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
-					}
-				} else {
-					JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt denne session");
-				}
+				return;
+			}
+			Session session = (Session) sessionData[selectedRow][0];
+			if (!courseController.removeSessionMember(session, person)) {
+				JOptionPane.showMessageDialog(null, "Kunne ikke melde afbud");
+				return;
+			}
+			JOptionPane.showMessageDialog(null, "Afmeldt session");
+			try {
+				refreshTable(courseController.getAllSessionsFromCourse(course));
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
 		});
 		btnLeaveSession.setBounds(493, 61, 123, 39);
 		add(btnLeaveSession);
 	}
 
+	private void refreshTable(List<Session> sessions) throws SQLException {
+		Object[][] data = new Object[sessions.size()][7];
+
+		for (int i = 0; i < sessions.size(); i++) {
+			Session session = sessions.get(i);
+			data[i][0] = session;
+			data[i][1] = session.getSubject().getName();
+			data[i][2] = session.getDate();
+			data[i][3] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
+			data[i][4] = courseController.getAllSessionMembers(session).size();
+			data[i][5] = session.getAddress().getStreet() + " " + session.getAddress().getHouseNumber() + ", "
+					+ session.getAddress().getZipCode() + " " + session.getAddress().getCity();
+			data[i][6] = isEnrolled(course, session);
+		}
+
+		sessionData = data;
+
+		String[] columnNames = {
+				"SessionObject", "Fag", "Dato", "Instruktør", "Tilmeldte", "Adresse", "Tilmeldt"
+		};
+
+		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+
+		table.setModel(model);
+		// Get the column model
+		TableColumnModel columnModel = table.getColumnModel();
+		// Hide the first column
+		TableColumn column = columnModel.getColumn(0);
+		columnModel.removeColumn(column);
+	}
+
+	private void createNewSubjectPopup(){
+		JTextField textFieldName = new JTextField(10);
+		JTextArea textFieldDescription = new JTextArea();
+		textFieldDescription.setColumns(10);
+		textFieldDescription.setRows(10);
+		JPanel panel = new JPanel(new GridBagLayout());
+		panel.setBounds(10, 11, 414, 143);
+		add(panel);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(5, 5, 5, 5);
+
+		panel.add(new JLabel("Navn:"), gbc);
+
+		gbc.gridx = 1;
+		panel.add(textFieldName, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panel.add(new JLabel("Beskrivelse:"), gbc);
+
+		gbc.gridx = 1;
+		panel.add(textFieldDescription, gbc);
+		int result = JOptionPane.showConfirmDialog(null, panel,
+				"Nyt fag", JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			Subject subject = new Subject(textFieldName.getText(), textFieldDescription.getText());
+			try {
+				if(!courseController.createSubject(subject)) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke oprette fag");
+					return;
+				}
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Kunne ikke tilgå database");
+				return;
+			}
+
+			JOptionPane.showMessageDialog(null, "Fag oprettet");
+		}
+	}
+
 	private String isEnrolled(Course course, Session session) throws SQLException {
 		List<Session> enrolledSessions = courseController.getEnrolledSessions(person, course);
-		if(enrolledSessions.contains(session)) {
+		if (enrolledSessions.contains(session)) {
 			return "Ja";
 		} else {
 			return "Nej";

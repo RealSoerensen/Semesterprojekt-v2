@@ -6,10 +6,8 @@ import model.Course;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Month;
 
 public class CreateCourseMenu extends JPanel {
     final CourseController courseController = new CourseController();
@@ -94,7 +92,7 @@ public class CreateCourseMenu extends JPanel {
                 return;
             }
 
-            LocalDate startDate = null;
+            LocalDate startDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(stringStartDate.split("-"));
             	startDate = DateController.getInstance().getLocalDate(intDate);
@@ -106,7 +104,7 @@ public class CreateCourseMenu extends JPanel {
                 return;
             }
 
-            LocalDate endDate = null;
+            LocalDate endDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(stringStartDate.split("-"));
 				endDate = DateController.getInstance().getLocalDate(intDate);

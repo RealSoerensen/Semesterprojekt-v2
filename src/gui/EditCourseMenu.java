@@ -2,11 +2,8 @@ package gui;
 
 import model.Course;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 
 import javax.swing.*;
 
@@ -14,15 +11,13 @@ import controller.CourseController;
 import controller.DateController;
 
 import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class EditCourseMenu extends JPanel {
 	private JTextField textFieldName;
 	private JTextField textFieldPrice;
 	private JTextField textFieldStartingDate;
 	private JTextField textFieldEndingDate;
-	private CourseController courseController = new CourseController();
+	private final CourseController courseController = new CourseController();
 
     public EditCourseMenu(MainMenu mainMenu, Course course) {
     	setSize(626, 515);
@@ -52,7 +47,7 @@ public class EditCourseMenu extends JPanel {
 			String strStartDate = textFieldStartingDate.getText();
 			String strEndDate = textFieldEndingDate.getText();
 
-			LocalDate startDate = null;
+			LocalDate startDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(strStartDate.split("-"));
             	startDate = DateController.getInstance().getLocalDate(intDate);
@@ -64,7 +59,7 @@ public class EditCourseMenu extends JPanel {
 				return;
 			}
 
-            LocalDate endDate = null;
+            LocalDate endDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(strEndDate.split("-"));
             	endDate = DateController.getInstance().getLocalDate(intDate);

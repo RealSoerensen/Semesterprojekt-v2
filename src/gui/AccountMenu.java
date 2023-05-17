@@ -13,8 +13,8 @@ import javax.swing.JButton;
 
 public class AccountMenu extends JPanel {
 
-	Person user = LoginController.getInstance().getPerson();
-	private MainMenu mainMenu;
+	final Person user = LoginController.getInstance().getPerson();
+	private final MainMenu mainMenu;
 
 	/**
 	 * Create the panel.
@@ -45,7 +45,7 @@ public class AccountMenu extends JPanel {
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(272, 61, 2, 196);
+		separator_1.setBounds(272, 61, 2, 292);
 		add(separator_1);
 		
 		JLabel lblEmailText = new JLabel("Email:");
@@ -63,9 +63,9 @@ public class AccountMenu extends JPanel {
 		lblAddressText.setBounds(284, 78, 101, 20);
 		add(lblAddressText);
 		
-		JLabel lblPostalCode = new JLabel(user.getAddress().getZipCode() + " " + user.getAddress().getCity() + ", " + user.getAddress().getStreet() + " " + user.getAddress().getHouseNumber());
+		JLabel lblPostalCode = new JLabel(user.getAddress().getZipCode());
 		lblPostalCode.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblPostalCode.setBounds(285, 113, 145, 20);
+		lblPostalCode.setBounds(285, 113, 331, 156);
 		add(lblPostalCode);
 		
 		JLabel lblName = new JLabel(user.getFirstName() + " " + user.getLastName());
@@ -84,7 +84,7 @@ public class AccountMenu extends JPanel {
 		add(lblPhone);
 		
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setBounds(-68, 256, 600, 2);
+		separator_2.setBounds(-59, 351, 685, 2);
 		add(separator_2);
 		
 		JButton btnEditInfo = new JButton("Rediger Konto");
@@ -93,12 +93,12 @@ public class AccountMenu extends JPanel {
 			mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
 		});
-		btnEditInfo.setBounds(224, 266, 180, 23);
+		btnEditInfo.setBounds(293, 364, 129, 23);
 		add(btnEditInfo);
 		
 		JButton btnBack = new JButton("Tilbage");
 		btnBack.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel"));
-		btnBack.setBounds(86, 266, 129, 23);
+		btnBack.setBounds(154, 365, 129, 23);
 		add(btnBack);
 	}
 }

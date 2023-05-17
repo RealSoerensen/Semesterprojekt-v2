@@ -10,14 +10,17 @@ import java.sql.SQLException;
 
 public class EditAccountMenu extends JPanel {
 
+	private final Person user;
 	private static PersonController personController;
+	private JTextField textFieldSSN;
+	JComboBox<Integer> comboBoxRoles;
 
 	/**
 	 * Create the panel.
 	 */
 	public EditAccountMenu(MainMenu mainMenu, Person person) {
 		personController = new PersonController();
-		
+		user = LoginController.getInstance().getPerson();
 		setName("Bruh");
 		setSize(626, 515);
 		setLayout(null);
@@ -100,18 +103,34 @@ public class EditAccountMenu extends JPanel {
 				person.getAddress().setHouseNumber(txtHouseNumber.getText());
 				person.getAddress().setStreet(txtRoadname.getText());
 				person.getAddress().setZipCode(txtPostalCode.getText());
-				
-				personController.updatePerson(person);
-				personController.updateAddress(person.getAddress());
 
-				AccountMenu accountMenu = new AccountMenu(mainMenu);
-				mainMenu.mainPanel.add(accountMenu, "account menu panel");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "account menu panel");
+				if(user.getRole() > 2) {
+					int role = comboBoxRoles.getItemAt(comboBoxRoles.getSelectedIndex());
+					person.setRole(role);
+					personController.deletePerson(person);
+					person.setSsn(Integer.parseInt(textFieldSSN.getText()));
+					if(personController.createPerson(person)) {
+						JOptionPane.showMessageDialog(null, "Kontoen er blevet opdateret");
+					} else {
+						JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen");
+						return;
+					}
+				} else {
+					if(personController.updatePerson(person)) {
+						JOptionPane.showMessageDialog(null, "Dine oplysninger er blevet opdateret");
+					} else {
+						JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen");
+						return;
+					}
+				}
+
 			} catch (SQLException ex) {
-				throw new RuntimeException(ex);
+				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen");
+				return;
 			}
-
-			//TODO: implement going back to account menu
+			AccountMenu accountMenu = new AccountMenu(mainMenu);
+			mainMenu.mainPanel.add(accountMenu, "account menu panel");
+			mainMenu.cardLayout.show(mainMenu.mainPanel, "account menu panel");
 		});
 		btnDoneEditInfo.setBounds(473, 452, 143, 52);
 		add(btnDoneEditInfo);
@@ -142,11 +161,38 @@ public class EditAccountMenu extends JPanel {
 		add(lblHusNummer);
 		
 		JButton btnBack = new JButton("Tilbage");
-		btnBack.addActionListener(e -> {
-			mainMenu.switchPanelToAccountMenu();
-		});
+		btnBack.addActionListener(e -> mainMenu.switchPanelToAccountMenu());
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBack.setBounds(320, 452, 143, 52);
 		add(btnBack);
+		
+		JPanel adminPanel = new JPanel();
+		adminPanel.setBounds(0, 194, 277, 86);
+		add(adminPanel);
+		adminPanel.setLayout(null);
+		adminPanel.setVisible(user.getRole() > 2);
+		
+		JLabel lblRole = new JLabel("Role:");
+		lblRole.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblRole.setBounds(10, 11, 54, 19);
+		adminPanel.add(lblRole);
+		
+		comboBoxRoles = new JComboBox<>();
+		comboBoxRoles.addItem(person.getRole());
+		for(int i = 1; i < 4; i++) {
+			if(i != person.getRole()) comboBoxRoles.addItem(i);
+		}
+		comboBoxRoles.setBounds(93, 8, 184, 29);
+		adminPanel.add(comboBoxRoles);
+		
+		JLabel lblCPR = new JLabel("CPR:");
+		lblCPR.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblCPR.setBounds(10, 49, 54, 19);
+		adminPanel.add(lblCPR);
+		
+		textFieldSSN = new JTextField(String.valueOf(person.getSsn()));
+		textFieldSSN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		textFieldSSN.setBounds(93, 50, 184, 25);
+		adminPanel.add(textFieldSSN);
 	}
 }

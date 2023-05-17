@@ -1,6 +1,5 @@
 package dal.instructorsubject;
 
-import dal.CRUD;
 import model.Person;
 import model.Subject;
 

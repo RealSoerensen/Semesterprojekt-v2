@@ -1,6 +1,5 @@
 package dal.instructorsubject;
 
-import model.Course;
 import model.Person;
 import model.Subject;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 public class InstructorSubjectContainer implements InstructorSubjectDataAccessIF{
     private static InstructorSubjectContainer instance;
-    private List<InstructorSubject> container;
+    private final List<InstructorSubject> container;
 
     private InstructorSubjectContainer() {
         	container = new ArrayList<>();
