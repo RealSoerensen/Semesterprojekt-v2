@@ -1,12 +1,15 @@
 package gui;
 
 import controller.CourseController;
+import controller.DateController;
 import model.Course;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
 
 public class CreateCourseMenu extends JPanel {
     final CourseController courseController = new CourseController();
@@ -91,11 +94,11 @@ public class CreateCourseMenu extends JPanel {
                 return;
             }
 
-            Date startDate;
+            LocalDate startDate = null;
             try {
-                int[] date = courseController.StringArrToIntArr(stringStartDate.split("-"));
-                startDate = new Date(date[2], date[1], date[0]);
-            } catch (IndexOutOfBoundsException _ignore) {
+            	int[] intDate = courseController.StringArrToIntArr(stringStartDate.split("-"));
+            	startDate = DateController.getInstance().getLocalDate(intDate);
+			} catch (IndexOutOfBoundsException _ignore) {
                 JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
                 return;
             } catch (Exception e2) {
@@ -103,30 +106,34 @@ public class CreateCourseMenu extends JPanel {
                 return;
             }
 
-            Date endDate;
+            LocalDate endDate = null;
             try {
-                int[] date = courseController.StringArrToIntArr(stringStartDate.split("-"));
-                endDate = new Date(date[2], date[1], date[0]);
-            } catch (IndexOutOfBoundsException _ignore) {
+            	int[] intDate = courseController.StringArrToIntArr(stringStartDate.split("-"));
+				endDate = DateController.getInstance().getLocalDate(intDate);
+			} catch (IndexOutOfBoundsException _ignore) {
                 JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
                 return;
             } catch (Exception e2) {
                 JOptionPane.showMessageDialog(null, e2);
                 return;
             }
-
-            Course newCourse = new Course(name, price, description, startDate, endDate);
-            try {
-                if(courseController.createCourse(newCourse)){
-                    JOptionPane.showMessageDialog(null, "Kursus oprettet");
-                    CourseMenu courseMenu = new CourseMenu(mainMenu);
-                    mainMenu.mainPanel.add(courseMenu, "course panel");
-                    mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Fejl: Kursus kunne ikke oprettes");
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+            if(endDate == null || startDate == null || startDate.isAfter(endDate)) {
+				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
+			}
+            else {
+	            Course newCourse = new Course(name, price, description, startDate, endDate);
+	            try {
+	                if(courseController.createCourse(newCourse)){
+	                    JOptionPane.showMessageDialog(null, "Kursus oprettet");
+	                    CourseMenu courseMenu = new CourseMenu(mainMenu);
+	                    mainMenu.mainPanel.add(courseMenu, "course panel");
+	                    mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "Fejl: Kursus kunne ikke oprettes");
+	                }
+	            } catch (SQLException ex) {
+	                JOptionPane.showMessageDialog(null, ex.getMessage());
+	            }
             }
         });
         btnCreateCourse.setText("Opret Kursus");

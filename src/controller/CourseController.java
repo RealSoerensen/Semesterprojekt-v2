@@ -213,11 +213,6 @@ public class CourseController {
 		int[] result = new int[s.length];
 		for (int i = 0; i < s.length; i++) {
 			int newInt = Integer.parseInt(s[i]);
-			if(i == 0){
-				newInt -= 1900;
-			} else if(i == 1){
-				newInt--;
-			}
 			result[i] = newInt;
 		}
 		return result;

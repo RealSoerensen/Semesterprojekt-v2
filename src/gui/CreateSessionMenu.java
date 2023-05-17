@@ -1,13 +1,18 @@
 package gui;
 
 import controller.CourseController;
+import controller.DateController;
 import controller.PersonController;
 import model.*;
 
 import javax.swing.*;
 import java.awt.Font;
+import java.nio.channels.DatagramChannel;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +24,7 @@ public class CreateSessionMenu extends JPanel {
 	private JTextField textFieldZip;
 	private JTextField textFieldStreet;
 	private JTextField textFieldStreetNum;
+	private JTextField textFieldTime;
     public CreateSessionMenu(MainMenu mainMenu, Course course) {
 
     	setSize(626, 515);
@@ -26,13 +32,23 @@ public class CreateSessionMenu extends JPanel {
     	
     	JLabel lblNewLabel = new JLabel("Dato (dd-mm-yyyy):");
     	lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-    	lblNewLabel.setBounds(158, 78, 137, 19);
+    	lblNewLabel.setBounds(158, 45, 137, 19);
     	add(lblNewLabel);
     	
+    	JLabel lblTime = new JLabel("Tid (time;min):");
+    	lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
+    	lblTime.setBounds(158, 78, 137, 19);
+    	add(lblTime);
+    	
     	textFieldDate = new JTextField();
-    	textFieldDate.setBounds(322, 79, 156, 21);
+    	textFieldDate.setBounds(322, 45, 156, 21);
     	add(textFieldDate);
     	textFieldDate.setColumns(10);
+    	
+    	textFieldTime = new JTextField();
+    	textFieldTime.setBounds(322, 78, 156, 21);
+    	add(textFieldTime);
+    	textFieldTime.setColumns(10);
     	
     	JLabel lblInstructr = new JLabel("Instruktør:");
     	lblInstructr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -136,10 +152,11 @@ public class CreateSessionMenu extends JPanel {
     	JButton btnOpretSession = new JButton("Opret session");
     	btnOpretSession.addActionListener(e -> {
 			String strDate = textFieldDate.getText();
-			Date date;
+			LocalDate date = null;
 			try {
 				int[] intDate = courseController.StringArrToIntArr(strDate.split("-"));
-				date = new Date(intDate[2], intDate[1], intDate[0]);
+				date = DateController.getInstance().getLocalDate(intDate);
+				
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;
@@ -147,33 +164,54 @@ public class CreateSessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, e2);
 				return;
 			}
-			String city = textFieldCity.getText();
-			String zip = textFieldZip.getText();
-			String street = textFieldStreet.getText();
-			String streetNum = textFieldStreetNum.getText();
-			Address address = new Address(city, zip, street, streetNum);
-			Session newSession = new Session(date, (Person) comboBoxInstructors.getSelectedItem(), course, address, (Subject) comboBoxSubjects.getSelectedItem());
+			
+			String strTime = textFieldTime.getText();
+			LocalTime time = null;
+			
 			try {
-				if(courseController.createSession(newSession)) {
-					JOptionPane.showMessageDialog(null, "Session oprettet");
-				} else {
-					JOptionPane.showMessageDialog(null, "Kunne ikke oprette session");
+				int[] intTime = courseController.StringArrToIntArr(strTime.split(":"));
+				time = LocalTime.of(intTime[0], intTime[1]);
+			} catch (IndexOutOfBoundsException _ignore) {
+				JOptionPane.showMessageDialog(null, "Fejl: Tid er skrevet forkert ind");
+				time = null;
+				return;
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, e2);
+				return;
+			}
+			
+			if(date == null || time == null) {
+				JOptionPane.showMessageDialog(null, "Fejl: Dato eller tid er skrevet forkert ind");
+			} 
+			else {
+				String city = textFieldCity.getText();
+				String zip = textFieldZip.getText();
+				String street = textFieldStreet.getText();
+				String streetNum = textFieldStreetNum.getText();
+				Address address = new Address(city, zip, street, streetNum);
+				Session newSession = new Session(date, (Person) comboBoxInstructors.getSelectedItem(), course, address, (Subject) comboBoxSubjects.getSelectedItem(), time);
+				try {
+					if(courseController.createSession(newSession)) {
+						JOptionPane.showMessageDialog(null, "Session oprettet");
+					} else {
+						JOptionPane.showMessageDialog(null, "Kunne ikke oprette session");
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Der skete en fejl i forbindelse med databasen. Prøv igen senere.");
+					return;
 				}
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl i forbindelse med databasen. Prøv igen senere.");
-				return;
-			}
-
-			SessionMenu sessionMenu;
-			try {
-				sessionMenu = new SessionMenu(mainMenu, course);
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl i forbindelse med databasen. Prøv igen senere.");
-				return;
-			}
-			mainMenu.mainPanel.add(sessionMenu,"SessionMenu");
-			mainMenu.cardLayout.show(mainMenu.mainPanel, "SessionMenu");
-		});
+	
+				SessionMenu sessionMenu;
+				try {
+					sessionMenu = new SessionMenu(mainMenu, course);
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Der skete en fejl i forbindelse med databasen. Prøv igen senere.");
+					return;
+				}
+				mainMenu.mainPanel.add(sessionMenu,"SessionMenu");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "SessionMenu");
+				}
+			});
     	btnOpretSession.setBounds(322, 362, 106, 45);
     	add(btnOpretSession);
 

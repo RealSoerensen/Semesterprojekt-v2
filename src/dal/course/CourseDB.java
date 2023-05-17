@@ -4,11 +4,13 @@ import dal.DBConnection;
 import model.Course;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class CourseDB implements CourseDataAccessIF {
     Connection connection;
@@ -35,8 +37,8 @@ public class CourseDB implements CourseDataAccessIF {
             stmt.setString(1, obj.getName());
             stmt.setDouble(2, obj.getPrice());
             stmt.setString(3, obj.getDescription());
-            stmt.setDate(4, obj.getStartDate());
-            stmt.setDate(5, obj.getEndDate());
+            stmt.setDate(4, Date.valueOf(obj.getStartDate()));
+            stmt.setDate(5, Date.valueOf(obj.getEndDate()));
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,8 +66,8 @@ public class CourseDB implements CourseDataAccessIF {
                     courseRS.getString("name"),
                     courseRS.getDouble("price"),
                     courseRS.getString("description"),
-                    courseRS.getDate("startDate"),
-                    courseRS.getDate("endDate")
+                    courseRS.getDate("startDate").toLocalDate(),
+                    courseRS.getDate("endDate").toLocalDate()
             );
         }
         return course;
@@ -89,8 +91,8 @@ public class CourseDB implements CourseDataAccessIF {
                     courseRS.getString("name"),
                     courseRS.getDouble("price"),
                     courseRS.getString("description"),
-                    courseRS.getDate("startDate"),
-                    courseRS.getDate("endDate")
+                    courseRS.getDate("startDate").toLocalDate(),
+                    courseRS.getDate("endDate").toLocalDate()
             );
             courses.add(course);
         }
@@ -111,8 +113,8 @@ public class CourseDB implements CourseDataAccessIF {
             stmt.setString(1, obj.getName());
             stmt.setDouble(2, obj.getPrice());
             stmt.setString(3, obj.getDescription());
-            stmt.setDate(4, obj.getStartDate());
-            stmt.setDate(5, obj.getEndDate());
+            stmt.setDate(4, Date.valueOf(obj.getStartDate()));
+            stmt.setDate(5, Date.valueOf(obj.getEndDate()));
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

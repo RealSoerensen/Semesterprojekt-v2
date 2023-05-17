@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
 
 public class CourseTest {
     private final CourseController courseController;
@@ -22,7 +24,7 @@ public class CourseTest {
     @Test
     public void testCreateCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
         boolean result = courseController.createCourse(course);
@@ -34,7 +36,7 @@ public class CourseTest {
     @Test
     public void testGetCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
         courseController.createCourse(course);
@@ -47,8 +49,8 @@ public class CourseTest {
     @Test
     public void testUpdateCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
-        Course updatedCourse = new Course(1, "Updated Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+        Course updatedCourse = new Course(1, "Updated Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
         courseController.createCourse(course);
@@ -61,7 +63,7 @@ public class CourseTest {
     @Test
     public void testDeleteCourse() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
         courseController.createCourse(course);
@@ -74,9 +76,9 @@ public class CourseTest {
     @Test
     public void testGetAllCourses() throws SQLException {
         //Arrange
-        Course course1 = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
-        Course course2 = new Course(2, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
-        Course course3 = new Course(3, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course1 = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+        Course course2 = new Course(2, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+        Course course3 = new Course(3, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
         courseController.createCourse(course1);
@@ -91,7 +93,7 @@ public class CourseTest {
     @Test
     public void testEnrollMember() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
         Person person = new Person("John", "Doe", address, "email", "phone", 1,  "password", 1303014586);
 
@@ -107,7 +109,7 @@ public class CourseTest {
     @Test
     public void testUnenrollMember() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
         Person person = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
 
@@ -123,7 +125,7 @@ public class CourseTest {
     @Test
     public void testGetAllCourseMembers() throws SQLException {
         //Arrange
-        Course course = new Course(1, "Test Name", 20.00, "Test Description", new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
+        Course course = new Course(1, "Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
         Address address = new Address("1234", "Aalborg", "Testvej", "1");
         Person person1 = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);
         Person person2 = new Person("John", "Doe", address, "email", "phone", 1, "password", 1303014586);

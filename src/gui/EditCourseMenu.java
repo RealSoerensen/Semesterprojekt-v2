@@ -5,10 +5,14 @@ import model.Course;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 
 import javax.swing.*;
 
 import controller.CourseController;
+import controller.DateController;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -48,10 +52,10 @@ public class EditCourseMenu extends JPanel {
 			String strStartDate = textFieldStartingDate.getText();
 			String strEndDate = textFieldEndingDate.getText();
 
-			Date startDate;
-			try {
-				int[] intArrDate = courseController.StringArrToIntArr(strStartDate.split("-"));
-				startDate = new Date(intArrDate[2], intArrDate[1], intArrDate[0]);
+			LocalDate startDate = null;
+            try {
+            	int[] intDate = courseController.StringArrToIntArr(strStartDate.split("-"));
+            	startDate = DateController.getInstance().getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;
@@ -60,10 +64,10 @@ public class EditCourseMenu extends JPanel {
 				return;
 			}
 
-			Date endDate;
-			try {
-				int[] intArrDate = courseController.StringArrToIntArr(strEndDate.split("-"));
-				endDate = new Date(intArrDate[2], intArrDate[1], intArrDate[0]);
+            LocalDate endDate = null;
+            try {
+            	int[] intDate = courseController.StringArrToIntArr(strEndDate.split("-"));
+            	endDate = DateController.getInstance().getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;
@@ -71,30 +75,36 @@ public class EditCourseMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, e2);
 				return;
 			}
-
-			course.setName(name);
-			course.setPrice(price);
-			course.setStartDate(startDate);
-			course.setEndDate(endDate);
-
-			try {
-				courseController.updateCourse(course);
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl under opdateringen af kurset.");
-				return;
+            
+            if(endDate == null || startDate == null || startDate.isAfter(endDate)) {
+				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 			}
-
-			CourseMenu courseMenu;
-			try {
-				courseMenu = new CourseMenu(mainMenu);
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
-				return;
-			}
-
-			mainMenu.mainPanel.add(courseMenu, "CourseMenu");
-			mainMenu.cardLayout.show(mainMenu.mainPanel, "CourseMenu");
+            else {
+				course.setName(name);
+				course.setPrice(price);
+				course.setStartDate(startDate);
+				course.setEndDate(endDate);
+	
+				try {
+					courseController.updateCourse(course);
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Der skete en fejl under opdateringen af kurset.");
+					return;
+				}
+	
+				CourseMenu courseMenu;
+				try {
+					courseMenu = new CourseMenu(mainMenu);
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
+					return;
+				}
+	
+				mainMenu.mainPanel.add(courseMenu, "CourseMenu");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "CourseMenu");
+            }
 		});
+    	
     	btnAccept.setFont(new Font("Tahoma", Font.PLAIN, 14));
     	btnAccept.setBounds(335, 386, 175, 42);
     	add(btnAccept);
@@ -129,13 +139,12 @@ public class EditCourseMenu extends JPanel {
     	textFieldPrice.setBounds(271, 246, 210, 20);
     	add(textFieldPrice);
     	
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    	textFieldStartingDate = new JTextField(dateFormat.format(course.getStartDate()));
+    	textFieldStartingDate = new JTextField(course.getStartDate().toString());
     	textFieldStartingDate.setColumns(10);
     	textFieldStartingDate.setBounds(271, 296, 210, 20);
     	add(textFieldStartingDate);
     	
-    	textFieldEndingDate = new JTextField(dateFormat.format(course.getEndDate()));
+    	textFieldEndingDate = new JTextField(course.getEndDate().toString());
     	textFieldEndingDate.setColumns(10);
     	textFieldEndingDate.setBounds(271, 342, 210, 20);
     	add(textFieldEndingDate);

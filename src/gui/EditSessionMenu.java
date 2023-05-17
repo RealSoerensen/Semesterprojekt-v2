@@ -9,8 +9,12 @@ import javax.swing.*;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 
 import controller.CourseController;
+import controller.DateController;
 import controller.PersonController;
 import model.Subject;
 
@@ -23,6 +27,7 @@ import java.awt.event.ActionEvent;
 
 public class EditSessionMenu extends JPanel {
 	private JTextField textFieldDate;
+	private JTextField textFieldTime;
 	private JTextField textFieldCity;
 	private JTextField textFieldZIP;
 	private JTextField textFieldStreet;
@@ -38,13 +43,18 @@ public class EditSessionMenu extends JPanel {
 
     	JLabel lblNewLabel = new JLabel("Fag:");
     	lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-    	lblNewLabel.setBounds(191, 84, 103, 26);
+    	lblNewLabel.setBounds(191, 121, 103, 26);
     	add(lblNewLabel);
 
     	JLabel lblDato = new JLabel("Dato:");
     	lblDato.setFont(new Font("Tahoma", Font.PLAIN, 15));
-    	lblDato.setBounds(191, 121, 47, 26);
+    	lblDato.setBounds(191, 47, 47, 26);
     	add(lblDato);
+    	
+    	JLabel lblTime = new JLabel("Tid:");
+    	lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
+    	lblTime.setBounds(191, 84, 47, 26);
+    	add(lblTime);
 
     	JLabel lblInstruktr = new JLabel("Instruktør:");
     	lblInstruktr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -68,16 +78,18 @@ public class EditSessionMenu extends JPanel {
 			comboBoxSubject.addItem(subject);
 		}
 
-    	comboBoxSubject.setBounds(292, 86, 153, 26);
+    	comboBoxSubject.setBounds(292, 121, 153, 26);
     	add(comboBoxSubject);
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		// Format the Date object to a String
-		String formattedDate = dateFormat.format(session.getDate());
-    	textFieldDate = new JTextField(formattedDate);
-    	textFieldDate.setBounds(292, 123, 153, 26);
+    	textFieldDate = new JTextField(session.getDate().toString());
+    	textFieldDate.setBounds(292, 47, 153, 26);
     	add(textFieldDate);
     	textFieldDate.setColumns(10);
+    	
+    	textFieldTime = new JTextField(session.getTime().toString());
+    	textFieldTime.setBounds(292, 84, 153, 26);
+    	add(textFieldTime);
+    	textFieldTime.setColumns(10);
 
 		List<Person> instructors = new ArrayList<>();
 		try {
@@ -90,7 +102,7 @@ public class EditSessionMenu extends JPanel {
 		for (Person instructor : instructors) {
 			comboBoxInstructor.addItem(instructor);
 		}
-    	comboBoxInstructor.setBounds(292, 160, 153, 26);
+    	comboBoxInstructor.setBounds(292, 158, 153, 26);
     	add(comboBoxInstructor);
 
     	textFieldCity = new JTextField(session.getAddress().getCity());
@@ -138,10 +150,10 @@ public class EditSessionMenu extends JPanel {
 			Subject subject = (Subject) comboBoxSubject.getSelectedItem();
 			Person instructor = (Person) comboBoxInstructor.getSelectedItem();
 			String strDate = textFieldDate.getText();
-			Date date;
+			LocalDate date = session.getDate();
 			try {
-				int[] intArrDate = courseController.StringArrToIntArr(strDate.split("-"));
-				date = new Date(intArrDate[2], intArrDate[1], intArrDate[0]);
+				int[] intDate = courseController.StringArrToIntArr(strDate.split("-"));
+				date = DateController.getInstance().getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;
@@ -149,22 +161,45 @@ public class EditSessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, e2);
 				return;
 			}
-			String city = textFieldCity.getText();
-			String zip = textFieldZIP.getText();
-			String street = textFieldStreet.getText();
-			String streetNum = textFieldStreetNum.getText();
-			Address address = new Address(city, zip, street, streetNum);
-			session.setSubject(subject);
-			session.setInstructor(instructor);
-			session.setDate(date);
-			session.setAddress(address);
+			
+			String strTime = textFieldTime.getText();
+			LocalTime time = session.getTime();
+			
 			try {
-				courseController.updateSession(session);
-				JOptionPane.showMessageDialog(null, "Ændringerne er gemt");
-				mainMenu.mainPanel.add(new SessionMenu(mainMenu, session.getCourse()), "session panel");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
-			} catch (SQLException e1) {
-				JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
+				int[] intTime = courseController.StringArrToIntArr(strTime.split(":"));
+				time = LocalTime.of(intTime[0], intTime[1]);
+			} catch (IndexOutOfBoundsException _ignore) {
+				JOptionPane.showMessageDialog(null, "Fejl: Tid er skrevet forkert ind");
+				time = null;
+				return;
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, e2);
+				return;
+			}
+			
+			if(date == null || time == null) {
+				date = session.getDate();
+				time = session.getTime();
+			}
+			else {
+				String city = textFieldCity.getText();
+				String zip = textFieldZIP.getText();
+				String street = textFieldStreet.getText();
+				String streetNum = textFieldStreetNum.getText();
+				Address address = new Address(city, zip, street, streetNum);
+				session.setSubject(subject);
+				session.setInstructor(instructor);
+				session.setDate(date);
+				session.setTime(time);
+				session.setAddress(address);
+				try {
+					courseController.updateSession(session);
+					JOptionPane.showMessageDialog(null, "Ændringerne er gemt");
+					mainMenu.mainPanel.add(new SessionMenu(mainMenu, session.getCourse()), "session panel");
+					mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
+				}
 			}
 		});
     	btnSave.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -173,9 +208,11 @@ public class EditSessionMenu extends JPanel {
 
     	JButton btnBack = new JButton("Tilbage");
     	btnBack.addActionListener(e -> {
-			int option = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil annullere ændringerne?", "Annuller ændringer", JOptionPane.YES_NO_OPTION);
-			if(option == JOptionPane.YES_OPTION){
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "course menu panel");
+    		try {
+				mainMenu.mainPanel.add(new SessionMenu(mainMenu, session.getCourse()), "session panel");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+			} catch (SQLException e1) {
+				e1.printStackTrace();
 			}
 		});
     	btnBack.setFont(new Font("Tahoma", Font.PLAIN, 13));

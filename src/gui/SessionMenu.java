@@ -40,21 +40,22 @@ public class SessionMenu extends JPanel {
 		add(scrollPaneCourses);
 
 		List<Session> sessions = courseController.getAllSessionsFromCourse(course);
-		Object[][] data = new Object[sessions.size()][7];
+		Object[][] data = new Object[sessions.size()][8];
 
 		for (int i = 0; i < sessions.size(); i++) {
 			Session session = sessions.get(i);
 			data[i][0] = session;
 			data[i][1] = session.getSubject().getName();
 			data[i][2] = session.getDate();
-			data[i][3] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
-			data[i][4] = courseController.getAllSessionMembers(session).size();
-			data[i][5] = session.getAddress().getStreet() + " " + session.getAddress().getHouseNumber() + ", " + session.getAddress().getZipCode() + " " + session.getAddress().getCity();
-			data[i][6] = isEnrolled(course, session);
+			data[i][3] = session.getTime();
+			data[i][4] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
+			data[i][5] = courseController.getAllSessionMembers(session).size();
+			data[i][6] = session.getAddress().getStreet() + " " + session.getAddress().getHouseNumber() + ", " + session.getAddress().getZipCode() + " " + session.getAddress().getCity();
+			data[i][7] = isEnrolled(course, session);
 		}
 
 		String[] columnNames = {
-				"SessionObject", "Fag", "Dato", "Instruktør", "Tilmeldte", "Adresse", "Tilmeldt"
+				"SessionObject", "Fag", "Dato", "Tid", "Instruktør", "Tilmeldte", "Adresse", "Tilmeldt"
 		};
 
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {

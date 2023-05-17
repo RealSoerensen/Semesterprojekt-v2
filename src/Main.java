@@ -1,5 +1,8 @@
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 
 import controller.CourseController;
 import controller.PersonController;
@@ -55,12 +58,12 @@ public class Main {
 		CourseController courseController = new CourseController();
 
 		//Create courses
-		Course course1 = new Course("Svømning", 10, "Svømning for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
-		Course course2 = new Course("Fodbold", 20, "Fodbold for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
-		Course course3 = new Course("Håndbold", 30, "Håndbold for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
-		Course course4 = new Course("Tennis", 40, "Tennis for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
-		Course course5 = new Course("Badminton", 50, "Badminton for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
-		Course course6 = new Course("Golf", 60, "Golf for begyndere", new Date(System.currentTimeMillis()), new Date(123,4,4));
+		Course course1 = new Course("Svømning", 10, "Svømning for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+		Course course2 = new Course("Fodbold", 20, "Fodbold for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+		Course course3 = new Course("Håndbold", 30, "Håndbold for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+		Course course4 = new Course("Tennis", 40, "Tennis for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+		Course course5 = new Course("Badminton", 50, "Badminton for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
+		Course course6 = new Course("Golf", 60, "Golf for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
 		//Create subjects
 		Subject subject1 = new Subject("Svømning", "Svømning for begyndere");
@@ -71,12 +74,12 @@ public class Main {
 		Subject subject6 = new Subject("Golf", "Golf for begyndere");
 
 		//Create sessions
-		Session session1 = new Session(new Date(123, 4, 4), person4, course1, address1, subject1);
-		Session session2 = new Session(new Date(123, 4, 4), person4, course2, address2, subject2);
-		Session session3 = new Session(new Date(123, 4, 4), person4, course3, address3, subject3);
-		Session session4 = new Session(new Date(123, 4, 4), person4, course4, address4, subject4);
-		Session session5 = new Session(new Date(123, 4, 4), person4, course5, address5, subject5);
-		Session session6 = new Session(new Date(123, 4, 4), person4, course6, address6, subject6);
+		Session session1 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course1, address1, subject1, LocalTime.of(14, 30));
+		Session session2 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course2, address2, subject2, LocalTime.of(14, 30));
+		Session session3 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course3, address3, subject3, LocalTime.of(14, 30));
+		Session session4 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course4, address4, subject4, LocalTime.of(14, 30));
+		Session session5 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course5, address5, subject5, LocalTime.of(14, 30));
+		Session session6 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course6, address6, subject6, LocalTime.of(14, 30));
 
 
 
