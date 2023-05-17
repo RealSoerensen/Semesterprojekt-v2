@@ -21,6 +21,8 @@ import javax.swing.JOptionPane;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SessionMenu extends JPanel {
 
@@ -92,7 +94,7 @@ public class SessionMenu extends JPanel {
 		add(btnBack);
 
 		JPanel panelAdmin = new JPanel();
-		panelAdmin.setBounds(483, 284, 143, 163);
+		panelAdmin.setBounds(483, 238, 143, 209);
 		add(panelAdmin);
 		panelAdmin.setLayout(null);
 
@@ -118,7 +120,7 @@ public class SessionMenu extends JPanel {
 			mainMenu.mainPanel.add(editSessionMenu, "edit session panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit session panel");
 		});
-		btnEditSession.setBounds(10, 61, 124, 39);
+		btnEditSession.setBounds(10, 111, 124, 39);
 		panelAdmin.add(btnEditSession);
 
 		JButton btnDeleteSession = new JButton("Slet Session");
@@ -140,8 +142,17 @@ public class SessionMenu extends JPanel {
 				}
 			}
 		});
-		btnDeleteSession.setBounds(10, 111, 124, 39);
+		btnDeleteSession.setBounds(10, 161, 124, 39);
 		panelAdmin.add(btnDeleteSession);
+		
+		JButton btnCreateSubject = new JButton("Opret Nyt Fag");
+		btnCreateSubject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		btnCreateSubject.setBounds(10, 61, 124, 39);
+		panelAdmin.add(btnCreateSubject);
 
 		JButton btnJoinSession = new JButton("Tilmeld session");
 		btnJoinSession.addActionListener(e -> {

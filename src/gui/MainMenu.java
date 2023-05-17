@@ -75,13 +75,13 @@ public class MainMenu extends JFrame {
 
 		JButton btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> switchPanelToCourseMenu());
-		btnCourses.setBounds(10, 112, 144, 37);
+		btnCourses.setBounds(10, 86, 144, 37);
 		menuPanel.add(btnCourses);
 
 		JLabel lblMenu = new JLabel("Menu");
 		lblMenu.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblMenu.setBounds(10, 52, 144, 49);
+		lblMenu.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblMenu.setBounds(10, 52, 144, 23);
 		menuPanel.add(lblMenu);
 
 		JPanel panelContact = new JPanel();
@@ -146,29 +146,29 @@ public class MainMenu extends JFrame {
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
 
-		if (LoginController.getInstance().getPerson().getRole() > 1) {
-			JPanel panelMainWindowAdmin = new JPanel();
-			panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
-			panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
-			panelMainWindowAdmin.setBounds(0, 205, 164, 154);
-			menuPanel.add(panelMainWindowAdmin);
-			panelMainWindowAdmin.setLayout(null);
+		JPanel panelMainWindowAdmin = new JPanel();
+		panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
+		panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
+		panelMainWindowAdmin.setBounds(0, 182, 164, 177);
+		menuPanel.add(panelMainWindowAdmin);
+		panelMainWindowAdmin.setLayout(null);
+		panelMainWindowAdmin.setVisible(user.getRole() > 2);
 
-			JButton btnAccounts = new JButton("Alle Konti");
-			btnAccounts.addActionListener(e -> switchPanelToAccountManagerMenu());
-			btnAccounts.setBounds(10, 39, 144, 37);
-			panelMainWindowAdmin.add(btnAccounts);
+		JButton btnAccounts = new JButton("Alle Konti");
+		btnAccounts.addActionListener(e -> switchPanelToAccountManagerMenu());
+		btnAccounts.setBounds(10, 39, 144, 37);
+		panelMainWindowAdmin.add(btnAccounts);
 
-			JLabel lblAdmin = new JLabel("Admin");
-			lblAdmin.setFont(new Font("Tahoma", Font.PLAIN, 20));
-			lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
-			lblAdmin.setBounds(10, 11, 144, 17);
-			panelMainWindowAdmin.add(lblAdmin);
-		}
+		JLabel lblAdmin = new JLabel("Admin");
+		lblAdmin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblAdmin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAdmin.setBounds(10, 11, 144, 17);
+		panelMainWindowAdmin.add(lblAdmin);
+		
 
 		JButton btnMyAccount = new JButton("Min Konto");
 		btnMyAccount.addActionListener(e -> switchPanelToAccountMenu());
-		btnMyAccount.setBounds(10, 160, 144, 37);
+		btnMyAccount.setBounds(10, 134, 144, 37);
 		menuPanel.add(btnMyAccount);
 
 		JPanel panelFill = new JPanel();
