@@ -14,7 +14,7 @@ import static controller.DateController.getLocalDate;
 public class CreateCourseMenu extends JPanel {
     final CourseController courseController = new CourseController();
 
-    public CreateCourseMenu(MainMenu mainMenu) {
+    public CreateCourseMenu(MainMenu mainMenu) throws SQLException {
         setLayout(null);
         setSize(626, 515);
 
@@ -123,7 +123,7 @@ public class CreateCourseMenu extends JPanel {
             else {
 	            Course newCourse = new Course(name, price, description, startDate, endDate);
 	            try {
-	                if(courseController.createCourse(newCourse)){
+	                if(courseController.createCourse(newCourse) != null) {
 	                    JOptionPane.showMessageDialog(null, "Kursus oprettet");
 	                    CourseMenu courseMenu = new CourseMenu(mainMenu);
 	                    mainMenu.mainPanel.add(courseMenu, "course panel");
@@ -131,7 +131,7 @@ public class CreateCourseMenu extends JPanel {
 	                } else {
 	                    JOptionPane.showMessageDialog(null, "Fejl: Kursus kunne ikke oprettes");
 	                }
-	            } catch (SQLException ex) {
+	            } catch (Exception ex) {
 	                JOptionPane.showMessageDialog(null, ex.getMessage());
 	            }
             }

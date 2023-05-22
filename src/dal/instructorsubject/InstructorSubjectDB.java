@@ -22,7 +22,6 @@ public class InstructorSubjectDB implements InstructorSubjectDataAccessIF{
         try (var stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, person.getSsn());
             stmt.setLong(2, subject.getSubjectID());
-            stmt.executeUpdate();
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,7 +53,6 @@ public class InstructorSubjectDB implements InstructorSubjectDataAccessIF{
         try (var stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, person.getSsn());
             stmt.setLong(2, subject.getSubjectID());
-            stmt.executeUpdate();
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);

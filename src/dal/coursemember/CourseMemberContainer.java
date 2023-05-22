@@ -79,6 +79,19 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
         }
         return result;
     }
+
+    @Override
+    public boolean removeAll(Course course) {
+        boolean result = false;
+        for(int i = 0; i < container.size() && !result; i++) {
+            CourseMember courseMember = container.get(i);
+            if(courseMember.course().getCourseID() == course.getCourseID()) {
+                container.remove(i);
+                result = true;
+            }
+        }
+        return result;
+    }
 }
 
 record CourseMember(Course course, Person member) {

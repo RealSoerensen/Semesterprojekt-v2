@@ -38,12 +38,12 @@ public class SubjectContainer implements SubjectDataAccessIF {
      * The create function adds a new Subject to the container.
      *
      * @param obj Pass in a subject object to be added to the container
-     *
      * @return A boolean value that indicates whether the subject was added to the container or not
      */
     @Override
-    public boolean create(Subject obj) {
-    	return container.add(obj);
+    public Subject create(Subject obj) {
+        container.add(obj);
+        return obj;
     }
 
     /**

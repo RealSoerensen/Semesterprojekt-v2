@@ -29,9 +29,8 @@ public class CourseMenu extends JPanel {
 		scrollPaneCourses.setBounds(10, 11, 486, 492);
 		add(scrollPaneCourses);
 
-		List<Course> courses = courseController.getAllCourses();
 		table = new JTable();
-		refreshTable(courses);
+		refreshTable();
 
 		scrollPaneCourses.setViewportView(table);
 
@@ -52,7 +51,7 @@ public class CourseMenu extends JPanel {
 				return;
 			}
 			try {
-				refreshTable(courseController.getAllCourses());
+				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 				return;
@@ -81,7 +80,11 @@ public class CourseMenu extends JPanel {
 			
 			if(isNotEnrolled) {
 				JOptionPane.showMessageDialog(null, "Kursus er frameldt");
-				refreshTable(courses);
+				try {
+					refreshTable();
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
+				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Kunne ikke framelde kursus");
 			}
@@ -103,7 +106,12 @@ public class CourseMenu extends JPanel {
 				return;
 			}
 			Course course = (Course) courseData[selectedRow][0];
-			EditCourseMenu editCourseMenu = new EditCourseMenu(mainMenu, course);
+			EditCourseMenu editCourseMenu;
+			try {
+				editCourseMenu = new EditCourseMenu(mainMenu, course);
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			mainMenu.mainPanel.add(editCourseMenu, "edit course panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit course panel");
 		});
@@ -112,7 +120,12 @@ public class CourseMenu extends JPanel {
 
 		JButton btnCreateCourse = new JButton("Opret");
 		btnCreateCourse.addActionListener(e -> {
-			CreateCourseMenu createCourseMenu = new CreateCourseMenu(mainMenu);
+			CreateCourseMenu createCourseMenu;
+			try {
+				createCourseMenu = new CreateCourseMenu(mainMenu);
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			mainMenu.mainPanel.add(createCourseMenu, "create course panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "create course panel");
 		});
@@ -171,7 +184,7 @@ public class CourseMenu extends JPanel {
 				if (result == JOptionPane.YES_OPTION) {
 					courseController.removeCourse(course);
 					JOptionPane.showMessageDialog(null, "Kursus slettet");
-					refreshTable(courseController.getAllCourses());
+					refreshTable();
 				}
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
@@ -180,17 +193,19 @@ public class CourseMenu extends JPanel {
 		
 	}
 
-	private void refreshTable(List<Course> courses) {
+	private void refreshTable() throws SQLException {
+		List<Course> courses = courseController.getAllCourses();
 		Object[][] data = new Object[courses.size()][7];
 		for (int i = 0; i < courses.size(); i++) {
 			Course course = courses.get(i);
+			List<Person> enrolledList = courseController.getAllCourseMembers(course);
 			data[i][0] = course;
 			data[i][1] = course.getName();
 			data[i][2] = course.getPrice();
-			data[i][3] = courseController.getAllCourseMembers(course).size();
+			data[i][3] = enrolledList.size();
 			data[i][4] = course.getStartDate();
 			data[i][5] = course.getEndDate();
-			data[i][6] = isEnrolled(course);
+			data[i][6] = isEnrolled(enrolledList);
 		}
 
 		courseData = data;
@@ -215,12 +230,15 @@ public class CourseMenu extends JPanel {
 		columnModel.removeColumn(column);
 	}
 
-	private String isEnrolled(Course course) {
-		List<Person> personEnrolled = courseController.getAllCourseMembers(course);
-		if(personEnrolled.contains(person)){
-			return "Ja";
-		} else {
-			return "Nej";
+	private String isEnrolled(List<Person> personEnrolled) {
+		String result = "";
+		for(Person enrolled : personEnrolled) {
+			if(person.getSsn() == enrolled.getSsn()) {
+				result = "Ja";
+			} else {
+				result = "Nej";
+			}
 		}
+		return result;
 	}
 }

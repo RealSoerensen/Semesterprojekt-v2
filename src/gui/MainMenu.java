@@ -143,7 +143,11 @@ public class MainMenu extends JFrame {
 
 		JButton btnLogOut = new JButton("Log ud");
 		btnLogOut.addActionListener(e -> {
-			new LoginMenu().run();
+			try {
+				new LoginMenu().run();
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			dispose();
 		});
 		btnLogOut.setBounds(10, 370, 144, 23);

@@ -6,8 +6,10 @@ import java.util.List;
 
 import dal.DBConnection;
 import dal.address.AddressContainer;
+import dal.address.AddressDB;
 import dal.address.AddressDataAccessIF;
 import dal.person.PersonContainer;
+import dal.person.PersonDB;
 import dal.person.PersonDataAccessIF;
 import model.Address;
 import model.Person;
@@ -16,9 +18,9 @@ public class PersonController {
 	private PersonDataAccessIF personDB;
 	private AddressDataAccessIF addressDB;
 
-	public PersonController() {
-		setPersonDB(PersonContainer.getInstance());
-		setAddressDB(AddressContainer.getInstance());
+	public PersonController() throws SQLException {
+		setPersonDB(new PersonDB());
+		setAddressDB(new AddressDB());
 	}
 
 	public boolean isSsnUnique(long ssn) {
@@ -33,8 +35,11 @@ public class PersonController {
 		this.addressDB = addressDB;
 	}
 
-	public boolean createPerson(Person person) throws SQLException {
-		addressDB.create(person.getAddress());
+	public Person createPerson(Person person) throws Exception {
+		Address address = person.getAddress();
+		long addressID = addressDB.createAddressAndGetID(address);
+		address.setAddressID(addressID);
+		person.setAddress(address);
 		return personDB.create(person);
 	}
 	
@@ -57,6 +62,10 @@ public class PersonController {
 		return personDB.get(personID);
 	}
 
+	public Address createAddress(Address address) throws SQLException {
+		return addressDB.create(address);
+	}
+
 	public List<Person> getAllPersons() throws SQLException {
 		return personDB.getAll();
 	}
@@ -69,14 +78,6 @@ public class PersonController {
 	public boolean deletePerson(Person person) throws SQLException {
 		addressDB.delete(person.getAddress());
 		return personDB.delete(person);
-	}
-
-	public void removeAllPersons() throws SQLException {
-		List<Person> allPersons = getAllPersons();
-		while (!allPersons.isEmpty()) {
-			deletePerson(allPersons.get(0));
-			allPersons = getAllPersons();
-		}
 	}
 
 	public List<Person> getAllMembers() throws SQLException {
@@ -110,5 +111,9 @@ public class PersonController {
 			}
 		}
 		return admins;
+	}
+
+	public Person login(long ssn, String password) throws SQLException {
+		return personDB.login(ssn, password);
 	}
 }

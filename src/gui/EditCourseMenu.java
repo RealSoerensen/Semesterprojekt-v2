@@ -21,7 +21,7 @@ public class EditCourseMenu extends JPanel {
 	private JTextField textFieldEndingDate;
 	private final CourseController courseController = new CourseController();
 
-    public EditCourseMenu(MainMenu mainMenu, Course course) {
+    public EditCourseMenu(MainMenu mainMenu, Course course) throws SQLException {
     	setSize(626, 515);
     	setLayout(null);
     	

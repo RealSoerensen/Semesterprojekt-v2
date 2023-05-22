@@ -66,7 +66,12 @@ public class SessionMenu extends JPanel {
 		panelAdmin.setVisible(person.getRole() > 2);
 		JButton btnCreateNewSession = new JButton("Opret Session");
 		btnCreateNewSession.addActionListener(e -> {
-			CreateSessionMenu createSessionMenu = new CreateSessionMenu(mainMenu, course);
+			CreateSessionMenu createSessionMenu = null;
+			try {
+				createSessionMenu = new CreateSessionMenu(mainMenu, course);
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			mainMenu.mainPanel.add(createSessionMenu, "create session panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "create session panel");
 		});
@@ -81,7 +86,12 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) sessionData[selectedRow][0];
-			EditSessionMenu editSessionMenu = new EditSessionMenu(mainMenu, session);
+			EditSessionMenu editSessionMenu;
+			try {
+				editSessionMenu = new EditSessionMenu(mainMenu, session);
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			mainMenu.mainPanel.add(editSessionMenu, "edit session panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit session panel");
 		});
@@ -225,7 +235,7 @@ public class SessionMenu extends JPanel {
 		if (result == JOptionPane.OK_OPTION) {
 			Subject subject = new Subject(textFieldName.getText(), textFieldDescription.getText());
 			try {
-				if(!courseController.createSubject(subject)) {
+				if(courseController.createSubject(subject) == null) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke oprette fag");
 					return;
 				}

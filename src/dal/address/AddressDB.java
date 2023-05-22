@@ -2,6 +2,7 @@ package dal.address;
 
 import dal.DBConnection;
 import model.Address;
+import model.Subject;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,17 +25,27 @@ public class AddressDB implements AddressDataAccessIF {
      * @return True if the Address was created successfully, false otherwise.
      */
     @Override
-    public boolean create(Address obj) throws SQLException {
-        boolean result;
+    public Address create(Address obj) throws SQLException {
+        Address address = null;
         String sql = " INSERT INTO address (street, city, zipCode, houseNumber) VALUES (?, ?, ?, ?) ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, obj.getStreet());
             stmt.setString(2, obj.getCity());
             stmt.setString(3, obj.getZipCode());
             stmt.setString(4, obj.getHouseNumber());
-            result = stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                address = new Address(
+                        rs.getLong(1),
+                        obj.getZipCode(),
+                        obj.getCity(),
+                        obj.getStreet(),
+                        obj.getHouseNumber()
+                );
+            }
         }
-        return result;
+        return address;
     }
 
     /**
@@ -53,9 +64,10 @@ public class AddressDB implements AddressDataAccessIF {
             ResultSet addressRS = stmt.getResultSet();
             if (addressRS.next()) {
                 address = new Address(
-                        addressRS.getString("street"),
-                        addressRS.getString("city"),
+                        addressRS.getLong("addressID"),
                         addressRS.getString("zipCode"),
+                        addressRS.getString("city"),
+                        addressRS.getString("street"),
                         addressRS.getString("houseNumber"));
             }
         }
@@ -76,10 +88,12 @@ public class AddressDB implements AddressDataAccessIF {
             ResultSet addressRS = stmt.getResultSet();
             while (addressRS.next()) {
                 addresses.add(new Address(
-                        addressRS.getString("street"),
-                        addressRS.getString("city"),
+                        addressRS.getLong("addressID"),
                         addressRS.getString("zipCode"),
-                        addressRS.getString("houseNumber")));
+                        addressRS.getString("city"),
+                        addressRS.getString("street"),
+                        addressRS.getString("houseNumber")
+                ));
             }
         }
         return addresses;

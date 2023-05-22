@@ -42,8 +42,14 @@ public class DBTest {
 
     }
 
-    @AfterAll
-    public static void closeConnection() {
-        db.closeConnection();
+    @Test
+    public void testCreateTables() throws SQLException {
+        //Arrange
+
+        //Act
+        utils.createTables();
+
+        //Assert
+
     }
 }

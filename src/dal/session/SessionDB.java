@@ -30,21 +30,30 @@ public class SessionDB implements SessionDataAccessIF {
      * Creates a new Session in the database.
      *
      * @param obj The Session to be created.
-     * @return True if the Session was created successfully, false otherwise.
+     * @return The created Session.
      */
     @Override
-    public boolean create(Session obj) {
-        boolean result = false;
-        String sql = " INSERT INTO Session(date, courseID, instructorSsn, time) VALUES(?, ?, ?, ?) ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setDate(1, Date.valueOf(obj.getDate()));
-            stmt.setLong(2, obj.getCourse().getCourseID());
+    public Session create(Session obj) {
+        Session session = null;
+        String sql = " INSERT INTO Session(courseID, subjectID, instructorSsn, addressID, startDate, startTime) " +
+                " VALUES(?, ?, ?, ?, ?, ?) ";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setLong(1, obj.getCourse().getCourseID());
+            stmt.setLong(2, obj.getSubject().getSubjectID());
             stmt.setLong(3, obj.getInstructor().getSsn());
-            stmt.setTime(4, Time.valueOf(obj.getTime()));
+            stmt.setLong(4, obj.getAddress().getAddressID());
+            stmt.setDate(5, Date.valueOf(obj.getDate()));
+            stmt.setTime(6, Time.valueOf(obj.getTime()));
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                long generatedId = rs.getLong(1);
+                session = get(generatedId);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
+        return session;
     }
 
     /**
@@ -95,13 +104,14 @@ public class SessionDB implements SessionDataAccessIF {
     @Override
     public boolean update(Session obj) {
         boolean result = false;
-        String sql = " UPDATE Session SET date = ?, courseID = ?, instructorSsn = ? " +
+        String sql = " UPDATE Session SET startDate = ?, startTime = ?, courseID = ?, instructorSsn = ? " +
                 " WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(obj.getDate()));
-            stmt.setLong(2, obj.getCourse().getCourseID());
-            stmt.setLong(3, obj.getInstructor().getSsn());
-            stmt.setLong(4, obj.getSessionID());
+            stmt.setTime(2, Time.valueOf(obj.getTime()));
+            stmt.setLong(3, obj.getCourse().getCourseID());
+            stmt.setLong(4, obj.getInstructor().getSsn());
+            stmt.setLong(5, obj.getSessionID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,8 +141,8 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Session object.
      */
     private Session createSession(ResultSet rs) throws SQLException {
-        LocalDate date = rs.getDate("date").toLocalDate();
-        LocalTime time = rs.getTime("time").toLocalTime();
+        LocalDate date = rs.getDate("startDate").toLocalDate();
+        LocalTime time = rs.getTime("startTime").toLocalTime();
         Person instructor = getInstructor(rs.getLong("instructorSsn"));
         Course course = getCourse(rs.getLong("courseID"));
         Address address = getAddress(rs.getLong("addressID"));
@@ -183,7 +193,7 @@ public class SessionDB implements SessionDataAccessIF {
 
     @Override
     public void deleteAll() {
-        String sql = " DELETE * FROM Session ";
+        String sql = " DELETE FROM Session WHERE sessionID > 0 ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {

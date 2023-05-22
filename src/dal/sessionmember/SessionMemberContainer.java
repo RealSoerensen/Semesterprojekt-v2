@@ -76,6 +76,15 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
         }
         return result;
     }
+
+    @Override
+    public void removeAll(Session session) {
+        for(int i = 0; i < container.size(); i++) {
+            if(container.get(i).session().equals(session)) {
+                container.remove(i);
+            }
+        }
+    }
 }
 
 record SessionMember(Session session, Person member) {

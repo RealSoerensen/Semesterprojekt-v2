@@ -3,13 +3,10 @@ package gui;
 import controller.LoginController;
 import model.Person;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
-import javax.swing.JButton;
+import java.sql.SQLException;
 
 public class AccountMenu extends JPanel {
 
@@ -77,9 +74,14 @@ public class AccountMenu extends JPanel {
 		
 		JButton btnEditInfo = new JButton("Rediger Konto");
 		btnEditInfo.addActionListener(e -> {
-			EditAccountMenu editAccountMenu = new EditAccountMenu(mainMenu, user, true);
-			mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
-			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
+			EditAccountMenu editAccountMenu;
+			try {
+				editAccountMenu = new EditAccountMenu(mainMenu, user, true);
+				mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere.");
+			}
 		});
 		btnEditInfo.setBounds(293, 364, 129, 23);
 		add(btnEditInfo);
