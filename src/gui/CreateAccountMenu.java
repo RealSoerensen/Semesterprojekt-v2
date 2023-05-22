@@ -267,7 +267,7 @@ public class CreateAccountMenu extends JDialog {
 			Address address = new Address(zipcode, city, street, houseNumber);
 			Person person = new Person(firstName, lastName, address, email, phoneNumber, 1, password, Long.parseLong(ssn));
 			try {
-				if (personController.createPerson(person)) {
+				if (personController.createPersonWithAddress(person, address)) {
 					JOptionPane.showMessageDialog(contentPanel, "Bruger oprettet");
 				} else {
 					JOptionPane.showMessageDialog(contentPanel, "Bruger ikke oprettet");
