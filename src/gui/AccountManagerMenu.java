@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -12,6 +13,9 @@ import javax.swing.table.TableColumnModel;
 import controller.PersonController;
 import model.Address;
 import model.Person;
+import java.awt.event.ActionListener;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
 
 public class AccountManagerMenu extends JPanel {
 
@@ -24,6 +28,7 @@ public class AccountManagerMenu extends JPanel {
 	final PersonController personController = new PersonController();
 	/**
 	 * Create the panel.
+	 * Tab 0 = Member, 1 = Instructor, 2 = Administrator.
 	 */
 	public AccountManagerMenu(MainMenu mainMenu) throws SQLException {
 		setSize(626, 515);
@@ -51,7 +56,7 @@ public class AccountManagerMenu extends JPanel {
 		panelInstructors.setLayout(null);
 		
 		JScrollPane scrollPaneInstructors = new JScrollPane();
-		scrollPaneInstructors.setBounds(10, 11, 410, 442);
+		scrollPaneInstructors.setBounds(10, 11, 441, 442);
 		panelInstructors.add(scrollPaneInstructors);
 
 		List<Person> instructors = personController.getAllInstructors();
@@ -64,7 +69,7 @@ public class AccountManagerMenu extends JPanel {
 		panelAdminstrator.setLayout(null);
 		
 		JScrollPane scrollPaneAdmin = new JScrollPane();
-		scrollPaneAdmin.setBounds(10, 11, 410, 442);
+		scrollPaneAdmin.setBounds(10, 11, 441, 442);
 		panelAdminstrator.add(scrollPaneAdmin);
 
 		List<Person> admins = personController.getAllAdmins();
@@ -120,6 +125,19 @@ public class AccountManagerMenu extends JPanel {
 		JButton btnSeeInfo = new JButton("Se oplysninger");
 		btnSeeInfo.setBounds(486, 35, 118, 34);
 		add(btnSeeInfo);
+
+		
+		JButton btnCreatePerson = new JButton("Opret");
+		btnCreatePerson.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new CreateAccountMenu(false).run(false);
+				mainMenu.dispose();
+			}
+		});
+		
+		btnCreatePerson.setBounds(486, 215, 118, 34);
+		add(btnCreatePerson);
+		
 		btnSeeInfo.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 
@@ -149,10 +167,10 @@ public class AccountManagerMenu extends JPanel {
 		btnEditMember.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 			if(person == null) {
-				JOptionPane.showMessageDialog(null, "Vælg en kursist fra tabellen");
+				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
 				return;
 			}
-			EditAccountMenu editMember = new EditAccountMenu(mainMenu, person);
+			EditAccountMenu editMember = new EditAccountMenu(mainMenu, person, false);
 			mainMenu.mainPanel.add(editMember, "EditMember");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "EditMember");
 		});
@@ -160,24 +178,25 @@ public class AccountManagerMenu extends JPanel {
 		btnDeleteMembers.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 			if(person == null) {
-				JOptionPane.showMessageDialog(null, "Vælg en kursist fra tabellen");
+				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
 				return;
 			}
-			try {
-				if(!personController.deletePerson(person)) {
-					JOptionPane.showMessageDialog(null, "Bruger kunne ikke slettes");
+			int result = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil slette " + person.getFirstName() + " ?", "Slet Kursus", JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION) {
+				try {
+					if(!personController.deletePerson(person)) {
+						JOptionPane.showMessageDialog(null, "Bruger kunne ikke slettes");
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under sletning af bruger");
 				}
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under sletning af bruger");
-			}
-
-			try {
-				JOptionPane.showMessageDialog(null, "Kursisten er nu slettet");
-				memberData = refreshTable(memberTable, personController.getAllMembers());
-				instructorData = refreshTable(instructorTable, personController.getAllInstructors());
-				adminData = refreshTable(adminTable, personController.getAllAdmins());
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under opdatering af tabellen");
+				try {
+					memberData = refreshTable(memberTable, personController.getAllMembers());
+					instructorData = refreshTable(instructorTable, personController.getAllInstructors());
+					adminData = refreshTable(adminTable, personController.getAllAdmins());
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under opdatering af tabellen");
+				}
 			}
 		});
 
@@ -238,6 +257,4 @@ public class AccountManagerMenu extends JPanel {
 		columnModel.removeColumn(column);
 		return data;
 	}
-
-
 }

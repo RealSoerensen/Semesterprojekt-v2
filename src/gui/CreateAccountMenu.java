@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controller.LoginController;
 import controller.PersonController;
 import model.Address;
 import model.Person;
@@ -35,13 +36,14 @@ public class CreateAccountMenu extends JDialog {
 	private final JTextField textFieldRoadName;
 	private final JTextField textFieldRoadNumber;
 	private final JPasswordField passwordFieldConfirmPassword;
+	private boolean isOpenedFromLoginMenu;
 
 	/**
 	 * Launch the application.
 	 */
-	public void run() {
+	public void run(boolean isOpenedFromLoginMenu) {
 		try {
-			CreateAccountMenu dialog = new CreateAccountMenu();
+			CreateAccountMenu dialog = new CreateAccountMenu(isOpenedFromLoginMenu);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -52,7 +54,8 @@ public class CreateAccountMenu extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateAccountMenu() {
+	public CreateAccountMenu(boolean isOpenedFromLoginMenu) {
+		this.isOpenedFromLoginMenu = isOpenedFromLoginMenu;
 		setBounds(100, 100, 400, 580);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -184,7 +187,13 @@ public class CreateAccountMenu extends JDialog {
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(e -> {
-					new LoginMenu().run();
+					if(isOpenedFromLoginMenu) {
+						new LoginMenu().run();
+					}
+					else {
+						MainMenu mainMenu = new MainMenu().run();
+						mainMenu.switchPanelToAccountManagerMenu();
+					}
 					dispose();
 				});
 				buttonPane.add(cancelButton);
@@ -266,8 +275,8 @@ public class CreateAccountMenu extends JDialog {
 		if(viableAccount) {
 			Address address = new Address(zipcode, city, street, houseNumber);
 			Person person = new Person(firstName, lastName, address, email, phoneNumber, 1, password, Long.parseLong(ssn));
-			try {
-				if (personController.createPerson(person)) {
+			/*try {
+				if (personController.createPersonWithAddress(person, address)) {
 					JOptionPane.showMessageDialog(contentPanel, "Bruger oprettet");
 				} else {
 					JOptionPane.showMessageDialog(contentPanel, "Bruger ikke oprettet");
@@ -276,7 +285,20 @@ public class CreateAccountMenu extends JDialog {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			new LoginMenu().run();
+			*/
+			try {
+				personController.createPerson(person);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(isOpenedFromLoginMenu) {
+				new LoginMenu().run();
+			}
+			else {
+				MainMenu mainMenu = new MainMenu().run();
+				mainMenu.switchPanelToAccountManagerMenu();
+			}
 			dispose();
 		} else {
 			JOptionPane.showMessageDialog(contentPanel, errorMessage);
