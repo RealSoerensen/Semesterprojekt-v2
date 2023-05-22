@@ -149,7 +149,7 @@ public class AccountManagerMenu extends JPanel {
 		btnEditMember.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 			if(person == null) {
-				JOptionPane.showMessageDialog(null, "Vælg en kursist fra tabellen");
+				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
 				return;
 			}
 			EditAccountMenu editMember = new EditAccountMenu(mainMenu, person);
@@ -160,24 +160,25 @@ public class AccountManagerMenu extends JPanel {
 		btnDeleteMembers.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 			if(person == null) {
-				JOptionPane.showMessageDialog(null, "Vælg en kursist fra tabellen");
+				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
 				return;
 			}
-			try {
-				if(!personController.deletePerson(person)) {
-					JOptionPane.showMessageDialog(null, "Bruger kunne ikke slettes");
+			int result = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil slette " + person.getFirstName() + " ?", "Slet Kursus", JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION) {
+				try {
+					if(!personController.deletePerson(person)) {
+						JOptionPane.showMessageDialog(null, "Bruger kunne ikke slettes");
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under sletning af bruger");
 				}
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under sletning af bruger");
-			}
-
-			try {
-				JOptionPane.showMessageDialog(null, "Kursisten er nu slettet");
-				memberData = refreshTable(memberTable, personController.getAllMembers());
-				instructorData = refreshTable(instructorTable, personController.getAllInstructors());
-				adminData = refreshTable(adminTable, personController.getAllAdmins());
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under opdatering af tabellen");
+				try {
+					memberData = refreshTable(memberTable, personController.getAllMembers());
+					instructorData = refreshTable(instructorTable, personController.getAllInstructors());
+					adminData = refreshTable(adminTable, personController.getAllAdmins());
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under opdatering af tabellen");
+				}
 			}
 		});
 
