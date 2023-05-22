@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.sql.SQLException;
@@ -86,13 +88,13 @@ public class LoginMenu extends JFrame {
 		btnCreateUser.setBounds(217, 202, 101, 25);
 		contentPanel.add(btnCreateUser);
 
-		JLabel lblUserID = new JLabel("BRUGERNAVN:");
+		JLabel lblUserID = new JLabel("CPR-Nummer:");
 		lblUserID.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUserID.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblUserID.setBounds(10, 31, 134, 25);
 		contentPanel.add(lblUserID);
 
-		JLabel lblPassword = new JLabel("ADGANGSKODE:");
+		JLabel lblPassword = new JLabel("Adgangskode:");
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblPassword.setBounds(10, 83, 134, 25);
@@ -103,24 +105,29 @@ public class LoginMenu extends JFrame {
 	
 	private void createUser() {
 		dispose();
-		new CreateAccountMenu().run();
+		new CreateAccountMenu(true).run(true);
 	}
 
 	private void logIn() throws SQLException {
 		// TODO Auto-generated method stub
 		List<Person> persons = personController.getAllPersons();
+		Person person = null;
 
 		String usernameResult = textFieldUsername.getText();
 		String passwordResult = new String(passwordField.getPassword());
 
 		for (Person p : persons) {
 			if (usernameResult.equals(Long.toString(p.getSsn())) && passwordResult.equals(p.getPassword())) {
+				person = p;
 				loginController.setLoggedInPerson(p);
 				
-				System.out.println("Logged in as: " + p.getFirstName());
 				new MainMenu().run();
 				dispose();
 			}
+		}
+		
+		if(person == null) {
+			JOptionPane.showMessageDialog(null, "CPR-Nummer og adgangskode passer ikke sammen");
 		}
 	}
 }

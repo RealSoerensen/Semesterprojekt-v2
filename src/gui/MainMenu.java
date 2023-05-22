@@ -24,19 +24,23 @@ public class MainMenu extends JFrame {
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
 	private final JLabel lblTitle;
+	public JPanel menuPanel;
+	public JPanel panelMainWindowAdmin;
 
 	/**
 	 * Launch the application.
 	 */
-	public void run() {
+	public MainMenu run() {
+		MainMenu frame = null;
 		try {
-			MainMenu frame = new MainMenu();
+			frame = new MainMenu();
 			frame.setVisible(true);
 			frame.setResizable(false);
 			frame.setTitle("Aalborg Gigtforening");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return frame;
 	}
 
 	/**
@@ -65,7 +69,7 @@ public class MainMenu extends JFrame {
 		lblTitle.setBounds(10, 11, 773, 50);
 		titlePanel.add(lblTitle);
 
-		JPanel menuPanel = new JPanel();
+		menuPanel = new JPanel();
 		menuPanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
 		menuPanel.setBackground(new Color(192, 192, 192));
 		menuPanel.setBounds(10, 106, 164, 514);
@@ -145,7 +149,7 @@ public class MainMenu extends JFrame {
 		btnLogOut.setBounds(10, 370, 144, 23);
 		menuPanel.add(btnLogOut);
 
-		JPanel panelMainWindowAdmin = new JPanel();
+		panelMainWindowAdmin = new JPanel();
 		panelMainWindowAdmin.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
 		panelMainWindowAdmin.setBackground(new Color(192, 192, 192));
 		panelMainWindowAdmin.setBounds(0, 182, 164, 177);
