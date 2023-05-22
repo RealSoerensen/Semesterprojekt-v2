@@ -13,12 +13,12 @@ public class EditAccountMenu extends JPanel {
 	private final Person user;
 	private static PersonController personController;
 	private JTextField textFieldSSN;
-	JComboBox<Integer> comboBoxRoles;
+	JComboBox<String> comboBoxRoles;
 
 	/**
 	 * Create the panel.
 	 */
-	public EditAccountMenu(MainMenu mainMenu, Person person) {
+	public EditAccountMenu(MainMenu mainMenu, Person person, boolean isEditedFromAccountMenu) {
 		personController = new PersonController();
 		user = LoginController.getInstance().getPerson();
 		setName("Bruh");
@@ -105,7 +105,7 @@ public class EditAccountMenu extends JPanel {
 				person.getAddress().setZipCode(txtPostalCode.getText());
 
 				if(user.getRole() > 2) {
-					int role = comboBoxRoles.getItemAt(comboBoxRoles.getSelectedIndex());
+					int role = getRole();
 					person.setRole(role);
 					personController.deletePerson(person);
 					person.setSsn(Integer.parseInt(textFieldSSN.getText()));
@@ -128,9 +128,12 @@ public class EditAccountMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen");
 				return;
 			}
-			AccountMenu accountMenu = new AccountMenu(mainMenu);
-			mainMenu.mainPanel.add(accountMenu, "account menu panel");
-			mainMenu.cardLayout.show(mainMenu.mainPanel, "account menu panel");
+			if(isEditedFromAccountMenu) {
+				mainMenu.switchPanelToAccountMenu();
+			}
+			else {
+				mainMenu.switchPanelToAccountManagerMenu();
+			}
 		});
 		btnDoneEditInfo.setBounds(473, 452, 143, 52);
 		add(btnDoneEditInfo);
@@ -161,7 +164,14 @@ public class EditAccountMenu extends JPanel {
 		add(lblHusNummer);
 		
 		JButton btnBack = new JButton("Tilbage");
-		btnBack.addActionListener(e -> mainMenu.switchPanelToAccountMenu());
+		btnBack.addActionListener(e -> {
+			if(isEditedFromAccountMenu) {
+				mainMenu.switchPanelToAccountMenu();
+			}
+			else {
+				mainMenu.switchPanelToAccountManagerMenu();
+			}
+		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBack.setBounds(320, 452, 143, 52);
 		add(btnBack);
@@ -178,10 +188,10 @@ public class EditAccountMenu extends JPanel {
 		adminPanel.add(lblRole);
 		
 		comboBoxRoles = new JComboBox<>();
-		comboBoxRoles.addItem(person.getRole());
-		for(int i = 1; i < 4; i++) {
-			if(i != person.getRole()) comboBoxRoles.addItem(i);
-		}
+		comboBoxRoles.addItem("Kursist");
+		comboBoxRoles.addItem("Instructør");
+		comboBoxRoles.addItem("Adminstrator");
+		comboBoxRoles.setSelectedIndex(person.getRole() - 1);
 		comboBoxRoles.setBounds(93, 8, 184, 29);
 		adminPanel.add(comboBoxRoles);
 		
@@ -194,5 +204,19 @@ public class EditAccountMenu extends JPanel {
 		textFieldSSN.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		textFieldSSN.setBounds(93, 50, 184, 25);
 		adminPanel.add(textFieldSSN);
+	}
+	
+	private int getRole() {
+		int role = 1;
+		if(comboBoxRoles.getItemAt(comboBoxRoles.getSelectedIndex()).equals("Kursist")) {
+			role = 1;
+		}
+		else if(comboBoxRoles.getItemAt(comboBoxRoles.getSelectedIndex()).equals("Instructør")) {
+			role = 2;
+		}
+		else if(comboBoxRoles.getItemAt(comboBoxRoles.getSelectedIndex()).equals("Adminstrator")) {
+			role = 3;
+		}
+		return role;
 	}
 }

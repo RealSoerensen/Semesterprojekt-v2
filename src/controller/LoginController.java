@@ -1,5 +1,6 @@
 package controller;
 
+import gui.MainMenu;
 import model.Person;
 
 public class LoginController {
@@ -7,7 +8,6 @@ public class LoginController {
     private Person person;
 
     private LoginController() {
-
     }
 
     public static LoginController getInstance() {

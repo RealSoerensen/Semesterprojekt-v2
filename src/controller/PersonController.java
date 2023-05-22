@@ -4,10 +4,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dal.DBConnection;
 import dal.address.AddressContainer;
 import dal.address.AddressDataAccessIF;
 import dal.person.PersonContainer;
 import dal.person.PersonDataAccessIF;
+import model.Address;
 import model.Person;
 
 public class PersonController {
@@ -34,6 +36,21 @@ public class PersonController {
 	public boolean createPerson(Person person) throws SQLException {
 		addressDB.create(person.getAddress());
 		return personDB.create(person);
+	}
+	
+	public boolean createPersonWithAddress(Person person, Address address) throws SQLException {
+		boolean success = false;
+		try {
+			DBConnection.getInstance().startTransaction();
+			addressDB.create(address);
+			personDB.create(person);
+			DBConnection.getInstance().commitTransaction();
+			success = true;
+		}
+		catch(SQLException e) {
+			DBConnection.getInstance().rollbackTransaction();
+		}
+		return success;
 	}
 
 	public Person getPerson(long personID) throws SQLException {
