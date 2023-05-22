@@ -1,17 +1,16 @@
 package model;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class Course {
 	private long courseID;
 	private String name;
 	private double price;
 	private String description;
-	private Date startDate;
-	private Date endDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
 
-	public Course(String name, double price, String description, Date startDate, Date endDate) {
+	public Course(String name, double price, String description, LocalDate startDate, LocalDate endDate) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
@@ -19,7 +18,7 @@ public class Course {
 		this.endDate = endDate;
 	}
 
-	public Course(long courseID, String name, double price, String description, Date startDate, Date endDate) {
+	public Course(long courseID, String name, double price, String description, LocalDate startDate, LocalDate endDate) {
 		this.courseID = courseID;
 		this.name = name;
 		this.price = price;
@@ -60,19 +59,19 @@ public class Course {
 		this.courseID = courseID;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 }

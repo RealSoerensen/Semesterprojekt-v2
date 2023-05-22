@@ -1,13 +1,9 @@
 package dal.coursemember;
 
 import dal.DBConnection;
-import dal.course.CourseDB;
-import dal.course.CourseDataAccessIF;
 import dal.person.PersonDB;
-import dal.person.PersonDataAccessIF;
 import model.Course;
 import model.Person;
-import model.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +33,7 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
     @Override
     public boolean isPersonIn(Course course, Person person) {
         boolean result = false;
-        String sql = "SELECT * FROM CourseMember WHERE ssn = ? AND sessionid = ?";
+        String sql = "SELECT * FROM CourseMember WHERE ssn = ? AND courseID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, person.getSsn());
             preparedStatement.setLong(2, course.getCourseID());
@@ -53,11 +49,39 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
 
     @Override
     public List<Person> getAll(Course course) {
-        return null;
+        List<Person> result = new ArrayList<>();
+        String sql = "SELECT * FROM CourseMember WHERE courseID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, course.getCourseID());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                long ssn = resultSet.getLong("ssn");
+                Person person = getPerson(ssn);
+                result.add(person);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     @Override
     public boolean remove(Course course, Person member) {
-        return false;
+        boolean result;
+        String sql = "DELETE FROM CourseMember WHERE ssn = ? AND courseID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, member.getSsn());
+            stmt.setLong(2, course.getCourseID());
+            stmt.executeUpdate();
+            result = stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    private Person getPerson(long ssn) throws SQLException {
+        PersonDB personDB = new PersonDB();
+        return personDB.get(ssn);
     }
 }

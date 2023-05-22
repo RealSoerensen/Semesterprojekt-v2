@@ -53,6 +53,7 @@ public class EditCourseMenu extends JPanel {
             try {
             	int[] intDate = courseController.StringArrToIntArr(strStartDate.split("-"));
             	startDate = getLocalDate(intDate);
+
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;

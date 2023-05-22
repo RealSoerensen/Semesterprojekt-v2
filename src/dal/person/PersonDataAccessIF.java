@@ -4,4 +4,6 @@ import dal.CRUD;
 import model.Person;
 
 public interface PersonDataAccessIF extends CRUD<Person> {
+	
+	boolean isSsnUnique(long ssn);
 }

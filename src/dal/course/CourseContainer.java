@@ -104,4 +104,9 @@ public class CourseContainer implements CourseDataAccessIF{
         }
         return result;
     }
+
+    @Override
+    public void deleteAll() {
+        container.clear();
+    }
 }

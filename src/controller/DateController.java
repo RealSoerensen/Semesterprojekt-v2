@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 public class DateController {
+
 	public static LocalDate getLocalDate(int[] intDate) {
 		LocalDate date = null;
 		int year = intDate[0];

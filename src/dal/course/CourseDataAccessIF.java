@@ -4,4 +4,5 @@ import dal.CRUD;
 import model.Course;
 
 public interface CourseDataAccessIF extends CRUD<Course> {
+    void deleteAll();
 }

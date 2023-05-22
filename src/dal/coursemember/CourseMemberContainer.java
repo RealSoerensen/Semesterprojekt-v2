@@ -4,7 +4,6 @@ import model.Course;
 import model.Person;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class CourseMemberContainer implements CourseMemberDataAccessIF{
