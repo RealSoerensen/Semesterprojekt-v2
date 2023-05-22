@@ -66,7 +66,6 @@ public class AddressContainer implements AddressDataAccessIF{
 
     /**
      * Updates an Address in the container.
-     * @param id The ID of the Address to be updated.
      * @param obj The Address to be updated.
      *
      * @return True if the Address was updated, false otherwise.

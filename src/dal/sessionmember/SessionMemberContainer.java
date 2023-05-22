@@ -17,7 +17,7 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
      * Use getInstance() to get the instance of the SessionMemberContainer.
      */
     private SessionMemberContainer() {
-    	container = new ArrayList<>();
+        container = new ArrayList<>();
     }
 
     /**
@@ -37,13 +37,8 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
     public boolean create(Session session, Person member) {
         boolean result = false;
         SessionMember sessionMember = new SessionMember(session, member);
-        for(int i = 0; i < container.size() && !result; i++) {
-            Session currentSession = container.get(i).session();
-            Person currentMember = container.get(i).member();
-            if (!(currentSession.equals(session) && currentMember.equals(member))) {
-                container.add(sessionMember);
-                result = true;
-            }
+        if(!container.contains(sessionMember)) {
+            result = container.add(sessionMember);
         }
         return result;
     }

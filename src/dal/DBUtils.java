@@ -57,31 +57,31 @@ public class DBUtils {
 
                 stmt.executeUpdate(
                                 """
-                                CREATE TABLE Person (\t[firstName] varchar(50) NOT NULL,
-                                \t[lastName] varchar(50) NOT NULL,
-                                \t[addressID] bigint NOT NULL,
-                                \t[email] varchar(50) NOT NULL,
-                                \t[ssn] bigint PRIMARY KEY,
-                                \t[role] int NOT NULL,
-                                \t[phoneNo] varchar(50) NOT NULL,
-                                \t[username] varchar(18) NOT NULL,
-                                \t[password] varchar(30) NOT NULL,
+                                                CREATE TABLE Person (\t[firstName] varchar(50) NOT NULL,
+                                                \t[lastName] varchar(50) NOT NULL,
+                                                \t[addressID] bigint NOT NULL,
+                                                \t[email] varchar(50) NOT NULL,
+                                                \t[ssn] bigint PRIMARY KEY,
+                                                \t[role] int NOT NULL,
+                                                \t[phoneNo] varchar(50) NOT NULL,
+                                                \t[username] varchar(18) NOT NULL,
+                                                \t[password] varchar(30) NOT NULL,
 
-                                \tCONSTRAINT FK_Person_Address FOREIGN KEY ([addressID]) REFERENCES [Address] ([addressID]))""");
-
-                stmt.executeUpdate(
-                                """
-                                CREATE TABLE Instructor (\t[ssn] bigint PRIMARY KEY,
-                                \t[subjectID] bigint NOT NULL,
-                                \tCONSTRAINT FK_Instructor_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
-                                CONSTRAINT FK_Instructor_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))""");
+                                                \tCONSTRAINT FK_Person_Address FOREIGN KEY ([addressID]) REFERENCES [Address] ([addressID]))""");
 
                 stmt.executeUpdate(
                                 """
-                                CREATE TABLE InstructorSubject (\t[ssn] bigint PRIMARY KEY,
-                                \t[subjectID] bigint NOT NULL,
-                                \tCONSTRAINT FK_InstructorSubject_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
-                                CONSTRAINT FK_InstructorSubject_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))""");
+                                                CREATE TABLE Instructor (\t[ssn] bigint PRIMARY KEY,
+                                                \t[subjectID] bigint NOT NULL,
+                                                \tCONSTRAINT FK_Instructor_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                                                CONSTRAINT FK_Instructor_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))""");
+
+                stmt.executeUpdate(
+                                """
+                                                CREATE TABLE InstructorSubject (\t[ssn] bigint PRIMARY KEY,
+                                                \t[subjectID] bigint NOT NULL,
+                                                \tCONSTRAINT FK_InstructorSubject_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                                                CONSTRAINT FK_InstructorSubject_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID))""");
 
                 stmt.executeUpdate("""
                                 CREATE TABLE [Administrator] (
@@ -101,30 +101,30 @@ public class DBUtils {
 
                 stmt.executeUpdate(
                                 """
-                                CREATE TABLE CourseMember (\t[ssn] bigint PRIMARY KEY,
-                                \t[courseID] bigint NOT NULL,
-                                \tCONSTRAINT FK_CourseMember_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
-                                \tCONSTRAINT FK_CourseMember_Course FOREIGN KEY (courseID) REFERENCES Course(courseID))""");
+                                                CREATE TABLE CourseMember (\t[ssn] bigint PRIMARY KEY,
+                                                \t[courseID] bigint NOT NULL,
+                                                \tCONSTRAINT FK_CourseMember_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                                                \tCONSTRAINT FK_CourseMember_Course FOREIGN KEY (courseID) REFERENCES Course(courseID))""");
 
                 stmt.executeUpdate(
                                 """
-                                CREATE TABLE Session (\t[date] varchar(50) NOT NULL,
-                                \t[sessionID] bigint IDENTITY(1,1) PRIMARY KEY,
-                                \t[courseID] bigint NOT NULL,
-                                \t[instructorSsn] bigint NOT NULL,
-                                \t[subjectID] bigint NOT NULL,
-                                \t[addressID] bigint NOT NULL,
-                                \tCONSTRAINT FK_Session_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
-                                \tCONSTRAINT FK_Session_Person FOREIGN KEY (instructorSsn) REFERENCES Person(ssn),
-                                \tCONSTRAINT FK_Session_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID),
-                                \tCONSTRAINT FK_Session_Address FOREIGN KEY (addressID) REFERENCES Address(addressID))""");
+                                                CREATE TABLE Session (\t[date] varchar(50) NOT NULL,
+                                                \t[sessionID] bigint IDENTITY(1,1) PRIMARY KEY,
+                                                \t[courseID] bigint NOT NULL,
+                                                \t[instructorSsn] bigint NOT NULL,
+                                                \t[subjectID] bigint NOT NULL,
+                                                \t[addressID] bigint NOT NULL,
+                                                \tCONSTRAINT FK_Session_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
+                                                \tCONSTRAINT FK_Session_Person FOREIGN KEY (instructorSsn) REFERENCES Person(ssn),
+                                                \tCONSTRAINT FK_Session_Subject FOREIGN KEY (subjectID) REFERENCES Subject(subjectID),
+                                                \tCONSTRAINT FK_Session_Address FOREIGN KEY (addressID) REFERENCES Address(addressID))""");
 
                 stmt.executeUpdate(
                                 """
-                                CREATE TABLE SessionMember (\t[ssn] bigint NOT NULL,
-                                \t[sessionID] bigint PRIMARY KEY,
-                                \tCONSTRAINT FK_SessionMember_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
-                                \tCONSTRAINT FK_SessionMember_session FOREIGN KEY (sessionID) REFERENCES Session(sessionID))""");
+                                                CREATE TABLE SessionMember (\t[ssn] bigint NOT NULL,
+                                                \t[sessionID] bigint PRIMARY KEY,
+                                                \tCONSTRAINT FK_SessionMember_Person FOREIGN KEY (ssn) REFERENCES Person(ssn),
+                                                \tCONSTRAINT FK_SessionMember_session FOREIGN KEY (sessionID) REFERENCES Session(sessionID))""");
         }
 
         /**

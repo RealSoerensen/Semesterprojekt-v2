@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dal.course.CourseContainer;
@@ -10,8 +11,9 @@ import dal.coursemember.CourseMemberDataAccessIF;
 import dal.session.SessionContainer;
 import dal.session.SessionDataAccessIF;
 import dal.sessionmember.SessionMemberContainer;
-import dal.sessionmember.SessionMemberDB;
 import dal.sessionmember.SessionMemberDataAccessIF;
+import dal.subject.SubjectContainer;
+import dal.subject.SubjectDataAccessIF;
 import model.*;
 
 public class CourseController {
@@ -19,12 +21,22 @@ public class CourseController {
 	private CourseMemberDataAccessIF courseMemberDB;
 	private SessionDataAccessIF sessionDB;
 	private SessionMemberDataAccessIF sessionMemberDB;
+	private SubjectDataAccessIF subjectDB;
 
 	public CourseController() {
 		setCourseDB(CourseContainer.getInstance());
 		setCourseMemberDB(CourseMemberContainer.getInstance());
 		setSessionDB(SessionContainer.getInstance());
 		setSessionMemberDB(SessionMemberContainer.getInstance());
+		setSubjetDB(SubjectContainer.getInstance());
+	}
+
+	private void setSubjetDB(SubjectDataAccessIF subjectDB) {
+		this.subjectDB = subjectDB;
+	}
+
+	private SubjectDataAccessIF getSubjectDB() {
+		return subjectDB;
 	}
 
 	private CourseDataAccessIF getCourseDB() {
@@ -83,7 +95,13 @@ public class CourseController {
 		return getCourseMemberDB().create(course, member);
 	}
 
-	public boolean removeCourseMember(Course course, Person member) {
+	public boolean removeCourseMember(Course course, Person member) throws SQLException {
+		List<Session> sessions = getSessionDB().getAll();
+		for (Session currentSession : sessions) {
+			if (currentSession.getCourse().equals(course)) {
+				getSessionMemberDB().remove(currentSession, member);
+			}
+		}
 		return getCourseMemberDB().remove(course, member);
 	}
 
@@ -112,14 +130,14 @@ public class CourseController {
 	}
 
 	public List<Session> getAllSessionsFromCourse(Course course) throws SQLException {
+		List<Session> sessions = new ArrayList<>();
 		List<Session> allSessions = getAllSessions();
-		for(int i = 0; i < allSessions.size(); i++) {
-			if(!allSessions.get(i).getCourse().equals(course)) {
-				allSessions.remove(i);
-				i--;
+		for (Session allSession : allSessions) {
+			if (allSession.getCourse().equals(course)) {
+				sessions.add(allSession);
 			}
 		}
-		return allSessions;
+		return sessions;
 	}
 
 	public boolean updateSession(Session session) throws SQLException {
@@ -131,7 +149,14 @@ public class CourseController {
 	}
 
 	public boolean createSessionMember(Session session, Person member) {
-		return getSessionMemberDB().create(session, member);
+		boolean success = false;
+		Course course = session.getCourse();
+		List<Person> personList = getAllCourseMembers(course);
+		if (personList.contains(member)) {
+			success = getSessionMemberDB().create(session, member);
+		}
+		return success;
+
 	}
 
 	public List<Person> getAllSessionMembers(Session session) {
@@ -142,10 +167,54 @@ public class CourseController {
 		return getSessionMemberDB().remove(session, person);
 	}
 
-	public int getNumberOfMembersEnrolled(Course course) {
-		int numberOfMembersEnrolled = 0;
-		List<Person> allMembers = getCourseMemberDB().getAll(course);
-		numberOfMembersEnrolled = allMembers.size();
-		return numberOfMembersEnrolled;
+	public List<Session> getEnrolledSessions(Person person, Course course) throws SQLException {
+		List<Session> enrolledSessions = new ArrayList<>();
+		List<Session> allSessions = getAllSessionsFromCourse(course);
+		for (Session currentSession : allSessions) {
+			List<Person> allSessionMembers = getAllSessionMembers(currentSession);
+			for (Person currentSessionMember : allSessionMembers) {
+				if (currentSessionMember.equals(person)) {
+					enrolledSessions.add(currentSession);
+				}
+			}
+		}
+		return enrolledSessions;
+	}
+
+	public void deleteAllCourses() {
+		getCourseDB().deleteAll();
+	}
+
+	public void deleteAllSessions() {
+		getSessionDB().deleteAll();
+	}
+
+	public boolean createSubject(Subject subject) throws SQLException {
+		return getSubjectDB().create(subject);
+	}
+
+	public Subject getSubject(long subjectID) throws SQLException {
+		return getSubjectDB().get(subjectID);
+	}
+
+	public boolean updateSubject(Subject subject) throws SQLException {
+		return getSubjectDB().update(subject);
+	}
+
+	public boolean removeSubject(Subject subject) throws SQLException {
+		return getSubjectDB().delete(subject);
+	}
+
+	public List<Subject> getAllSubjects() throws SQLException {
+		return getSubjectDB().getAll();
+	}
+
+	public int[] StringArrToIntArr(String[] s) {
+		int[] result = new int[s.length];
+		for (int i = 0; i < s.length; i++) {
+			int newInt = Integer.parseInt(s[i]);
+			result[i] = newInt;
+		}
+		return result;
 	}
 }

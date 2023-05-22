@@ -10,7 +10,8 @@ import dal.person.PersonDataAccessIF;
 import dal.subject.SubjectDB;
 import dal.subject.SubjectDataAccessIF;
 import model.*;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +35,12 @@ public class SessionDB implements SessionDataAccessIF {
     @Override
     public boolean create(Session obj) {
         boolean result = false;
-        String sql = " INSERT INTO Session(date, courseID, instructorSsn) VALUES(?, ?, ?) ";
+        String sql = " INSERT INTO Session(date, courseID, instructorSsn, time) VALUES(?, ?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setTimestamp(1, obj.getDate());
+            stmt.setDate(1, Date.valueOf(obj.getDate()));
             stmt.setLong(2, obj.getCourse().getCourseID());
             stmt.setLong(3, obj.getInstructor().getSsn());
+            stmt.setTime(4, Time.valueOf(obj.getTime()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -96,7 +98,7 @@ public class SessionDB implements SessionDataAccessIF {
         String sql = " UPDATE Session SET date = ?, courseID = ?, instructorSsn = ? " +
                 " WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setTimestamp(1, obj.getDate());
+            stmt.setDate(1, Date.valueOf(obj.getDate()));
             stmt.setLong(2, obj.getCourse().getCourseID());
             stmt.setLong(3, obj.getInstructor().getSsn());
             stmt.setLong(4, obj.getSessionID());
@@ -129,13 +131,14 @@ public class SessionDB implements SessionDataAccessIF {
      * @return The Session object.
      */
     private Session createSession(ResultSet rs) throws SQLException {
-        Timestamp date = rs.getTimestamp("date");
+        LocalDate date = rs.getDate("date").toLocalDate();
+        LocalTime time = rs.getTime("time").toLocalTime();
         Person instructor = getInstructor(rs.getLong("instructorSsn"));
         Course course = getCourse(rs.getLong("courseID"));
         Address address = getAddress(rs.getLong("addressID"));
         Subject subject = getSubject(rs.getLong("subjectID"));
         long id = rs.getLong("sessionID");
-        return new Session(id, date, instructor, course, address, subject);
+        return new Session(id, date, instructor, course, address, subject, time);
     }
 
     /**
@@ -176,5 +179,15 @@ public class SessionDB implements SessionDataAccessIF {
     private Course getCourse(long courseID) throws SQLException {
         CourseDataAccessIF courseDB = new CourseDB();
         return courseDB.get(courseID);
+    }
+
+    @Override
+    public void deleteAll() {
+        String sql = " DELETE * FROM Session ";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

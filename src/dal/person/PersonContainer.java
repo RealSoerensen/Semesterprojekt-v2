@@ -86,4 +86,15 @@ public class PersonContainer implements PersonDataAccessIF {
         }
         return result;
     }
+
+	@Override
+	public boolean isSsnUnique(long ssn) {
+		boolean unique = true;
+		for(int i = 0; i < container.size() && unique; i++) {
+            if(container.get(i).getSsn() == ssn) {
+            	unique = false;
+            }
+        }
+		return unique;
+	}
 }

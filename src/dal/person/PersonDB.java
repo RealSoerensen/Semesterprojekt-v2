@@ -32,9 +32,9 @@ public class PersonDB implements PersonDataAccessIF {
 	* @return A boolean value to indicate whether the person was inserted into the database or not
 	*/
 	@Override
-	public boolean create(Person obj) throws SQLException {
+	public boolean create(Person obj) {
 		boolean result = false;
-		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, username, password, addressID) "
+		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, password, addressID) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, obj.getFirstName());
@@ -42,7 +42,6 @@ public class PersonDB implements PersonDataAccessIF {
 			stmt.setString(3, obj.getEmail());
 			stmt.setLong(4, obj.getSsn());
 			stmt.setString(6, obj.getPhoneNumber());
-			stmt.setString(7, obj.getUsername());
 			stmt.setString(8, obj.getPassword());
 			stmt.setLong(9, obj.getAddress().getAddressID());
 			result = stmt.executeUpdate() > 0;
@@ -147,14 +146,13 @@ public class PersonDB implements PersonDataAccessIF {
 			String lastName = rs.getString("lastName");
 			String email = rs.getString("email");
 			String phoneNo = rs.getString("phoneNo");
-			String username = rs.getString("username");
 			String password = rs.getString("password");
 			int role = rs.getInt("role");
 			long ssn = rs.getLong("ssn");
 			long addressID = rs.getLong("addressID");
 			Address address = getAddress(addressID);
 
-			person = new Person(firstName, lastName, address, email, phoneNo, role, username, password, ssn);
+			person = new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
 		}
 		return person;
 	}
@@ -182,5 +180,17 @@ public class PersonDB implements PersonDataAccessIF {
 	private long createAddress(Address address) throws SQLException {
 		AddressDB addressDB = new AddressDB();
 		return addressDB.createAddressAndGetID(address);
+	}
+
+	@Override
+	public boolean isSsnUnique(long ssn) {
+		List<Person> allPeople = getAll();
+		boolean unique = true;
+		for(int i = 0; i < allPeople.size() && unique; i++) {
+            if(allPeople.get(i).getSsn() == ssn) {
+            	unique = false;
+            }
+        }
+		return unique;
 	}
 }

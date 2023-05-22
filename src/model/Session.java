@@ -1,37 +1,41 @@
 package model;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Session {
 	private long sessionID;
-	private Timestamp date;
+	private LocalDate date;
+	private LocalTime time;
 	private Person instructor;
 	private Course course;
 	private Address address;
 	private Subject subject;
 
-	public Session(long sessionID, Timestamp date, Person instructor, Course course, Address address, Subject subject) {
+	public Session(long sessionID, LocalDate date, Person instructor, Course course, Address address, Subject subject, LocalTime time) {
 		this.sessionID = sessionID;
 		this.date = date;
+		this.time = time;
 		this.instructor = instructor;
 		this.course = course;
 		this.address = address;
 		this.subject = subject;
 	}
 
-	public Session(Timestamp date, Person instructor, Course course, Address address, Subject subject) {
+	public Session(LocalDate date, Person instructor, Course course, Address address, Subject subject, LocalTime time) {
 		this.date = date;
+		this.time = time;
 		this.instructor = instructor;
 		this.course = course;
 		this.address = address;
 		this.subject = subject;
 	}
 
-	public Timestamp getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -73,5 +77,13 @@ public class Session {
 
 	public void setSessionID(long sessionID) {
 		this.sessionID = sessionID;
+	}
+
+	public LocalTime getTime() {
+		return time;
+	}
+
+	public void setTime(LocalTime time) {
+		this.time = time;
 	}
 }
