@@ -71,4 +71,18 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
+    
+    public void startTransaction() throws SQLException {
+    	con.setAutoCommit(false);
+    }
+    
+    public void commitTransaction() throws SQLException {
+    	con.commit();
+    	con.setAutoCommit(true);
+    }
+    
+    public void rollbackTransaction() throws SQLException {
+    	con.rollback();
+    	con.setAutoCommit(true);
+    }
 }

@@ -9,6 +9,8 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import static controller.DateController.getLocalDate;
+
 public class CreateCourseMenu extends JPanel {
     final CourseController courseController = new CourseController();
 
@@ -95,7 +97,7 @@ public class CreateCourseMenu extends JPanel {
             LocalDate startDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(stringStartDate.split("-"));
-            	startDate = DateController.getInstance().getLocalDate(intDate);
+            	startDate = getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
                 JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
                 return;
@@ -107,7 +109,7 @@ public class CreateCourseMenu extends JPanel {
             LocalDate endDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(stringStartDate.split("-"));
-				endDate = DateController.getInstance().getLocalDate(intDate);
+				endDate = getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
                 JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
                 return;

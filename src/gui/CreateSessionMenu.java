@@ -13,6 +13,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static controller.DateController.getLocalDate;
+
 public class CreateSessionMenu extends JPanel {
 	private final CourseController courseController = new CourseController();
 	private final JTextField textFieldDate;
@@ -153,7 +155,7 @@ public class CreateSessionMenu extends JPanel {
 			LocalDate date;
 			try {
 				int[] intDate = courseController.StringArrToIntArr(strDate.split("-"));
-				date = DateController.getInstance().getLocalDate(intDate);
+				date = getLocalDate(intDate);
 
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");

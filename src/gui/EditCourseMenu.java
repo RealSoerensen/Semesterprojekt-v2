@@ -12,6 +12,8 @@ import controller.DateController;
 
 import java.awt.Font;
 
+import static controller.DateController.getLocalDate;
+
 public class EditCourseMenu extends JPanel {
 	private JTextField textFieldName;
 	private JTextField textFieldPrice;
@@ -50,7 +52,8 @@ public class EditCourseMenu extends JPanel {
 			LocalDate startDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(strStartDate.split("-"));
-            	startDate = DateController.getInstance().getLocalDate(intDate);
+            	startDate = getLocalDate(intDate);
+
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;
@@ -62,7 +65,7 @@ public class EditCourseMenu extends JPanel {
             LocalDate endDate;
             try {
             	int[] intDate = courseController.StringArrToIntArr(strEndDate.split("-"));
-            	endDate = DateController.getInstance().getLocalDate(intDate);
+            	endDate = getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 				return;
