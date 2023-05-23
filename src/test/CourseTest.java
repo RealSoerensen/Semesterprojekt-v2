@@ -33,7 +33,7 @@ public class CourseTest {
     }
 
     @Test
-    public void testCreateCourse() throws Exception {
+    public void testCreateCourse() {
         //Arrange
         Course course = new Course("Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
