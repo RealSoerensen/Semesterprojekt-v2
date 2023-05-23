@@ -171,7 +171,7 @@ public class EditAccountMenu extends JPanel {
 
 		comboBoxRoles = new JComboBox<>();
 		comboBoxRoles.addItem("Kursist");
-		comboBoxRoles.addItem("Instructør");
+		comboBoxRoles.addItem("Instruktør");
 		comboBoxRoles.addItem("Adminstrator");
 		comboBoxRoles.setSelectedIndex(person.getRole() - 1);
 		comboBoxRoles.setBounds(93, 8, 184, 29);

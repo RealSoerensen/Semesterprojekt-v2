@@ -106,9 +106,15 @@ public class AccountManagerMenu extends JPanel {
 			}
 
 			try {
-				personController.updatePerson(person);
+				if(personController.updatePerson(person)) {
+					JOptionPane.showMessageDialog(null, "Personen blev opdateret");
+				} else {
+					JOptionPane.showMessageDialog(null, "Der skete en fejl ved ændring af rolle");
+					return;
+				}
 			} catch (SQLException e1) {
 				JOptionPane.showMessageDialog(null, "Der skete en fejl ved opdatering af personen");
+				System.out.println(e1.getMessage());
 				return;
 			}
 
@@ -128,11 +134,9 @@ public class AccountManagerMenu extends JPanel {
 		add(btnSeeInfo);
 
 		JButton btnCreatePerson = new JButton("Opret");
-		btnCreatePerson.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new CreateAccountMenu(false).run(false);
-				mainMenu.dispose();
-			}
+		btnCreatePerson.addActionListener(e -> {
+			new CreateAccountMenu(false).run(false);
+			mainMenu.dispose();
 		});
 
 		btnCreatePerson.setBounds(486, 215, 118, 34);

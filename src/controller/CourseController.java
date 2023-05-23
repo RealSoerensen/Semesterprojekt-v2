@@ -222,8 +222,6 @@ public class CourseController {
 		return getInstructorSubjectDB().remove(instructor, subject);
 	}
 
-
-
 	public int[] StringArrToIntArr(String[] s) {
 		int[] result = new int[s.length];
 		for (int i = 0; i < s.length; i++) {
