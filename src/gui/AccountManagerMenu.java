@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,9 +14,6 @@ import javax.swing.table.TableColumnModel;
 import controller.PersonController;
 import model.Address;
 import model.Person;
-import java.awt.event.ActionListener;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
 
 public class AccountManagerMenu extends JPanel {
 
@@ -135,8 +134,20 @@ public class AccountManagerMenu extends JPanel {
 
 		JButton btnCreatePerson = new JButton("Opret");
 		btnCreatePerson.addActionListener(e -> {
-			new CreateAccountMenu(false).run(false);
-			mainMenu.dispose();
+			JDialog createUserPanel = new CreateAccountMenu(true);
+			createUserPanel.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent e) {
+					try {
+						memberData = refreshTable(memberTable, personController.getAllMembers());
+						instructorData = refreshTable(instructorTable, personController.getAllInstructors());
+						adminData = refreshTable(adminTable, personController.getAllAdmins());
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Der skete en fejl ved opdatering af tabellerne");
+					}
+				}
+			});
+			createUserPanel.setVisible(true);
 		});
 
 		btnCreatePerson.setBounds(486, 215, 118, 34);

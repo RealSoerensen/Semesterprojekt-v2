@@ -15,12 +15,8 @@ public class LoginMenu extends JFrame {
 
 	private final JTextField textFieldUsername;
 	private final JPasswordField passwordField;
-
 	private final PersonController personController;
-	private final LoginController loginController;
 
-	// personController = new PersonController(PersonContainer.getInstance(),
-	// AddressContainer.getInstance());
 	/**
 	 * Launch the application.
 	 */
@@ -28,7 +24,6 @@ public class LoginMenu extends JFrame {
 		try {
 
 			LoginMenu frame = new LoginMenu();
-
 			frame.setVisible(true);
 
 		} catch (Exception e) {
@@ -40,7 +35,6 @@ public class LoginMenu extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginMenu() throws SQLException {
-		loginController = LoginController.getInstance();
 		personController = new PersonController();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,12 +56,7 @@ public class LoginMenu extends JFrame {
 
 		JButton btnLogin = new JButton("Log ind");
 		btnLogin.addActionListener(e -> {
-			try {
-				logIn();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			logIn();
 		});
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnLogin.setBounds(217, 138, 101, 53);
@@ -94,19 +83,26 @@ public class LoginMenu extends JFrame {
 
 	private void createUser() {
 		dispose();
-		new CreateAccountMenu(true).run(true);
+		new CreateAccountMenu(true);
 	}
 
-	private void logIn() throws SQLException {
+	private void logIn() {
 		long ssn = Long.parseLong(textFieldUsername.getText());
 		String password = new String(passwordField.getPassword());
-		Person person = personController.login(ssn, password);
-		if (person != null) {
-			LoginController.getInstance().setLoggedInPerson(person);
-			dispose();
-			new MainMenu().run();
-		} else {
+		Person person;
+		try {
+			person = personController.login(ssn, password);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Der skete en fejl. Prøv igen senere.");
+			return;
+		}
+
+		if (person == null) {
 			JOptionPane.showMessageDialog(null, "Forkert brugernavn eller adgangskode");
 		}
+
+		LoginController.getInstance().setLoggedInPerson(person);
+		dispose();
+		new MainMenu().run();
 	}
 }
