@@ -17,7 +17,12 @@ public class EditAccountMenu extends JPanel {
 	 * Create the panel.
 	 */
 	public EditAccountMenu(MainMenu mainMenu, Person person, boolean isEditedFromAccountMenu) throws SQLException {
-		personController = new PersonController();
+		try {
+			personController = new PersonController();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke oprette forbindelse til databasen");
+			throw new RuntimeException(e);
+		}
 		Person user = LoginController.getInstance().getPerson();
 		setName("Bruh");
 		setSize(626, 515);
@@ -166,7 +171,7 @@ public class EditAccountMenu extends JPanel {
 
 		comboBoxRoles = new JComboBox<>();
 		comboBoxRoles.addItem("Kursist");
-		comboBoxRoles.addItem("Instructør");
+		comboBoxRoles.addItem("Instruktør");
 		comboBoxRoles.addItem("Adminstrator");
 		comboBoxRoles.setSelectedIndex(person.getRole() - 1);
 		comboBoxRoles.setBounds(93, 8, 184, 29);
@@ -174,7 +179,7 @@ public class EditAccountMenu extends JPanel {
 	}
 
 	private int getRole() {
-		int role = 0;
+		int role;
 		String roleString = comboBoxRoles.getItemAt(comboBoxRoles.getSelectedIndex());
 		switch (roleString) {
 			case "Instructør" -> role = 2;

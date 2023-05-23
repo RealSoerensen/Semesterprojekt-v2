@@ -122,14 +122,15 @@ public class PersonDB implements PersonDataAccessIF {
 	@Override
 	public boolean update(Person obj) throws SQLException {
 		boolean result;
-		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, phoneNo = ?, addressId = ? WHERE ssn = ?";
+		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, phoneNo = ?, addressId = ?, role = ? WHERE ssn = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, obj.getFirstName());
 			stmt.setString(2, obj.getLastName());
 			stmt.setString(3, obj.getEmail());
 			stmt.setString(4, obj.getPhoneNumber());
 			stmt.setLong(5, obj.getAddress().getAddressID());
-			stmt.setLong(6, obj.getSsn());
+			stmt.setInt(6, obj.getRole());
+			stmt.setLong(7, obj.getSsn());
 			result = stmt.executeUpdate() > 0;
 		}
 		return result;

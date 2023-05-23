@@ -130,6 +130,7 @@ public class CourseController {
 	}
 
 	public Session createSession(Session session) throws SQLException {
+		session.getAddress().setAddressID(getSessionDB().createAddressAndGetID(session.getAddress()));
 		return getSessionDB().create(session);
 	}
 
@@ -190,17 +191,7 @@ public class CourseController {
 	}
 
 	public List<Session> getEnrolledSessions(Person person, Course course) throws SQLException {
-		List<Session> enrolledSessions = new ArrayList<>();
-		List<Session> allSessions = getAllSessionsFromCourse(course);
-		for (Session currentSession : allSessions) {
-			List<Person> allSessionMembers = getAllSessionMembers(currentSession);
-			for (Person currentSessionMember : allSessionMembers) {
-				if (currentSessionMember.equals(person)) {
-					enrolledSessions.add(currentSession);
-				}
-			}
-		}
-		return enrolledSessions;
+		return getSessionDB().getEnrolledSessions(person, course);
 	}
 
 	public Subject createSubject(Subject subject) throws SQLException {
@@ -230,8 +221,6 @@ public class CourseController {
 	public boolean removeInstructorSubject(Person instructor, Subject subject) throws SQLException {
 		return getInstructorSubjectDB().remove(instructor, subject);
 	}
-
-
 
 	public int[] StringArrToIntArr(String[] s) {
 		int[] result = new int[s.length];
