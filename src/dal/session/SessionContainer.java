@@ -1,8 +1,10 @@
 package dal.session;
 
-import model.Session;
-import model.Subject;
+import dal.sessionmember.SessionMemberContainer;
+import dal.sessionmember.SessionMemberDataAccessIF;
+import model.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class SessionContainer implements SessionDataAccessIF {
      * Creates a new Session in the container.
      *
      * @param obj The Session to be created.
-     * @return True if the Session was created, false otherwise.
+     * @return The Session that was created.
      */
     @Override
     public Session create(Session obj) {
@@ -114,5 +116,22 @@ public class SessionContainer implements SessionDataAccessIF {
     @Override
     public void deleteAll() {
         container.clear();
+    }
+
+    @Override
+    public List<Session> getEnrolledSessions(Person person, Course course) {
+        SessionMemberDataAccessIF sessionMemberDB = SessionMemberContainer.getInstance();
+        List<Session> sessions = new ArrayList<>();
+        for (Session session : container) {
+            if (session.getCourse().getCourseID() == course.getCourseID() && sessionMemberDB.isPersonIn(session, person)) {
+                sessions.add(session);
+            }
+        }
+        return sessions;
+    }
+
+    @Override
+    public long createAddressAndGetID(Address address) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -200,4 +200,43 @@ public class SessionDB implements SessionDataAccessIF {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Session> getEnrolledSessions(Person person, Course course) throws SQLException {
+        List<Session> enrolledSessions = new ArrayList<>();
+        String query = "SELECT s.* FROM Session s " +
+                "INNER JOIN SessionMember sm ON s.sessionID = sm.sessionID " +
+                "WHERE sm.ssn = ? AND s.courseID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, person.getSsn());
+            statement.setLong(2, course.getCourseID());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Session session = createSession(resultSet);
+                    enrolledSessions.add(session);
+                }
+            }
+        }
+        return enrolledSessions;
+    }
+
+    @Override
+    public long createAddressAndGetID(Address address) {
+        long generatedId = 0;
+        String sql = " INSERT INTO Address (zipCode, city, street, houseNumber) VALUES (?, ?, ?, ?) ";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, address.getZipCode());
+            stmt.setString(2, address.getCity());
+            stmt.setString(3, address.getStreet());
+            stmt.setString(4, address.getHouseNumber());
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return generatedId;
+    }
 }

@@ -14,32 +14,33 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		new DBUtils().resetDB();
-		//Create Addresses
-		Address address1 = new Address("9000", "Aalborg", "Her", "5A");
-		Address address2 = new Address("9000", "Aalborg", "Der", "1");
-		Address address3 = new Address("9220", "Aalborg", "Hvorhenne", "73");
-		Address address4 = new Address("9200", "Aalborg", "Bilka", "252");
-		Address address5 = new Address("9000", "Aalborg", "Langbortistan", "3523");
-		Address address6 = new Address("8900", "Randers", "Storegade", "17");
-		Address address7 = new Address("9000", "Aalborg", "Jomfru Ane Gade", "23");
-		Address address8 = new Address("9000", "Aalborg", "Papkasse", "3");
-		Address address9 = new Address("9000", "Aalbrog", "Jomfru Ane Gade", "5");
-		Address address10 = new Address("9200", "Aalborg", "Sofiendalsvej", "60");
-
 		//Create members, instructors and administrators
 		PersonController personController = new PersonController();
-		
+
+		Address address1 = new Address("9000", "Aalborg", "Her", "5A");
 		Person person1 = new Person("Patrick", "Sørensen", address1, "UwULover@gmail.com", "112", 3, "0", 1111);
+
+		Address address2 = new Address("9000", "Aalborg", "Der", "1");
 		Person person2 = new Person("Jonas", "Jørgensen", address2, "Jonas.birch00@gmail.com", "51408590", 3, "1", 9999);
+
+		Address address3 = new Address("9220", "Aalborg", "Hvorhenne", "73");
 		Person person3 = new Person("Svend", "Damsgaard", address3, "svendmaster@gmail.com", "11111111", 3, "0", 3333);
-		
+
+		Address address4 = new Address("9200", "Aalborg", "Bilka", "252");
 		Person person4 = new Person("Filip", "Nymann", address4, "filipnymann@hotmail.com", "88888888", 2,"2", 7777);
+
+		Address address5 = new Address("9000", "Aalborg", "Langbortistan", "3523");
 		Person person5 = new Person("Nicklas", "Aagaard", address5, "nicklasspillerkata@hotmail.com", "25252525", 2, "2", 5555);
-		
+
+		Address address6 = new Address("8900", "Randers", "Storegade", "17");
 		Person person6 = new Person("Britta", "Mokaisen", address6, "mokaidrikker@gmail.com", "11411414", 1,  "0", 9878);
+		Address address7 = new Address("9000", "Aalborg", "Jomfru Ane Gade", "23");
 		Person person7 = new Person("Jannik", "Bøllesen", address7, "nordjyde123@live.dk", "69646567", 1,  "0", 5687);
+		Address address8 = new Address("9000", "Aalborg", "Papkasse", "3");
 		Person person8 = new Person("Mogens", "Hansen", address8, "hjemløsherre1525@gmail.com", "11223344", 1,  "0", 5547);
+		Address address9 = new Address("9000", "Aalbrog", "Jomfru Ane Gade", "5");
 		Person person9 = new Person("Bente", "Mortensen", address9, "mortensen.bente@hotmail.com", "99887766", 1,  "0", 6658);
+		Address address10 = new Address("9200", "Aalborg", "Sofiendalsvej", "60");
 		Person person10 = new Person("Ollie", "Osbourne", address10, "osbourne@live.dk", "55566688", 1,  "0", 6659);
 		
 		
@@ -106,12 +107,19 @@ public class Main {
 
 
 		//Create sessions
-		Session session1 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course1, address1, subject1, LocalTime.of(14, 30));
-		Session session2 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course2, address2, subject2, LocalTime.of(14, 30));
-		Session session3 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course3, address3, subject3, LocalTime.of(14, 30));
-		Session session4 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course4, address4, subject4, LocalTime.of(14, 30));
-		Session session5 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course5, address5, subject5, LocalTime.of(14, 30));
-		Session session6 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course6, address6, subject6, LocalTime.of(14, 30));
+		// Create addresses for sessions
+		Address address11 = new Address("9000", "Aalborg", "Papkasse", "3");
+		Address address12 = new Address("9000", "Aalborg", "Papkasse", "3");
+		Address address13 = new Address("9000", "Aalborg", "Papkasse", "3");
+		Address address14 = new Address("9000", "Aalborg", "Papkasse", "3");
+		Address address15 = new Address("9000", "Aalborg", "Papkasse", "3");
+		Address address16 = new Address("9000", "Aalborg", "Papkasse", "3");
+		Session session1 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course1, address11, subject1, LocalTime.of(14, 30));
+		Session session2 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course2, address12, subject2, LocalTime.of(14, 30));
+		Session session3 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course3, address13, subject3, LocalTime.of(14, 30));
+		Session session4 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course4, address14, subject4, LocalTime.of(14, 30));
+		Session session5 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course5, address15, subject5, LocalTime.of(14, 30));
+		Session session6 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course6, address16, subject6, LocalTime.of(14, 30));
 
 		session1 = courseController.createSession(session1);
 		session2 = courseController.createSession(session2);

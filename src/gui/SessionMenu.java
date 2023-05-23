@@ -27,7 +27,7 @@ public class SessionMenu extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public SessionMenu(MainMenu mainMenu, Course course) throws SQLException {
+	public SessionMenu(MainMenu mainMenu, Course course) throws SQLException{
 		person = mainMenu.user;
 		this.course = course;
 		setLayout(null);
@@ -38,7 +38,11 @@ public class SessionMenu extends JPanel {
 		add(scrollPaneCourses);
 
 		table = new JTable();
-		refreshTable(courseController.getAllSessionsFromCourse(course));
+		try {
+			refreshTable();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere sessioner");
+		}
 		scrollPaneCourses.setViewportView(table);
 
 		JButton btnBack = new JButton("Tilbage");
@@ -109,7 +113,7 @@ public class SessionMenu extends JPanel {
 			try {
 				courseController.removeSession(session);
 				JOptionPane.showMessageDialog(null, "Session slettet");
-				refreshTable(courseController.getAllSessionsFromCourse(course));
+				refreshTable();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -137,7 +141,7 @@ public class SessionMenu extends JPanel {
 			}
 			JOptionPane.showMessageDialog(null, "Tilmeldt session");
 			try {
-				refreshTable(courseController.getAllSessionsFromCourse(course));
+				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
@@ -159,7 +163,7 @@ public class SessionMenu extends JPanel {
 			}
 			JOptionPane.showMessageDialog(null, "Afmeldt session");
 			try {
-				refreshTable(courseController.getAllSessionsFromCourse(course));
+				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
@@ -168,7 +172,8 @@ public class SessionMenu extends JPanel {
 		add(btnLeaveSession);
 	}
 
-	private void refreshTable(List<Session> sessions) throws SQLException {
+	private void refreshTable() throws SQLException {
+		List<Session> sessions = courseController.getAllSessionsFromCourse(course);
 		Object[][] data = new Object[sessions.size()][7];
 
 		for (int i = 0; i < sessions.size(); i++) {
@@ -249,11 +254,15 @@ public class SessionMenu extends JPanel {
 	}
 
 	private String isEnrolled(Course course, Session session) throws SQLException {
+		String result = "Nej";
 		List<Session> enrolledSessions = courseController.getEnrolledSessions(person, course);
-		if (enrolledSessions.contains(session)) {
-			return "Ja";
-		} else {
-			return "Nej";
+		System.out.println(enrolledSessions);
+		for(Session enrolledSession : enrolledSessions) {
+			if(enrolledSession.getSessionID() == session.getSessionID()){
+				result = "Ja";
+				break;
+			}
 		}
+		return result;
 	}
 }

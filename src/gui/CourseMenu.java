@@ -30,7 +30,11 @@ public class CourseMenu extends JPanel {
 		add(scrollPaneCourses);
 
 		table = new JTable();
-		refreshTable();
+		try{
+			refreshTable();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
+		}
 
 		scrollPaneCourses.setViewportView(table);
 
@@ -154,8 +158,15 @@ public class CourseMenu extends JPanel {
 				return;
 			}
 			Course course = (Course) courseData[selectedRow][0];
-			if (!courseController.getAllCourseMembers((Course) table.getModel().getValueAt(table.getSelectedRow(), 0)).contains(person))
-			{
+			List<Person> courseMembers = courseController.getAllCourseMembers(course);
+			boolean isEnrolled = false;
+			for(Person p : courseMembers) {
+				if(p.getSsn() == person.getSsn()) {
+					isEnrolled = true;
+					break;
+				}
+			}
+			if(!isEnrolled) {
 				JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt dette kursus");
 				return;
 			}
@@ -184,7 +195,11 @@ public class CourseMenu extends JPanel {
 				if (result == JOptionPane.YES_OPTION) {
 					courseController.removeCourse(course);
 					JOptionPane.showMessageDialog(null, "Kursus slettet");
-					refreshTable();
+					try {
+						refreshTable();
+					} catch (SQLException ex) {
+						JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
+					}
 				}
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
