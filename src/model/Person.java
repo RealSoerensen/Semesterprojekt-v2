@@ -81,7 +81,7 @@ public class Person {
         return ssn;
     }
 
-    public void setSsn(int ssn) {
+    public void setSsn(long ssn) {
         this.ssn = ssn;
     }
 

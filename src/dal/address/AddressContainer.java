@@ -1,6 +1,7 @@
 package dal.address;
 
 import model.Address;
+import model.Subject;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -28,13 +29,14 @@ public class AddressContainer implements AddressDataAccessIF{
 
     /**
      * Creates a new Address in the container.
-     * @param obj The Address to be created.
      *
+     * @param obj The Address to be created.
      * @return True if the Address was created, false otherwise.
      */
     @Override
-    public boolean create(Address obj) {
-        return container.add(obj);
+    public Address create(Address obj) {
+        container.add(obj);
+        return obj;
     }
 
     /**
@@ -98,5 +100,11 @@ public class AddressContainer implements AddressDataAccessIF{
             }
         }
         return result;
+    }
+
+    @Override
+    public long createAddressAndGetID(Address address) throws Exception {
+        create(address);
+        return address.getAddressID();
     }
 }

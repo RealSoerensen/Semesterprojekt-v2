@@ -24,7 +24,7 @@ public class CreateSessionMenu extends JPanel {
 	private final JTextField textFieldStreetNum;
 	private final JTextField textFieldTime;
 
-	public CreateSessionMenu(MainMenu mainMenu, Course course) {
+	public CreateSessionMenu(MainMenu mainMenu, Course course) throws SQLException {
 		setSize(626, 515);
 		setLayout(null);
 
@@ -190,7 +190,7 @@ public class CreateSessionMenu extends JPanel {
 				Session newSession = new Session(date, (Person) comboBoxInstructors.getSelectedItem(), course, address,
 						(Subject) comboBoxSubjects.getSelectedItem(), time);
 				try {
-					if (courseController.createSession(newSession)) {
+					if (courseController.createSession(newSession) != null) {
 						JOptionPane.showMessageDialog(null, "Session oprettet");
 					} else {
 						JOptionPane.showMessageDialog(null, "Kunne ikke oprette session");

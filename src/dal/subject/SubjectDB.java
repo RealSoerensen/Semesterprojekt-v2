@@ -3,10 +3,7 @@ package dal.subject;
 import dal.DBConnection;
 import model.Subject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +21,24 @@ public class SubjectDB implements SubjectDataAccessIF {
     }
 
     @Override
-    public boolean create(Subject obj) {
-        return false;
+    public Subject create(Subject obj) {
+        Subject subject = null;
+        String sql = "INSERT INTO Subject(name, description) VALUES(?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, obj.getName());
+            stmt.setString(2, obj.getDescription());
+            stmt.executeUpdate();
+            ResultSet subjectRS = stmt.getGeneratedKeys();
+            if (subjectRS.next()) {
+                long subjectID = subjectRS.getLong(1);
+                subject = new Subject(subjectID, obj.getName(), obj.getDescription());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return subject;
     }
+
 
     /**
      * The get function takes in a long id and returns the subject with that id.
@@ -46,7 +58,7 @@ public class SubjectDB implements SubjectDataAccessIF {
             if (subjectRS.next()) {
                 String name = subjectRS.getString("name");
                 String description = subjectRS.getString("description");
-                subject = new Subject(name, description);
+                subject = new Subject(id, name, description);
             }
         }
         return subject;

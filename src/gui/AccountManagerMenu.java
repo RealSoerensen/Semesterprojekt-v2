@@ -26,6 +26,7 @@ public class AccountManagerMenu extends JPanel {
 	Object[][] instructorData;
 	Object[][] adminData;
 	final PersonController personController = new PersonController();
+
 	/**
 	 * Create the panel.
 	 * Tab 0 = Member, 1 = Instructor, 2 = Administrator.
@@ -37,11 +38,11 @@ public class AccountManagerMenu extends JPanel {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 11, 466, 493);
 		add(tabbedPane);
-		
+
 		JPanel panelMembers = new JPanel();
 		tabbedPane.addTab("Kursister", null, panelMembers, "Skift til Kursister");
 		panelMembers.setLayout(null);
-		
+
 		JScrollPane scrollPaneMembers = new JScrollPane();
 		scrollPaneMembers.setBounds(10, 11, 441, 442);
 		panelMembers.add(scrollPaneMembers);
@@ -50,11 +51,11 @@ public class AccountManagerMenu extends JPanel {
 		memberTable = new JTable();
 		memberData = refreshTable(memberTable, members);
 		scrollPaneMembers.setViewportView(memberTable);
-		
+
 		JPanel panelInstructors = new JPanel();
 		tabbedPane.addTab("Instruktører", null, panelInstructors, "Skift til Instruktører");
 		panelInstructors.setLayout(null);
-		
+
 		JScrollPane scrollPaneInstructors = new JScrollPane();
 		scrollPaneInstructors.setBounds(10, 11, 441, 442);
 		panelInstructors.add(scrollPaneInstructors);
@@ -63,11 +64,11 @@ public class AccountManagerMenu extends JPanel {
 		instructorTable = new JTable();
 		instructorData = refreshTable(instructorTable, instructors);
 		scrollPaneInstructors.setViewportView(instructorTable);
-		
+
 		JPanel panelAdminstrator = new JPanel();
 		tabbedPane.addTab("Adminstratorer", null, panelAdminstrator, "Skift til Adminstratorer");
 		panelAdminstrator.setLayout(null);
-		
+
 		JScrollPane scrollPaneAdmin = new JScrollPane();
 		scrollPaneAdmin.setBounds(10, 11, 441, 442);
 		panelAdminstrator.add(scrollPaneAdmin);
@@ -76,11 +77,11 @@ public class AccountManagerMenu extends JPanel {
 		adminTable = new JTable();
 		adminData = refreshTable(adminTable, admins);
 		scrollPaneAdmin.setViewportView(adminTable);
-		
+
 		JButton btnDeleteMembers = new JButton("Slet");
 		btnDeleteMembers.setBounds(486, 170, 118, 34);
 		add(btnDeleteMembers);
-		
+
 		JButton btnEditMember = new JButton("Rediger");
 		btnEditMember.setBounds(486, 125, 118, 34);
 		add(btnEditMember);
@@ -89,18 +90,19 @@ public class AccountManagerMenu extends JPanel {
 		btnChangeRole.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 
-			if(person == null) {
+			if (person == null) {
 				JOptionPane.showMessageDialog(null, "Vælg en kursist fra tabellen");
 				return;
 			}
 
-			String[] options = {"Medlem", "Instruktør", "Administrator"};
-			int choice = JOptionPane.showOptionDialog(null, "Vælg en rolle", "Rolle", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-			if(choice == 0) {
+			String[] options = { "Medlem", "Instruktør", "Administrator" };
+			int choice = JOptionPane.showOptionDialog(null, "Vælg en rolle", "Rolle", JOptionPane.DEFAULT_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			if (choice == 0) {
 				person.setRole(1);
-			} else if(choice == 1) {
+			} else if (choice == 1) {
 				person.setRole(2);
-			} else if(choice == 2) {
+			} else if (choice == 2) {
 				person.setRole(3);
 			}
 
@@ -126,7 +128,6 @@ public class AccountManagerMenu extends JPanel {
 		btnSeeInfo.setBounds(486, 35, 118, 34);
 		add(btnSeeInfo);
 
-		
 		JButton btnCreatePerson = new JButton("Opret");
 		btnCreatePerson.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,14 +135,14 @@ public class AccountManagerMenu extends JPanel {
 				mainMenu.dispose();
 			}
 		});
-		
+
 		btnCreatePerson.setBounds(486, 215, 118, 34);
 		add(btnCreatePerson);
-		
+
 		btnSeeInfo.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 
-			if(person == null) {
+			if (person == null) {
 				JOptionPane.showMessageDialog(null, "Vælg en kursist fra tabellen");
 				return;
 			}
@@ -166,25 +167,32 @@ public class AccountManagerMenu extends JPanel {
 
 		btnEditMember.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
-			if(person == null) {
+			if (person == null) {
 				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
 				return;
 			}
-			EditAccountMenu editMember = new EditAccountMenu(mainMenu, person, false);
+			EditAccountMenu editMember;
+			try {
+				editMember = new EditAccountMenu(mainMenu, person, false);
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			mainMenu.mainPanel.add(editMember, "EditMember");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "EditMember");
 		});
 
 		btnDeleteMembers.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
-			if(person == null) {
+			if (person == null) {
 				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
 				return;
 			}
-			int result = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil slette " + person.getFirstName() + " ?", "Slet Kursus", JOptionPane.YES_NO_OPTION);
-			if(result == JOptionPane.YES_OPTION) {
+			int result = JOptionPane.showConfirmDialog(null,
+					"Er du sikker på at du vil slette " + person.getFirstName() + " ?", "Slet Kursus",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
 				try {
-					if(!personController.deletePerson(person)) {
+					if (!personController.deletePerson(person)) {
 						JOptionPane.showMessageDialog(null, "Bruger kunne ikke slettes");
 					}
 				} catch (SQLException ex) {
@@ -210,13 +218,11 @@ public class AccountManagerMenu extends JPanel {
 		JTable table = (JTable) scrollPane.getViewport().getView();
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow != -1) {
-			if(activeTabIndex == 0) {
+			if (activeTabIndex == 0) {
 				person = (Person) memberData[selectedRow][0];
-			}
-			else if(activeTabIndex == 1) {
+			} else if (activeTabIndex == 1) {
 				person = (Person) instructorData[selectedRow][0];
-			}
-			else if(activeTabIndex == 2) {
+			} else if (activeTabIndex == 2) {
 				person = (Person) adminData[selectedRow][0];
 			}
 		}
@@ -233,7 +239,8 @@ public class AccountManagerMenu extends JPanel {
 			data[i][2] = person.getLastName();
 			data[i][3] = person.getPhoneNumber();
 			data[i][4] = person.getEmail();
-			data[i][5] = person.getAddress().getStreet() + " " + person.getAddress().getHouseNumber() + ", " + person.getAddress().getZipCode() + " " + person.getAddress().getCity();
+			data[i][5] = person.getAddress().getStreet() + " " + person.getAddress().getHouseNumber() + ", "
+					+ person.getAddress().getZipCode() + " " + person.getAddress().getCity();
 			data[i][6] = person.getSsn();
 		}
 

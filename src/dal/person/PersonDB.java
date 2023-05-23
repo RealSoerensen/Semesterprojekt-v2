@@ -25,30 +25,31 @@ public class PersonDB implements PersonDataAccessIF {
 	}
 
 	/**
-	* The create function takes in a Person object and inserts it into the database.
-	*
-	* @param obj Pass the person object to be inserted into the database
-	*
-	* @return A boolean value to indicate whether the person was inserted into the database or not
-	*/
+	 * The create function takes in a Person object and inserts it into the database.
+	 *
+	 * @param obj Pass the person object to be inserted into the database
+	 * @return A boolean value to indicate whether the person was inserted into the database or not
+	 */
 	@Override
-	public boolean create(Person obj) {
-		boolean result = false;
+	public Person create(Person obj) {
+		Person person = obj;
 		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, password, addressID) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, obj.getFirstName());
 			stmt.setString(2, obj.getLastName());
 			stmt.setString(3, obj.getEmail());
 			stmt.setLong(4, obj.getSsn());
+			stmt.setInt(5, obj.getRole());
 			stmt.setString(6, obj.getPhoneNumber());
-			stmt.setString(8, obj.getPassword());
-			stmt.setLong(9, obj.getAddress().getAddressID());
-			result = stmt.executeUpdate() > 0;
+			stmt.setString(7, obj.getPassword());
+			stmt.setLong(8, obj.getAddress().getAddressID());
+			stmt.executeUpdate();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return person;
 	}
 
 	/**
@@ -62,10 +63,20 @@ public class PersonDB implements PersonDataAccessIF {
 	public Person get(long id) {
 		Person person = null;
 		try {
-			String sql = "SELECT * FROM Person WHERE ssn = " + id;
-			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			person = createPersonFromRS(rs);
+			String sql = "SELECT * FROM Person WHERE ssn = ?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setLong(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				String email = rs.getString("email");
+				int role = rs.getInt("role");
+				String phoneNo = rs.getString("phoneNo");
+				String password = rs.getString("password");
+				Address address = getAddress(rs.getLong("addressID"));
+				person = new Person(firstName, lastName, address, email, phoneNo, role, password, id);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -80,19 +91,24 @@ public class PersonDB implements PersonDataAccessIF {
  	@Override
 	public List<Person> getAll() {
 		List<Person> people = new ArrayList<>();
-		try {
-			String sql = "SELECT * FROM Person";
-			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-				ResultSet rs = stmt.executeQuery();
-				while (rs.next()) {
-					Person person = createPersonFromRS(rs);
-					people.add(person);
-				}
+		String sql = "SELECT * FROM Person";
+		try (Statement stmt = connection.createStatement()) {
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				long ssn = rs.getLong("ssn");
+				String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				String email = rs.getString("email");
+				int role = rs.getInt("role");
+				String phoneNo = rs.getString("phoneNo");
+				String password = rs.getString("password");
+				Address address = getAddress(rs.getLong("addressID"));
+				Person person = new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
+				people.add(person);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return people;
 	}
 
@@ -106,7 +122,7 @@ public class PersonDB implements PersonDataAccessIF {
 	@Override
 	public boolean update(Person obj) throws SQLException {
 		boolean result;
-		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, phone = ?, addressId = ? WHERE ssn = ?";
+		String sql = "UPDATE Person SET firstName = ?, lastName = ?, email = ?, phoneNo = ?, addressId = ? WHERE ssn = ?";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, obj.getFirstName());
 			stmt.setString(2, obj.getLastName());
@@ -139,24 +155,6 @@ public class PersonDB implements PersonDataAccessIF {
 		return result;
 	}
 
-	private Person createPersonFromRS(ResultSet rs) throws SQLException {
-		Person person = null;
-		if (rs.next()) {
-			String firstName = rs.getString("firstName");
-			String lastName = rs.getString("lastName");
-			String email = rs.getString("email");
-			String phoneNo = rs.getString("phoneNo");
-			String password = rs.getString("password");
-			int role = rs.getInt("role");
-			long ssn = rs.getLong("ssn");
-			long addressID = rs.getLong("addressID");
-			Address address = getAddress(addressID);
-
-			person = new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
-		}
-		return person;
-	}
-
 	/**
 	* The getAddress function takes in a long addressID and returns an Address object.
 	*
@@ -169,28 +167,32 @@ public class PersonDB implements PersonDataAccessIF {
 		return addressDB.get(addressID);
 	}
 
-	/**
-	* The createAddress function takes an Address object as a parameter and creates a new address in the database.
-	* It returns the ID of the newly created address.
-	*
-	* @param address Pass the address object to the createAddress function
-	*
-	* @return The id of the address that was created in the database
-	*/
-	private long createAddress(Address address) throws SQLException {
-		AddressDB addressDB = new AddressDB();
-		return addressDB.createAddressAndGetID(address);
-	}
-
 	@Override
 	public boolean isSsnUnique(long ssn) {
 		List<Person> allPeople = getAll();
-		boolean unique = true;
-		for(int i = 0; i < allPeople.size() && unique; i++) {
-            if(allPeople.get(i).getSsn() == ssn) {
-            	unique = false;
-            }
-        }
-		return unique;
+		return allPeople.stream().noneMatch(person -> person.getSsn() == ssn);
+	}
+
+	@Override
+	public Person login(long ssn, String password) {
+		Person person = null;
+		String sql = "SELECT * FROM Person WHERE ssn = ? AND password = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setLong(1, ssn);
+			stmt.setString(2, password);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				String email = rs.getString("email");
+				int role = rs.getInt("role");
+				String phoneNo = rs.getString("phoneNo");
+				Address address = getAddress(rs.getLong("addressID"));
+				person = new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return person;
 	}
 }

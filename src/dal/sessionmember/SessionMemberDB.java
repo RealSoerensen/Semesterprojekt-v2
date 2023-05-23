@@ -89,4 +89,15 @@ public class SessionMemberDB implements SessionMemberDataAccessIF {
         }
         return result;
     }
+
+    @Override
+    public void removeAll(Session session) {
+        String sql = "DELETE FROM SessionMember WHERE sessionid = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, session.getSessionID());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

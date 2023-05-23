@@ -29,7 +29,7 @@ public class EditSessionMenu extends JPanel {
 	private final JTextField textFieldTime;
 	private final CourseController courseController;
 
-	public EditSessionMenu(MainMenu mainMenu, Session session) {
+	public EditSessionMenu(MainMenu mainMenu, Session session) throws SQLException {
 		courseController = new CourseController();
 		PersonController personController = new PersonController();
 		setSize(626, 515);
@@ -175,7 +175,7 @@ public class EditSessionMenu extends JPanel {
 				String zip = textFieldZIP.getText();
 				String street = textFieldStreet.getText();
 				String streetNum = textFieldStreetNum.getText();
-				Address address = new Address(city, zip, street, streetNum);
+				Address address = new Address(zip, city, street, streetNum);
 				session.setSubject(subject);
 				session.setInstructor(instructor);
 				session.setDate(date);

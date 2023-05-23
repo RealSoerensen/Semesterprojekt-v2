@@ -10,4 +10,5 @@ public interface SessionMemberDataAccessIF {
     boolean isPersonIn(Session session, Person person);
     List<Person> getAll(Session session);
     boolean remove(Session session, Person member);
+    void removeAll(Session session);
 }

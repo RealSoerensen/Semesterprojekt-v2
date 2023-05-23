@@ -25,24 +25,35 @@ public class CourseDB implements CourseDataAccessIF {
      * Creates a new Course in the database.
      *
      * @param obj The Course to be created.
-     * @return True if the Course was created successfully, false otherwise.
+     * @return The created Course.
      */
     @Override
-    public boolean create(Course obj) {
-        boolean result = false;
+    public Course create(Course obj) {
+        Course course = null;
         String sql = " INSERT INTO course(name, price, description, startDate, endDate) " +
-                " VALUES(?, ?, ?, ?) ";
+                " VALUES(?, ?, ?, ?, ?) ";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, obj.getName());
             stmt.setDouble(2, obj.getPrice());
             stmt.setString(3, obj.getDescription());
             stmt.setDate(4, Date.valueOf(obj.getStartDate()));
             stmt.setDate(5, Date.valueOf(obj.getEndDate()));
-            result = stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                course = new Course(
+                        rs.getLong(1),
+                        obj.getName(),
+                        obj.getPrice(),
+                        obj.getDescription(),
+                        obj.getStartDate(),
+                        obj.getEndDate()
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return result;
+        return course;
     }
 
     /**
@@ -59,15 +70,16 @@ public class CourseDB implements CourseDataAccessIF {
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             courseRS = stmt.executeQuery();
-        }
-        if (courseRS.next()) {
-            course = new Course(
-                    courseRS.getString("name"),
-                    courseRS.getDouble("price"),
-                    courseRS.getString("description"),
-                    courseRS.getDate("startDate").toLocalDate(),
-                    courseRS.getDate("endDate").toLocalDate()
-            );
+            if (courseRS.next()) {
+                course = new Course(
+                        courseRS.getLong("courseID"),
+                        courseRS.getString("name"),
+                        courseRS.getDouble("price"),
+                        courseRS.getString("description"),
+                        courseRS.getDate("startDate").toLocalDate(),
+                        courseRS.getDate("endDate").toLocalDate()
+                );
+            }
         }
         return course;
     }
@@ -81,19 +93,18 @@ public class CourseDB implements CourseDataAccessIF {
     public List<Course> getAll() throws SQLException {
         List<Course> courses = new ArrayList<>();
         String sql = " SELECT * FROM course ";
-        ResultSet courseRS;
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
-            courseRS = stmt.executeQuery();
-        }
-        while(courseRS.next()) {
-            Course course = new Course(
-                    courseRS.getString("name"),
-                    courseRS.getDouble("price"),
-                    courseRS.getString("description"),
-                    courseRS.getDate("startDate").toLocalDate(),
-                    courseRS.getDate("endDate").toLocalDate()
-            );
-            courses.add(course);
+            ResultSet courseRS = stmt.executeQuery();
+            while (courseRS.next()) {
+                courses.add(new Course(
+                        courseRS.getLong("courseID"),
+                        courseRS.getString("name"),
+                        courseRS.getDouble("price"),
+                        courseRS.getString("description"),
+                        courseRS.getDate("startDate").toLocalDate(),
+                        courseRS.getDate("endDate").toLocalDate()
+                ));
+            }
         }
         return courses;
     }
@@ -114,6 +125,7 @@ public class CourseDB implements CourseDataAccessIF {
             stmt.setString(3, obj.getDescription());
             stmt.setDate(4, Date.valueOf(obj.getStartDate()));
             stmt.setDate(5, Date.valueOf(obj.getEndDate()));
+            stmt.setLong(6, obj.getCourseID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,11 +154,33 @@ public class CourseDB implements CourseDataAccessIF {
 
     @Override
     public void deleteAll() {
-        String sql = " DELETE * FROM course ";
+        String sql = " DELETE FROM course WHERE courseID > 0 ";
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public long createCourseAndGetID(Course course) throws Exception {
+        long id = -1;
+        String sql = " INSERT INTO course(name, price, description, startDate, endDate) " +
+                " VALUES(?, ?, ?, ?, ?) ";
+        try(PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, course.getName());
+            stmt.setDouble(2, course.getPrice());
+            stmt.setString(3, course.getDescription());
+            stmt.setDate(4, Date.valueOf(course.getStartDate()));
+            stmt.setDate(5, Date.valueOf(course.getEndDate()));
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
+        } catch (SQLException ignored) {
+
+        }
+        return id;
     }
 }

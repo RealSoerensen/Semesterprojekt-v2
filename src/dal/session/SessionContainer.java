@@ -1,6 +1,7 @@
 package dal.session;
 
 import model.Session;
+import model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +34,14 @@ public class SessionContainer implements SessionDataAccessIF {
 
     /**
      * Creates a new Session in the container.
-     * 
-     * @param obj The Session to be created.
      *
+     * @param obj The Session to be created.
      * @return True if the Session was created, false otherwise.
      */
     @Override
-    public boolean create(Session obj) {
-        return container.add(obj);
+    public Session create(Session obj) {
+        container.add(obj);
+        return obj;
     }
 
     /**

@@ -27,7 +27,16 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
 
     @Override
     public boolean create(Course course, Person member) {
-        return false;
+        boolean result;
+        String sql = "INSERT INTO CourseMember(ssn, courseID) VALUES(?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, member.getSsn());
+            preparedStatement.setLong(2, course.getCourseID());
+            result = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     @Override
@@ -50,12 +59,13 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
     @Override
     public List<Person> getAll(Course course) {
         List<Person> result = new ArrayList<>();
-        String sql = "SELECT * FROM CourseMember WHERE courseID = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setLong(1, course.getCourseID());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                long ssn = resultSet.getLong("ssn");
+        String sql = "SELECT ssn FROM CourseMember WHERE courseID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, course.getCourseID());
+            stmt.executeQuery();
+            ResultSet subjectRS = stmt.getResultSet();
+            while (subjectRS.next()) {
+                long ssn = subjectRS.getLong("ssn");
                 Person person = getPerson(ssn);
                 result.add(person);
             }
@@ -72,7 +82,6 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, member.getSsn());
             stmt.setLong(2, course.getCourseID());
-            stmt.executeUpdate();
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -83,5 +92,18 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
     private Person getPerson(long ssn) throws SQLException {
         PersonDB personDB = new PersonDB();
         return personDB.get(ssn);
+    }
+
+    @Override
+    public boolean removeAll(Course course) {
+        boolean result;
+        String sql = "DELETE FROM CourseMember WHERE courseID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, course.getCourseID());
+            result = stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }

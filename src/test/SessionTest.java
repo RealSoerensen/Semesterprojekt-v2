@@ -1,8 +1,9 @@
 package test;
 
 import controller.CourseController;
+import controller.PersonController;
+import dal.DBUtils;
 import model.*;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,59 +17,76 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SessionTest {
     private final CourseController courseController;
-    private Course course;
-    private Person person;
-    private Address address;
-    private Subject subject;
+    private final PersonController personController;
 
-    public SessionTest() {
+    public SessionTest() throws SQLException {
         courseController = new CourseController();
+        personController = new PersonController();
     }
 
     @BeforeEach
-    public void init() {
-        course = new Course(1, "Test course", 20, "Test description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
-        person = new Person("John", "Doe", null, "email", "phone", 1, "password", 1303014586);
-        address = new Address("1234", "Aalborg", "Testvej", "1");
-        subject = new Subject(1, "Test Subject", "Test Description");
+    public void init() throws SQLException {
+        new DBUtils().resetDB();
     }
 
     @Test
-    public void testCreateSession() throws SQLException {
+    public void testCreateSession() throws Exception {
         //Arrange
-        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Person person = new Person("John", "Doe", new Address("1234", "Aalborg", "Testvej", "1"), "email", "phone", 1, "password", 1303014586);
+        Course course = new Course("TestCourse", 20.0, "TestDescription",  LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2023, Month.MAY, 5));
+        Address address = new Address("1234", "Aalborg", "Testvej", "1");
+        Subject subject = new Subject("TestSubject", "TestDescription");
 
         //Act
-        courseController.createCourse(course);
-        boolean result = courseController.createSession(session);
+        personController.createPerson(person);
+        address = personController.createAddress(address);
+        course = courseController.createCourse(course);
+        subject = courseController.createSubject(subject);
+        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        session = courseController.createSession(session);
 
         //Assert
-        assertTrue(result);
+        assertEquals(1, session.getSessionID());
     }
 
     @Test
-    public void testGetSession() throws SQLException {
+    public void testGetSession() throws Exception {
         //Arrange
-        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Person person = new Person("John", "Doe", new Address("1234", "Aalborg", "Testvej", "1"), "email", "phone", 1, "password", 1303014586);
+        Course course = new Course("TestCourse", 20.0, "TestDescription",  LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2023, Month.MAY, 5));
+        Address address = new Address("1234", "Aalborg", "Testvej", "1");
+        Subject subject = new Subject("TestSubject", "TestDescription");
+        personController.createPerson(person);
+        address = personController.createAddress(address);
+        course = courseController.createCourse(course);
+        subject = courseController.createSubject(subject);
 
         //Act
-        courseController.createCourse(course);
-        courseController.createSession(session);
-        Session result = courseController.getSession(course, 1);
+        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        session = courseController.createSession(session);
+        Session result = courseController.getSession(course, session.getSessionID());
 
         //Assert
         assertEquals(session.getSessionID(), result.getSessionID());
     }
 
     @Test
-    public void testUpdateSession() throws SQLException {
+    public void testUpdateSession() throws Exception {
         //Arrange
-        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
-        Session updatedSession = new Session(1, LocalDate.of(2023, Month.MAY, 8), person, course, address, subject, LocalTime.of(14, 30));
+        Person person = new Person("John", "Doe", new Address("1234", "Aalborg", "Testvej", "1"), "email", "phone", 1, "password", 1303014586);
+        Course course = new Course("TestCourse", 20.0, "TestDescription",  LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2023, Month.MAY, 5));
+        Address address = new Address("1234", "Aalborg", "Testvej", "1");
+        Subject subject = new Subject("TestSubject", "TestDescription");
+        personController.createPerson(person);
+        address = personController.createAddress(address);
+        course = courseController.createCourse(course);
+        subject = courseController.createSubject(subject);
 
         //Act
         courseController.createCourse(course);
-        courseController.createSession(session);
+        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        session = courseController.createSession(session);
+        Session updatedSession = new Session(session.getSessionID(), LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
         boolean result = courseController.updateSession(updatedSession);
 
         //Assert
@@ -76,13 +94,20 @@ public class SessionTest {
     }
 
     @Test
-    public void testDeleteSession() throws SQLException {
+    public void testDeleteSession() throws Exception {
         //Arrange
-        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Person person = new Person("John", "Doe", new Address("1234", "Aalborg", "Testvej", "1"), "email", "phone", 1, "password", 1303014586);
+        Course course = new Course("TestCourse", 20.0, "TestDescription",  LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2023, Month.MAY, 5));
+        Address address = new Address("1234", "Aalborg", "Testvej", "1");
+        Subject subject = new Subject("TestSubject", "TestDescription");
+        personController.createPerson(person);
+        address = personController.createAddress(address);
+        course = courseController.createCourse(course);
+        subject = courseController.createSubject(subject);
 
         //Act
-        courseController.createCourse(course);
-        courseController.createSession(session);
+        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        session = courseController.createSession(session);
         boolean result = courseController.removeSession(session);
 
         //Assert
@@ -90,14 +115,22 @@ public class SessionTest {
     }
 
     @Test
-    public void testGetAllSessions() throws SQLException {
+    public void testGetAllSessions() throws Exception {
         //Arrange
+        Person person = new Person("John", "Doe", new Address("1234", "Aalborg", "Testvej", "1"), "email", "phone", 1, "password", 1303014586);
+        Course course = new Course("TestCourse", 20.0, "TestDescription",  LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2023, Month.MAY, 5));
+        Address address = new Address("1234", "Aalborg", "Testvej", "1");
+        Subject subject = new Subject("TestSubject", "TestDescription");
+        personController.createPerson(person);
+        address = personController.createAddress(address);
+        course = courseController.createCourse(course);
+        subject = courseController.createSubject(subject);
+
+        //Act
         Session session1 = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
         Session session2 = new Session(2, LocalDate.of(2023, Month.MAY, 6), person, course, address, subject, LocalTime.of(14, 30));
         Session session3 = new Session(3, LocalDate.of(2023, Month.MAY, 7), person, course, address, subject, LocalTime.of(14, 30));
 
-        //Act
-        courseController.createCourse(course);
         courseController.createSession(session1);
         courseController.createSession(session2);
         courseController.createSession(session3);
@@ -108,14 +141,22 @@ public class SessionTest {
     }
 
     @Test
-    public void testGetAllSessionFromCourse() throws SQLException {
+    public void testGetAllSessionFromCourse() throws Exception {
         // Arrange
+        Person person = new Person("John", "Doe", new Address("1234", "Aalborg", "Testvej", "1"), "email", "phone", 1, "password", 1303014586);
+        Course course = new Course("TestCourse", 20.0, "TestDescription",  LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2023, Month.MAY, 5));
+        Address address = new Address("1234", "Aalborg", "Testvej", "1");
+        Subject subject = new Subject("TestSubject", "TestDescription");
+        personController.createPerson(person);
+        address = personController.createAddress(address);
+        course = courseController.createCourse(course);
+        subject = courseController.createSubject(subject);
+
+        // Act
         Session session1 = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
         Session session2 = new Session(2, LocalDate.of(2023, Month.MAY, 6), person, course, address, subject, LocalTime.of(14, 30));
         Session session3 = new Session(3, LocalDate.of(2023, Month.MAY, 7), person, course, address, subject, LocalTime.of(14, 30));
 
-        // Act
-        courseController.createCourse(course);
         courseController.createSession(session1);
         courseController.createSession(session2);
         courseController.createSession(session3);
@@ -125,9 +166,4 @@ public class SessionTest {
         assertEquals(3, result);
     }
 
-    @AfterEach
-    public void tearDown() {
-        courseController.deleteAllCourses();
-        courseController.deleteAllSessions();
-    }
 }

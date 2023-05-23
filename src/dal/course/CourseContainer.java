@@ -1,6 +1,7 @@
 package dal.course;
 
 import model.Course;
+import model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,14 @@ public class CourseContainer implements CourseDataAccessIF{
 
     /**
      * Creates a new Course in the container.
-     * @param obj The Course to be created.
      *
-     * @return True if the Course was created, false otherwise.
+     * @param obj The Course to be created.
+     * @return The created Course.
      */
     @Override
-    public boolean create(Course obj) {
-        return container.add(obj);
+    public Course create(Course obj) {
+        container.add(obj);
+        return obj;
     }
 
     /**
@@ -108,5 +110,10 @@ public class CourseContainer implements CourseDataAccessIF{
     @Override
     public void deleteAll() {
         container.clear();
+    }
+
+    @Override
+    public long createCourseAndGetID(Course course) throws Exception {
+        return 0;
     }
 }

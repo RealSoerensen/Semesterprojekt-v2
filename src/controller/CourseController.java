@@ -4,15 +4,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dal.course.CourseContainer;
+import dal.course.CourseDB;
 import dal.course.CourseDataAccessIF;
-import dal.coursemember.CourseMemberContainer;
+import dal.coursemember.CourseMemberDB;
 import dal.coursemember.CourseMemberDataAccessIF;
-import dal.session.SessionContainer;
+import dal.instructorsubject.InstructorSubjectDB;
+import dal.instructorsubject.InstructorSubjectDataAccessIF;
+import dal.session.SessionDB;
 import dal.session.SessionDataAccessIF;
-import dal.sessionmember.SessionMemberContainer;
+import dal.sessionmember.SessionMemberDB;
 import dal.sessionmember.SessionMemberDataAccessIF;
-import dal.subject.SubjectContainer;
+import dal.subject.SubjectDB;
 import dal.subject.SubjectDataAccessIF;
 import model.*;
 
@@ -22,13 +24,23 @@ public class CourseController {
 	private SessionDataAccessIF sessionDB;
 	private SessionMemberDataAccessIF sessionMemberDB;
 	private SubjectDataAccessIF subjectDB;
+	private InstructorSubjectDataAccessIF instructorSubjectDB;
 
-	public CourseController() {
-		setCourseDB(CourseContainer.getInstance());
-		setCourseMemberDB(CourseMemberContainer.getInstance());
-		setSessionDB(SessionContainer.getInstance());
-		setSessionMemberDB(SessionMemberContainer.getInstance());
-		setSubjetDB(SubjectContainer.getInstance());
+	public CourseController() throws SQLException {
+		setCourseDB(new CourseDB());
+		setCourseMemberDB(new CourseMemberDB());
+		setSessionDB(new SessionDB());
+		setSessionMemberDB(new SessionMemberDB());
+		setSubjetDB(new SubjectDB());
+		setInstructorSubjectDB(new InstructorSubjectDB());
+	}
+
+	private void setInstructorSubjectDB(InstructorSubjectDB instructorSubjectDB) {
+		this.instructorSubjectDB = instructorSubjectDB;
+	}
+
+	private InstructorSubjectDataAccessIF getInstructorSubjectDB() {
+		return instructorSubjectDB;
 	}
 
 	private void setSubjetDB(SubjectDataAccessIF subjectDB) {
@@ -71,8 +83,9 @@ public class CourseController {
 		this.sessionMemberDB = sessionMemberDB;
 	}
 
-	public boolean createCourse(Course course) throws SQLException {
-		return getCourseDB().create(course);
+	public Course createCourse(Course course) throws Exception {
+		course.setCourseID(getCourseDB().createCourseAndGetID(course));
+		return course;
 	}
 
 	public Course getCourse(long courseID) throws SQLException {
@@ -88,6 +101,11 @@ public class CourseController {
 	}
 
 	public boolean removeCourse(Course course) throws SQLException {
+		for (Session session : getAllSessionsFromCourse(course)) {
+			getSessionMemberDB().removeAll(session);
+			removeSession(session);
+		}
+		getCourseMemberDB().removeAll(course);
 		return getCourseDB().delete(course);
 	}
 
@@ -96,20 +114,22 @@ public class CourseController {
 	}
 
 	public boolean removeCourseMember(Course course, Person member) throws SQLException {
+		boolean result;
 		List<Session> sessions = getSessionDB().getAll();
 		for (Session currentSession : sessions) {
-			if (currentSession.getCourse().equals(course)) {
+			if (currentSession.getCourse().getCourseID() == course.getCourseID()) {
 				getSessionMemberDB().remove(currentSession, member);
 			}
 		}
-		return getCourseMemberDB().remove(course, member);
+		result = getCourseMemberDB().remove(course, member);
+		return result;
 	}
 
 	public List<Person> getAllCourseMembers(Course course) {
 		return getCourseMemberDB().getAll(course);
 	}
 
-	public boolean createSession(Session session) throws SQLException {
+	public Session createSession(Session session) throws SQLException {
 		return getSessionDB().create(session);
 	}
 
@@ -118,7 +138,7 @@ public class CourseController {
 		List<Session> allSessions = getAllSessions();
 		for(int i = 0; i < allSessions.size() && session == null; i++) {
 			Session currentSession = allSessions.get(i);
-			if(currentSession.getSessionID() == sessionID && currentSession.getCourse().equals(course)) {
+			if(currentSession.getSessionID() == sessionID && currentSession.getCourse().getCourseID() == course.getCourseID()) {
 				session = allSessions.get(i);
 			}
 		}
@@ -133,7 +153,7 @@ public class CourseController {
 		List<Session> sessions = new ArrayList<>();
 		List<Session> allSessions = getAllSessions();
 		for (Session allSession : allSessions) {
-			if (allSession.getCourse().equals(course)) {
+			if (allSession.getCourse().getCourseID() == course.getCourseID()) {
 				sessions.add(allSession);
 			}
 		}
@@ -151,9 +171,11 @@ public class CourseController {
 	public boolean createSessionMember(Session session, Person member) {
 		boolean success = false;
 		Course course = session.getCourse();
-		List<Person> personList = getAllCourseMembers(course);
-		if (personList.contains(member)) {
-			success = getSessionMemberDB().create(session, member);
+		List<Person> allCourseMembers = getAllCourseMembers(course);
+		for (Person currentCourseMember : allCourseMembers) {
+			if (currentCourseMember.getSsn() == member.getSsn()) {
+				success = getSessionMemberDB().create(session, member);
+			}
 		}
 		return success;
 
@@ -181,15 +203,7 @@ public class CourseController {
 		return enrolledSessions;
 	}
 
-	public void deleteAllCourses() {
-		getCourseDB().deleteAll();
-	}
-
-	public void deleteAllSessions() {
-		getSessionDB().deleteAll();
-	}
-
-	public boolean createSubject(Subject subject) throws SQLException {
+	public Subject createSubject(Subject subject) throws SQLException {
 		return getSubjectDB().create(subject);
 	}
 
@@ -208,6 +222,16 @@ public class CourseController {
 	public List<Subject> getAllSubjects() throws SQLException {
 		return getSubjectDB().getAll();
 	}
+
+	public boolean createInstructorSubject(Person instructor, Subject subject) throws SQLException {
+		return getInstructorSubjectDB().create(instructor, subject);
+	}
+
+	public boolean removeInstructorSubject(Person instructor, Subject subject) throws SQLException {
+		return getInstructorSubjectDB().remove(instructor, subject);
+	}
+
+
 
 	public int[] StringArrToIntArr(String[] s) {
 		int[] result = new int[s.length];

@@ -5,13 +5,15 @@ import java.time.Month;
 
 import controller.CourseController;
 import controller.PersonController;
+import dal.DBUtils;
 import gui.LoginMenu;
 import model.*;
 
 public class Main {
 
-	public static void main(String[] args) throws SQLException {
-		
+	public static void main(String[] args) throws Exception {
+
+		new DBUtils().resetDB();
 		//Create Addresses
 		Address address1 = new Address("9000", "Aalborg", "Her", "5A");
 		Address address2 = new Address("9000", "Aalborg", "Der", "1");
@@ -23,9 +25,7 @@ public class Main {
 		Address address8 = new Address("9000", "Aalborg", "Papkasse", "3");
 		Address address9 = new Address("9000", "Aalbrog", "Jomfru Ane Gade", "5");
 		Address address10 = new Address("9200", "Aalborg", "Sofiendalsvej", "60");
-		
-		
-		
+
 		//Create members, instructors and administrators
 		PersonController personController = new PersonController();
 		
@@ -64,6 +64,22 @@ public class Main {
 		Course course5 = new Course("Badminton", 50, "Badminton for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 		Course course6 = new Course("Golf", 60, "Golf for begyndere", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
+		course1 = courseController.createCourse(course1);
+		course2 = courseController.createCourse(course2);
+		course3 = courseController.createCourse(course3);
+		course4 = courseController.createCourse(course4);
+		course5 = courseController.createCourse(course5);
+		course6 = courseController.createCourse(course6);
+
+		//Create course members
+		courseController.createCourseMember(course1, person1);
+		courseController.createCourseMember(course2, person2);
+		courseController.createCourseMember(course3, person3);
+		courseController.createCourseMember(course4, person4);
+		courseController.createCourseMember(course5, person5);
+		courseController.createCourseMember(course6, person6);
+
+
 		//Create subjects
 		Subject subject1 = new Subject("Svømning", "Svømning for begyndere");
 		Subject subject2 = new Subject("Fodbold", "Fodbold for begyndere");
@@ -71,6 +87,23 @@ public class Main {
 		Subject subject4 = new Subject("Tennis", "Tennis for begyndere");
 		Subject subject5 = new Subject("Badminton", "Badminton for begyndere");
 		Subject subject6 = new Subject("Golf", "Golf for begyndere");
+
+		subject1 = courseController.createSubject(subject1);
+		subject2 = courseController.createSubject(subject2);
+		subject3 = courseController.createSubject(subject3);
+		subject4 = courseController.createSubject(subject4);
+		subject5 = courseController.createSubject(subject5);
+		subject6 = courseController.createSubject(subject6);
+
+		// Assign person to subjectss
+		courseController.createInstructorSubject(person4, subject1);
+		courseController.createInstructorSubject(person4, subject2);
+		courseController.createInstructorSubject(person4, subject3);
+
+		courseController.createInstructorSubject(person5, subject4);
+		courseController.createInstructorSubject(person5, subject5);
+		courseController.createInstructorSubject(person5, subject6);
+
 
 		//Create sessions
 		Session session1 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course1, address1, subject1, LocalTime.of(14, 30));
@@ -80,74 +113,25 @@ public class Main {
 		Session session5 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course5, address5, subject5, LocalTime.of(14, 30));
 		Session session6 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course6, address6, subject6, LocalTime.of(14, 30));
 
-
-
-		courseController.createCourse(course1);
-		courseController.createCourse(course2);
-		courseController.createCourse(course3);
-		courseController.createCourse(course4);
-		courseController.createCourse(course5);
-		courseController.createCourse(course6);
-
-		//Create course members
-		courseController.createCourseMember(course1, person1);
-		courseController.createCourseMember(course1, person2);
-		courseController.createCourseMember(course1, person4);
-		courseController.createCourseMember(course1, person5);
-		courseController.createCourseMember(course1, person8);
-		courseController.createCourseMember(course1, person9);
-
-		courseController.createCourseMember(course2, person2);
-		courseController.createCourseMember(course2, person4);
-
-		courseController.createCourseMember(course3, person2);
-		courseController.createCourseMember(course3, person3);
-		courseController.createCourseMember(course3, person4);
-		courseController.createCourseMember(course3, person5);
-		courseController.createCourseMember(course3, person6);
-
-		courseController.createCourseMember(course4, person1);
-		courseController.createCourseMember(course4, person3);
-
-		courseController.createCourseMember(course5, person1);
-
-		courseController.createCourseMember(course6, person1);
-		courseController.createCourseMember(course6, person2);
-
-		// Create subjects
-		courseController.createSubject(subject1);
-		courseController.createSubject(subject2);
-		courseController.createSubject(subject3);
-		courseController.createSubject(subject4);
-		courseController.createSubject(subject5);
-		courseController.createSubject(subject6);
-
-		//Create sessions
-		courseController.createSession(session1);
-		courseController.createSession(session2);
-		courseController.createSession(session3);
-		courseController.createSession(session4);
-		courseController.createSession(session5);
-		courseController.createSession(session6);
+		session1 = courseController.createSession(session1);
+		session2 = courseController.createSession(session2);
+		session3 = courseController.createSession(session3);
+		session4 = courseController.createSession(session4);
+		session5 = courseController.createSession(session5);
+		session6 = courseController.createSession(session6);
 
 		//Create session members
 		courseController.createSessionMember(session1, person1);
 		courseController.createSessionMember(session1, person2);
-
 		courseController.createSessionMember(session2, person1);
 		courseController.createSessionMember(session2, person2);
-
 		courseController.createSessionMember(session3, person1);
 		courseController.createSessionMember(session3, person2);
-
 		courseController.createSessionMember(session4, person1);
 		courseController.createSessionMember(session4, person2);
-
 		courseController.createSessionMember(session5, person1);
-
 		courseController.createSessionMember(session6, person1);
 
 		new LoginMenu().run();
-		
 	}
 }

@@ -1,21 +1,13 @@
 package gui;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import controller.LoginController;
 import controller.PersonController;
 import model.Person;
 
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -27,8 +19,8 @@ public class LoginMenu extends JFrame {
 	private final PersonController personController;
 	private final LoginController loginController;
 
-
-//	personController = new PersonController(PersonContainer.getInstance(), AddressContainer.getInstance());
+	// personController = new PersonController(PersonContainer.getInstance(),
+	// AddressContainer.getInstance());
 	/**
 	 * Launch the application.
 	 */
@@ -38,8 +30,7 @@ public class LoginMenu extends JFrame {
 			LoginMenu frame = new LoginMenu();
 
 			frame.setVisible(true);
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,10 +39,10 @@ public class LoginMenu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LoginMenu() {
+	public LoginMenu() throws SQLException {
 		loginController = LoginController.getInstance();
 		personController = new PersonController();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 420, 302);
 		JPanel contentPanel = new JPanel();
@@ -101,33 +92,21 @@ public class LoginMenu extends JFrame {
 		contentPanel.add(lblPassword);
 	}
 
-	
-	
 	private void createUser() {
 		dispose();
 		new CreateAccountMenu(true).run(true);
 	}
 
 	private void logIn() throws SQLException {
-		// TODO Auto-generated method stub
-		List<Person> persons = personController.getAllPersons();
-		Person person = null;
-
-		String usernameResult = textFieldUsername.getText();
-		String passwordResult = new String(passwordField.getPassword());
-
-		for (Person p : persons) {
-			if (usernameResult.equals(Long.toString(p.getSsn())) && passwordResult.equals(p.getPassword())) {
-				person = p;
-				loginController.setLoggedInPerson(p);
-				
-				new MainMenu().run();
-				dispose();
-			}
-		}
-		
-		if(person == null) {
-			JOptionPane.showMessageDialog(null, "CPR-Nummer og adgangskode passer ikke sammen");
+		long ssn = Long.parseLong(textFieldUsername.getText());
+		String password = new String(passwordField.getPassword());
+		Person person = personController.login(ssn, password);
+		if (person != null) {
+			LoginController.getInstance().setLoggedInPerson(person);
+			dispose();
+			new MainMenu().run();
+		} else {
+			JOptionPane.showMessageDialog(null, "Forkert brugernavn eller adgangskode");
 		}
 	}
 }

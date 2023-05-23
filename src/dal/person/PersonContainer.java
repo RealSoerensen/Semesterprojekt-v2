@@ -1,6 +1,7 @@
 package dal.person;
 
 import model.Person;
+import model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,12 @@ public class PersonContainer implements PersonDataAccessIF {
      * The create function adds a new Person object to the container.
      *
      * @param obj Add the person to the container
-     *
      * @return A boolean value to indicate whether the person was added to the container or not
      */
     @Override
-    public boolean create(Person obj) {
-        return container.add(obj);
+    public Person create(Person obj) {
+        container.add(obj);
+        return obj;
     }
 
     @Override
@@ -97,4 +98,15 @@ public class PersonContainer implements PersonDataAccessIF {
         }
 		return unique;
 	}
+
+    @Override
+    public Person login(long ssn, String password) {
+        Person person = null;
+        for(int i = 0; i < container.size() && person == null; i++) {
+            if(container.get(i).getSsn() == ssn && container.get(i).getPassword().equals(password)) {
+                person = container.get(i);
+            }
+        }
+        return person;
+    }
 }
