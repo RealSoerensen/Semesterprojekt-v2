@@ -24,14 +24,14 @@ public class MainMenu extends JFrame {
 	public static final String ACCOUNT_MANAGER_PANEL = "account manager panel";
 	public static final String COURSE_PANEL = "course panel";
 	private final JLabel lblTitle;
-	public JPanel menuPanel;
-	public JPanel panelMainWindowAdmin;
+	public final JPanel menuPanel;
+	public final JPanel panelMainWindowAdmin;
 
 	/**
 	 * Launch the application.
 	 */
-	public MainMenu run() {
-		MainMenu frame = null;
+	public void run() {
+		MainMenu frame;
 		try {
 			frame = new MainMenu();
 			frame.setVisible(true);
@@ -40,7 +40,6 @@ public class MainMenu extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return frame;
 	}
 
 	/**

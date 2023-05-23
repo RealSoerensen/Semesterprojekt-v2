@@ -1,7 +1,6 @@
 package dal.person;
 
 import model.Person;
-import model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;

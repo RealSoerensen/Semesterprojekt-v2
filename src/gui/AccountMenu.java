@@ -6,7 +6,6 @@ import model.Person;
 import javax.swing.*;
 
 import java.awt.Font;
-import java.sql.SQLException;
 
 public class AccountMenu extends JPanel {
 
@@ -75,13 +74,9 @@ public class AccountMenu extends JPanel {
 		JButton btnEditInfo = new JButton("Rediger Konto");
 		btnEditInfo.addActionListener(e -> {
 			EditAccountMenu editAccountMenu;
-			try {
-				editAccountMenu = new EditAccountMenu(mainMenu, user, true);
-				mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere.");
-			}
+			editAccountMenu = new EditAccountMenu(mainMenu, user, true);
+			mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
+			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
 		});
 		btnEditInfo.setBounds(293, 364, 129, 23);
 		add(btnEditInfo);

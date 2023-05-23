@@ -70,7 +70,7 @@ public class SessionMenu extends JPanel {
 		panelAdmin.setVisible(person.getRole() > 2);
 		JButton btnCreateNewSession = new JButton("Opret Session");
 		btnCreateNewSession.addActionListener(e -> {
-			CreateSessionMenu createSessionMenu = null;
+			CreateSessionMenu createSessionMenu;
 			try {
 				createSessionMenu = new CreateSessionMenu(mainMenu, course);
 			} catch (SQLException ex) {

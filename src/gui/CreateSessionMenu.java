@@ -1,7 +1,6 @@
 package gui;
 
 import controller.CourseController;
-import controller.DateController;
 import controller.PersonController;
 import model.*;
 

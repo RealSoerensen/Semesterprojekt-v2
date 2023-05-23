@@ -79,11 +79,13 @@ public class SessionMemberContainer implements SessionMemberDataAccessIF {
 
     @Override
     public void removeAll(Session session) {
-        for(int i = 0; i < container.size(); i++) {
-            if(container.get(i).session().equals(session)) {
-                container.remove(i);
+        List<SessionMember> sessionsToRemove = new ArrayList<>();
+        for (SessionMember sessionMember : container) {
+            if (sessionMember.session().getSessionID() == session.getSessionID()) {
+                sessionsToRemove.add(sessionMember);
             }
         }
+        container.removeAll(sessionsToRemove);
     }
 }
 

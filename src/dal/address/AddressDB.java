@@ -2,7 +2,6 @@ package dal.address;
 
 import dal.DBConnection;
 import model.Address;
-import model.Subject;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class AddressDB implements AddressDataAccessIF {
      * Creates a new Address in the database.
      *
      * @param obj The Address to be created.
-     * @return True if the Address was created successfully, false otherwise.
+     * @return The Address that was created.
      */
     @Override
     public Address create(Address obj) throws SQLException {

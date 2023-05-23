@@ -3,7 +3,6 @@ package dal.sessionmember;
 import dal.DBConnection;
 import dal.person.PersonDB;
 import dal.person.PersonDataAccessIF;
-import model.Course;
 import model.Session;
 import model.Person;
 

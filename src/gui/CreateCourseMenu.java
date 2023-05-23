@@ -1,7 +1,6 @@
 package gui;
 
 import controller.CourseController;
-import controller.DateController;
 import model.Course;
 
 import javax.swing.*;

@@ -32,7 +32,6 @@ public class PersonDB implements PersonDataAccessIF {
 	 */
 	@Override
 	public Person create(Person obj) {
-		Person person = obj;
 		String sql = "INSERT INTO Person (firstName, lastName, email, ssn, role, phoneNo, password, addressID) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -49,7 +48,7 @@ public class PersonDB implements PersonDataAccessIF {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return person;
+		return obj;
 	}
 
 	/**

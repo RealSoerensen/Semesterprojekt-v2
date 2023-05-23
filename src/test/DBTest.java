@@ -2,7 +2,6 @@ package test;
 
 import dal.DBConnection;
 import dal.DBUtils;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;

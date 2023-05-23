@@ -1,7 +1,5 @@
 package dal;
 
-import model.Subject;
-
 import java.sql.SQLException;
 import java.util.List;
 

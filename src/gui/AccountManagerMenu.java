@@ -186,11 +186,7 @@ public class AccountManagerMenu extends JPanel {
 				return;
 			}
 			EditAccountMenu editMember;
-			try {
-				editMember = new EditAccountMenu(mainMenu, person, false);
-			} catch (SQLException ex) {
-				throw new RuntimeException(ex);
-			}
+			editMember = new EditAccountMenu(mainMenu, person, false);
 			mainMenu.mainPanel.add(editMember, "EditMember");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "EditMember");
 		});

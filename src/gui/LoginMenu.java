@@ -52,9 +52,7 @@ public class LoginMenu extends JFrame {
 		contentPanel.add(passwordField);
 
 		JButton btnLogin = new JButton("Log ind");
-		btnLogin.addActionListener(e -> {
-			logIn();
-		});
+		btnLogin.addActionListener(e -> logIn());
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnLogin.setBounds(217, 138, 101, 53);
 		contentPanel.add(btnLogin);
@@ -87,12 +85,7 @@ public class LoginMenu extends JFrame {
 		long ssn = Long.parseLong(textFieldUsername.getText());
 		String password = new String(passwordField.getPassword());
 		Person person;
-		try {
-			person = personController.login(ssn, password);
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Der skete en fejl. Prøv igen senere.");
-			return;
-		}
+		person = personController.login(ssn, password);
 
 		if (person == null) {
 			JOptionPane.showMessageDialog(null, "Forkert brugernavn eller adgangskode");
