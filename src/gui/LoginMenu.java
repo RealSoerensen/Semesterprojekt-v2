@@ -9,7 +9,6 @@ import model.Person;
 
 import java.awt.Font;
 import java.sql.SQLException;
-import java.util.List;
 
 public class LoginMenu extends JFrame {
 
@@ -22,10 +21,8 @@ public class LoginMenu extends JFrame {
 	 */
 	public void run() {
 		try {
-
 			LoginMenu frame = new LoginMenu();
 			frame.setVisible(true);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,7 +80,7 @@ public class LoginMenu extends JFrame {
 
 	private void createUser() {
 		dispose();
-		new CreateAccountMenu(true);
+		new CreateAccountMenu().run(true);
 	}
 
 	private void logIn() {
@@ -99,6 +96,7 @@ public class LoginMenu extends JFrame {
 
 		if (person == null) {
 			JOptionPane.showMessageDialog(null, "Forkert brugernavn eller adgangskode");
+			return;
 		}
 
 		LoginController.getInstance().setLoggedInPerson(person);

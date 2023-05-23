@@ -134,7 +134,7 @@ public class AccountManagerMenu extends JPanel {
 
 		JButton btnCreatePerson = new JButton("Opret");
 		btnCreatePerson.addActionListener(e -> {
-			JDialog createUserPanel = new CreateAccountMenu(true);
+			CreateAccountMenu createUserPanel = new CreateAccountMenu();
 			createUserPanel.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent e) {
@@ -147,7 +147,7 @@ public class AccountManagerMenu extends JPanel {
 					}
 				}
 			});
-			createUserPanel.setVisible(true);
+			createUserPanel.run(false);
 		});
 
 		btnCreatePerson.setBounds(486, 215, 118, 34);

@@ -35,6 +35,19 @@ public class CreateAccountMenu extends JDialog {
 	private final JTextField textFieldRoadNumber;
 	private final JPasswordField passwordFieldConfirmPassword;
 
+	public void run(boolean isOpenedFromLoginMenu) {
+		try {
+			CreateAccountMenu frame = new CreateAccountMenu(isOpenedFromLoginMenu);
+			frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public CreateAccountMenu() {
+		this(false);
+	}
+
 	/**
 	 * Create the dialog.
 	 */
@@ -177,11 +190,12 @@ public class CreateAccountMenu extends JDialog {
 					}
 
 					if(isCreated) {
-						if(!isOpenedFromLoginMenu) {
+						if(isOpenedFromLoginMenu) {
 							try {
 								new LoginMenu().run();
 							} catch (SQLException ex) {
 								JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
+								return;
 							}
 						}
 						dispose();
@@ -198,6 +212,7 @@ public class CreateAccountMenu extends JDialog {
 							new LoginMenu().run();
 						} catch (SQLException ex) {
 							JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
+							return;
 						}
 					}
 					dispose();
