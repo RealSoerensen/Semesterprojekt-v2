@@ -46,17 +46,16 @@ public class CourseMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
 				return;
 			}
-			if(!courseController.createCourseMember(course, LoginController.getInstance().getPerson())) {
+			if(!courseController.createCourseMember(course, person)) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde kursus");
 				return;
 			}
+			JOptionPane.showMessageDialog(null, "Kursus er tilmeldt");
 			try {
 				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
-				return;
 			}
-			JOptionPane.showMessageDialog(null, "Kursus er tilmeldt");
 		});
 		btnEnrollCourse.setBounds(506, 11, 110, 48);
 		add(btnEnrollCourse);
@@ -78,15 +77,16 @@ public class CourseMenu extends JPanel {
 				return;
 			}
 			
-			if(isNotEnrolled) {
-				JOptionPane.showMessageDialog(null, "Kursus er frameldt");
-				try {
-					refreshTable();
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
-				}
-			} else {
+			if(!isNotEnrolled) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke framelde kursus");
+				return;
+			}
+
+			JOptionPane.showMessageDialog(null, "Kursus er frameldt");
+			try {
+				refreshTable();
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 			}
 		});
 		btnLeaveCourse.setBounds(506, 70, 110, 48);
@@ -231,12 +231,11 @@ public class CourseMenu extends JPanel {
 	}
 
 	private String isEnrolled(List<Person> personEnrolled) {
-		String result = "";
+		String result = "Nej";
 		for(Person enrolled : personEnrolled) {
-			if(person.getSsn() == enrolled.getSsn()) {
+			if (person.getSsn() == enrolled.getSsn()) {
 				result = "Ja";
-			} else {
-				result = "Nej";
+				break;
 			}
 		}
 		return result;
