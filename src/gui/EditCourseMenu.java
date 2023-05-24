@@ -121,12 +121,12 @@ public class EditCourseMenu extends JPanel {
     	lblPrice.setBounds(179, 247, 72, 14);
     	add(lblPrice);
     	
-    	JLabel lblEndingDate = new JLabel("Slut Dato:");
+    	JLabel lblEndingDate = new JLabel("Slut Dato (YEAR-MM-DD):");
     	lblEndingDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
     	lblEndingDate.setBounds(179, 343, 72, 14);
     	add(lblEndingDate);
     	
-    	JLabel lblStartingDate = new JLabel("Starts dato:");
+    	JLabel lblStartingDate = new JLabel("Starts dato (YEAR-MM-DD):");
     	lblStartingDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
     	lblStartingDate.setBounds(179, 297, 82, 14);
     	add(lblStartingDate);

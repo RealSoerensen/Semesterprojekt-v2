@@ -28,6 +28,7 @@ public class CreateSessionMenu extends JPanel {
 		setSize(626, 515);
 		setLayout(null);
 
+
 		JLabel lblNewLabel = new JLabel("Dato (YEAR-MM-DD):");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel.setBounds(158, 45, 137, 19);
