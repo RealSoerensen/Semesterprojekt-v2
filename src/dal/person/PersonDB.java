@@ -195,4 +195,64 @@ public class PersonDB implements PersonDataAccessIF {
 		}
 		return person;
 	}
+
+	@Override
+	public List<Person> getAllMembers() {
+		String sql = "SELECT * FROM Person WHERE role = 1";
+		List<Person> members = new ArrayList<>();
+		try (Statement stmt = connection.createStatement()) {
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				Person person = createPerson(rs);
+				members.add(person);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return members;
+	}
+
+	@Override
+	public List<Person> getAllInstructors() {
+		String sql = "SELECT * FROM Person WHERE role = 2";
+		List<Person> instructors = new ArrayList<>();
+		try (Statement stmt = connection.createStatement()) {
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				Person person = createPerson(rs);
+				instructors.add(person);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return instructors;
+	}
+
+	@Override
+	public List<Person> getAllAdmins() {
+String sql = "SELECT * FROM Person WHERE role = 3";
+		List<Person> admins = new ArrayList<>();
+		try (Statement stmt = connection.createStatement()) {
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				Person person = createPerson(rs);
+				admins.add(person);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return admins;
+	}
+
+	private Person createPerson(ResultSet rs) throws SQLException {
+		long ssn = rs.getLong("ssn");
+		String firstName = rs.getString("firstName");
+		String lastName = rs.getString("lastName");
+		String email = rs.getString("email");
+		int role = rs.getInt("role");
+		String phoneNo = rs.getString("phoneNo");
+		String password = rs.getString("password");
+		Address address = getAddress(rs.getLong("addressID"));
+		return new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
+	}
 }

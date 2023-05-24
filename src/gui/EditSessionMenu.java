@@ -25,8 +25,9 @@ public class EditSessionMenu extends JPanel {
 	private final JTextField textFieldZIP;
 	private final JTextField textFieldStreet;
 	private final JTextField textFieldStreetNum;
-	private final JTextField textFieldTime;
+	private final JTextField textFieldStartTime;
 	private final CourseController courseController;
+	private JTextField textFieldEndTime;
 
 	public EditSessionMenu(MainMenu mainMenu, Session session) throws SQLException {
 		courseController = new CourseController();
@@ -36,27 +37,31 @@ public class EditSessionMenu extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Fag:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel.setBounds(191, 121, 103, 26);
+		lblNewLabel.setBounds(181, 158, 91, 26);
 		add(lblNewLabel);
 
 		JLabel lblDato = new JLabel("Dato (YEAR-MM-DD):");
 		lblDato.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblDato.setBounds(191, 47, 47, 26);
+		lblDato.setBounds(180, 47, 91, 26);
 		add(lblDato);
 
 		JLabel lblTime = new JLabel("Tid (TIME:MIN):");
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTime.setBounds(191, 84, 47, 26);
 		add(lblTime);
+		JLabel lblStartTime = new JLabel("Start tid (TIME:MIN):");
+		lblStartTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblStartTime.setBounds(180, 84, 91, 26);
+		add(lblStartTime);
 
 		JLabel lblInstruktr = new JLabel("Instruktør:");
 		lblInstruktr.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblInstruktr.setBounds(191, 158, 103, 26);
+		lblInstruktr.setBounds(181, 195, 91, 26);
 		add(lblInstruktr);
 
 		JLabel lblAdresse = new JLabel("Adresse:");
 		lblAdresse.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblAdresse.setBounds(191, 195, 103, 26);
+		lblAdresse.setBounds(181, 232, 303, 26);
 		add(lblAdresse);
 
 		List<Subject> subjects = new ArrayList<>();
@@ -71,18 +76,18 @@ public class EditSessionMenu extends JPanel {
 			comboBoxSubject.addItem(subject);
 		}
 
-		comboBoxSubject.setBounds(292, 121, 153, 26);
+		comboBoxSubject.setBounds(282, 158, 202, 26);
 		add(comboBoxSubject);
 
 		textFieldDate = new JTextField(session.getDate().toString());
-		textFieldDate.setBounds(292, 47, 153, 26);
+		textFieldDate.setBounds(281, 47, 202, 26);
 		add(textFieldDate);
 		textFieldDate.setColumns(10);
 
-		textFieldTime = new JTextField(session.getTime().toString());
-		textFieldTime.setBounds(292, 84, 153, 26);
-		add(textFieldTime);
-		textFieldTime.setColumns(10);
+		textFieldStartTime = new JTextField(session.getStartTime().toString());
+		textFieldStartTime.setBounds(281, 84, 202, 26);
+		add(textFieldStartTime);
+		textFieldStartTime.setColumns(10);
 
 		List<Person> instructors = new ArrayList<>();
 		try {
@@ -95,47 +100,47 @@ public class EditSessionMenu extends JPanel {
 		for (Person instructor : instructors) {
 			comboBoxInstructor.addItem(instructor);
 		}
-		comboBoxInstructor.setBounds(292, 158, 153, 26);
+		comboBoxInstructor.setBounds(282, 195, 202, 26);
 		add(comboBoxInstructor);
 
 		textFieldCity = new JTextField(session.getAddress().getCity());
-		textFieldCity.setBounds(292, 232, 153, 29);
+		textFieldCity.setBounds(282, 269, 202, 29);
 		add(textFieldCity);
 		textFieldCity.setColumns(10);
 
 		JLabel lblBy = new JLabel("By:");
 		lblBy.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblBy.setBounds(191, 235, 29, 26);
+		lblBy.setBounds(181, 272, 91, 26);
 		add(lblBy);
 
 		JLabel lblPostNummer = new JLabel("Postnummer:");
 		lblPostNummer.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblPostNummer.setBounds(191, 272, 103, 26);
+		lblPostNummer.setBounds(181, 309, 91, 26);
 		add(lblPostNummer);
 
 		textFieldZIP = new JTextField(session.getAddress().getZipCode());
-		textFieldZIP.setBounds(292, 270, 153, 28);
+		textFieldZIP.setBounds(282, 307, 202, 28);
 		add(textFieldZIP);
 		textFieldZIP.setColumns(10);
 
 		JLabel lblGade = new JLabel("Vej:");
 		lblGade.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblGade.setBounds(191, 309, 103, 26);
+		lblGade.setBounds(181, 346, 91, 26);
 		add(lblGade);
 
 		textFieldStreet = new JTextField(session.getAddress().getStreet());
 		textFieldStreet.setColumns(10);
-		textFieldStreet.setBounds(292, 309, 153, 28);
+		textFieldStreet.setBounds(282, 346, 202, 28);
 		add(textFieldStreet);
 
 		JLabel lblV = new JLabel("Vejnummer:");
 		lblV.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblV.setBounds(191, 346, 103, 26);
+		lblV.setBounds(181, 383, 91, 26);
 		add(lblV);
 
 		textFieldStreetNum = new JTextField(session.getAddress().getHouseNumber());
 		textFieldStreetNum.setColumns(10);
-		textFieldStreetNum.setBounds(292, 346, 153, 28);
+		textFieldStreetNum.setBounds(282, 383, 202, 28);
 		add(textFieldStreetNum);
 
 		JButton btnSave = new JButton("Gem ændringer");
@@ -155,12 +160,26 @@ public class EditSessionMenu extends JPanel {
 				return;
 			}
 
-			String strTime = textFieldTime.getText();
-			LocalTime time;
+			String strTime = textFieldStartTime.getText();
+			LocalTime startTime;
 
 			try {
 				int[] intTime = courseController.StringArrToIntArr(strTime.split(":"));
-				time = LocalTime.of(intTime[0], intTime[1]);
+				startTime = LocalTime.of(intTime[0], intTime[1]);
+			} catch (IndexOutOfBoundsException _ignore) {
+				JOptionPane.showMessageDialog(null, "Fejl: Tid er skrevet forkert ind");
+				return;
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, e2);
+				return;
+			}
+			
+			strTime = textFieldEndTime.getText();
+			LocalTime endTime;
+
+			try {
+				int[] intTime = courseController.StringArrToIntArr(strTime.split(":"));
+				endTime = LocalTime.of(intTime[0], intTime[1]);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Tid er skrevet forkert ind");
 				return;
@@ -169,7 +188,7 @@ public class EditSessionMenu extends JPanel {
 				return;
 			}
 
-			if (date != null || time != null) {
+			if (date != null || startTime != null || endTime != null) {
 				String city = textFieldCity.getText();
 				String zip = textFieldZIP.getText();
 				String street = textFieldStreet.getText();
@@ -178,7 +197,9 @@ public class EditSessionMenu extends JPanel {
 				session.setSubject(subject);
 				session.setInstructor(instructor);
 				session.setDate(date);
-				session.setTime(time);
+				session.setStartTime(startTime);
+				session.setEndTime(endTime);
+
 				session.setAddress(address);
 				try {
 					courseController.updateSession(session);
@@ -193,7 +214,7 @@ public class EditSessionMenu extends JPanel {
 			}
 		});
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnSave.setBounds(324, 409, 121, 36);
+		btnSave.setBounds(336, 423, 170, 36);
 		add(btnSave);
 
 		JButton btnBack = new JButton("Tilbage");
@@ -206,8 +227,18 @@ public class EditSessionMenu extends JPanel {
 			}
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnBack.setBounds(191, 409, 121, 36);
+		btnBack.setBounds(156, 423, 170, 36);
 		add(btnBack);
+		
+		textFieldEndTime = new JTextField(session.getEndTime().toString());
+		textFieldEndTime.setColumns(10);
+		textFieldEndTime.setBounds(282, 121, 202, 26);
+		add(textFieldEndTime);
+		
+		JLabel lblEndTime = new JLabel("Slut tid:");
+		lblEndTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblEndTime.setBounds(181, 121, 91, 26);
+		add(lblEndTime);
 
 	}
 }

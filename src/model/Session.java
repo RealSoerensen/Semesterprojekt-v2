@@ -6,25 +6,28 @@ import java.time.LocalTime;
 public class Session {
 	private long sessionID;
 	private LocalDate date;
-	private LocalTime time;
+	private LocalTime startTime;
+	private LocalTime endTime;
 	private Person instructor;
 	private Course course;
 	private Address address;
 	private Subject subject;
 
-	public Session(long sessionID, LocalDate date, Person instructor, Course course, Address address, Subject subject, LocalTime time) {
+	public Session(long sessionID, LocalDate date, Person instructor, Course course, Address address, Subject subject, LocalTime startTime, LocalTime endTime) {
 		this.sessionID = sessionID;
 		this.date = date;
-		this.time = time;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.instructor = instructor;
 		this.course = course;
 		this.address = address;
 		this.subject = subject;
 	}
 
-	public Session(LocalDate date, Person instructor, Course course, Address address, Subject subject, LocalTime time) {
+	public Session(LocalDate date, Person instructor, Course course, Address address, Subject subject, LocalTime startTime, LocalTime endTime) {
 		this.date = date;
-		this.time = time;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.instructor = instructor;
 		this.course = course;
 		this.address = address;
@@ -79,11 +82,19 @@ public class Session {
 		this.sessionID = sessionID;
 	}
 
-	public LocalTime getTime() {
-		return time;
+	public LocalTime getStartTime() {
+		return startTime;
 	}
 
-	public void setTime(LocalTime time) {
-		this.time = time;
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
 	}
 }

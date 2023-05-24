@@ -138,7 +138,36 @@ public class CourseMenu extends JPanel {
 
 		JButton btnDeleteCourse = new JButton("Slet");
 		btnDeleteCourse.addActionListener(e -> {
-			// TODO: implement delete course functionality
+			int selectedRow = table.getSelectedRow();
+			if (selectedRow == -1) {
+				JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
+				return;
+			}
+			Course course = (Course) courseData[selectedRow][0];
+			if (course == null) {
+				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
+				return;
+			}
+
+			boolean isDeleted;
+
+			try {
+				isDeleted = courseController.removeCourse(course);
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke slette kursus");
+				return;
+			}
+
+			if(!isDeleted) {
+				JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
+				return;
+			}
+			JOptionPane.showMessageDialog(null, "Kursus er slettet");
+			try {
+				refreshTable();
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
+			}
 		});
 		btnDeleteCourse.setBounds(0, 132, 110, 48);
 		panelAdmin.add(btnDeleteCourse);
