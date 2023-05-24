@@ -8,7 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controller.LoginController;
 import controller.PersonController;
 import model.Address;
 import model.Person;
@@ -24,7 +23,6 @@ import java.sql.SQLException;
 
 public class CreateAccountMenu extends JDialog {
 
-	private final JPanel contentPanel = new JPanel();
 	private final JTextField textFieldFirstName;
 	private final JTextField textFieldLastName;
 	private final JTextField textFieldEmail;
@@ -36,28 +34,29 @@ public class CreateAccountMenu extends JDialog {
 	private final JTextField textFieldRoadName;
 	private final JTextField textFieldRoadNumber;
 	private final JPasswordField passwordFieldConfirmPassword;
-	private boolean isOpenedFromLoginMenu;
 
-	/**
-	 * Launch the application.
-	 */
 	public void run(boolean isOpenedFromLoginMenu) {
 		try {
-			CreateAccountMenu dialog = new CreateAccountMenu(isOpenedFromLoginMenu);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+			CreateAccountMenu frame = new CreateAccountMenu(isOpenedFromLoginMenu);
+			frame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public CreateAccountMenu() {
+		this(false);
 	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public CreateAccountMenu(boolean isOpenedFromLoginMenu) {
-		this.isOpenedFromLoginMenu = isOpenedFromLoginMenu;
+		setTitle("Opret Konto");
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 400, 580);
 		getContentPane().setLayout(new BorderLayout());
+		JPanel contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -179,12 +178,27 @@ public class CreateAccountMenu extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				JButton okButton = new JButton("Opret");
 				okButton.addActionListener(e -> {
+					boolean isCreated;
+
 					try {
-						createAccount();
+						isCreated = createAccount();
 					} catch (SQLException ex) {
-						throw new RuntimeException(ex);
+						JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
+						return;
+					}
+
+					if(isCreated) {
+						if(isOpenedFromLoginMenu) {
+							try {
+								new LoginMenu().run();
+							} catch (SQLException ex) {
+								JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
+								return;
+							}
+						}
+						dispose();
 					}
 				});
 				buttonPane.add(okButton);
@@ -193,10 +207,13 @@ public class CreateAccountMenu extends JDialog {
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(e -> {
-					try {
-						new LoginMenu().run();
-					} catch (SQLException ex) {
-						throw new RuntimeException(ex);
+					if(isOpenedFromLoginMenu) {
+						try {
+							new LoginMenu().run();
+						} catch (SQLException ex) {
+							JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
+							return;
+						}
 					}
 					dispose();
 				});
@@ -205,7 +222,7 @@ public class CreateAccountMenu extends JDialog {
 		}
 	}
 
-	private void createAccount() throws SQLException {
+	private boolean createAccount() throws SQLException {
 		String errorMessage = "Følgende fejl findes:";
 		boolean viableAccount = true;
 		PersonController personController = new PersonController();
@@ -280,24 +297,18 @@ public class CreateAccountMenu extends JDialog {
 					Long.parseLong(ssn));
 			try {
 				if (personController.createPerson(person) != null) {
-					JOptionPane.showMessageDialog(contentPanel, "Bruger oprettet");
+					JOptionPane.showMessageDialog(null, "Bruger oprettet");
 				} else {
-					JOptionPane.showMessageDialog(contentPanel, "Bruger ikke oprettet");
+					JOptionPane.showMessageDialog(null, "Bruger ikke oprettet");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-			}
+				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
 
-			if (isOpenedFromLoginMenu) {
-				new LoginMenu().run();
-			} else {
-				MainMenu mainMenu = new MainMenu().run();
-				mainMenu.switchPanelToAccountManagerMenu();
 			}
-			dispose();
 		} else {
-			JOptionPane.showMessageDialog(contentPanel, errorMessage);
+			JOptionPane.showMessageDialog(null, errorMessage);
 		}
+		return viableAccount;
 	}
 
 	private boolean isStringNotNumber(String string) {

@@ -4,7 +4,6 @@ import dal.sessionmember.SessionMemberContainer;
 import dal.sessionmember.SessionMemberDataAccessIF;
 import model.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

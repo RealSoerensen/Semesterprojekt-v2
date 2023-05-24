@@ -163,7 +163,7 @@ public class CourseDB implements CourseDataAccessIF {
     }
 
     @Override
-    public long createCourseAndGetID(Course course) throws Exception {
+    public long createCourseAndGetID(Course course) {
         long id = -1;
         String sql = " INSERT INTO course(name, price, description, startDate, endDate) " +
                 " VALUES(?, ?, ?, ?, ?) ";

@@ -83,7 +83,7 @@ public class CourseController {
 		this.sessionMemberDB = sessionMemberDB;
 	}
 
-	public Course createCourse(Course course) throws Exception {
+	public Course createCourse(Course course) {
 		course.setCourseID(getCourseDB().createCourseAndGetID(course));
 		return course;
 	}
@@ -214,11 +214,11 @@ public class CourseController {
 		return getSubjectDB().getAll();
 	}
 
-	public boolean createInstructorSubject(Person instructor, Subject subject) throws SQLException {
+	public boolean createInstructorSubject(Person instructor, Subject subject) {
 		return getInstructorSubjectDB().create(instructor, subject);
 	}
 
-	public boolean removeInstructorSubject(Person instructor, Subject subject) throws SQLException {
+	public boolean removeInstructorSubject(Person instructor, Subject subject) {
 		return getInstructorSubjectDB().remove(instructor, subject);
 	}
 

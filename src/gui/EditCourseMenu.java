@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import javax.swing.*;
 
 import controller.CourseController;
-import controller.DateController;
 
 import java.awt.Font;
 

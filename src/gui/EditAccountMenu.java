@@ -16,7 +16,7 @@ public class EditAccountMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public EditAccountMenu(MainMenu mainMenu, Person person, boolean isEditedFromAccountMenu) throws SQLException {
+	public EditAccountMenu(MainMenu mainMenu, Person person, boolean isEditedFromAccountMenu) {
 		try {
 			personController = new PersonController();
 		} catch (SQLException e) {

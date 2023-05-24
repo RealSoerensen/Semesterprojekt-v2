@@ -1,6 +1,5 @@
 package controller;
 
-import gui.MainMenu;
 import model.Person;
 
 public class LoginController {

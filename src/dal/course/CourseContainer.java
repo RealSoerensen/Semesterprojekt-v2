@@ -1,7 +1,6 @@
 package dal.course;
 
 import model.Course;
-import model.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +112,7 @@ public class CourseContainer implements CourseDataAccessIF{
     }
 
     @Override
-    public long createCourseAndGetID(Course course) throws Exception {
+    public long createCourseAndGetID(Course course) {
         return 0;
     }
 }

@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dal.DBConnection;
-import dal.address.AddressContainer;
 import dal.address.AddressDB;
 import dal.address.AddressDataAccessIF;
-import dal.person.PersonContainer;
 import dal.person.PersonDB;
 import dal.person.PersonDataAccessIF;
 import model.Address;
@@ -113,7 +111,7 @@ public class PersonController {
 		return admins;
 	}
 
-	public Person login(long ssn, String password) throws SQLException {
+	public Person login(long ssn, String password) {
 		return personDB.login(ssn, password);
 	}
 }

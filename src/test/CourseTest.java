@@ -5,8 +5,6 @@ import controller.PersonController;
 import dal.DBConnection;
 import dal.DBUtils;
 import model.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +13,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.function.BooleanSupplier;
 
 public class CourseTest {
     private static CourseController courseController = null;
@@ -36,7 +33,7 @@ public class CourseTest {
     }
 
     @Test
-    public void testCreateCourse() throws Exception {
+    public void testCreateCourse() {
         //Arrange
         Course course = new Course("Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
@@ -96,9 +93,9 @@ public class CourseTest {
         Course course3 = new Course("Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
-        course1 = courseController.createCourse(course1);
-        course2 = courseController.createCourse(course2);
-        course3 = courseController.createCourse(course3);
+        courseController.createCourse(course1);
+        courseController.createCourse(course2);
+        courseController.createCourse(course3);
         int result = courseController.getAllCourses().size();
 
         //Assert
