@@ -128,7 +128,8 @@ public class CourseMenu extends JPanel {
 			try {
 				createCourseMenu = new CreateCourseMenu(mainMenu);
 			} catch (SQLException ex) {
-				throw new RuntimeException(ex);
+				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke åbne menuen");
+				return;
 			}
 			mainMenu.mainPanel.add(createCourseMenu, "create course panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "create course panel");

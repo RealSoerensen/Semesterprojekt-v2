@@ -1,8 +1,6 @@
 package gui;
 
-import model.Course;
-import model.Person;
-import model.Session;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,11 +8,12 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import controller.CourseController;
-import model.Subject;
 
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SessionMenu extends JPanel {
 
@@ -172,6 +171,35 @@ public class SessionMenu extends JPanel {
 		add(btnLeaveSession);
 		
 		JButton btnSessionInfo = new JButton("Session Info");
+		btnSessionInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Session session = (Session) sessionData[table.getSelectedRow()][0];
+
+				if (session == null) {
+					JOptionPane.showMessageDialog(null, "Vælg en session at se informationer om");
+					return;
+				}
+
+				Address address = session.getAddress();
+				JOptionPane optionPane = new JOptionPane();
+				optionPane.setMessage("Session informationer:\n" +
+								"Fag: " + session.getSubject().getName() + "\n" +
+								"Beskrivelse: " + session.getSubject().getDescription() + "\n" +
+								"Start dato: " + session.getDate() + "\n" +
+								"Fra: " + session.getStartTime() + "\n" +
+								"Til: " + session.getEndTime() + "\n" +
+								"Instruktør: " + session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName() + "\n" +
+								"Adresse: " + address.getZipCode() + " " + address.getCity() + "\n" +
+								address.getStreet() + " " + address.getHouseNumber()
+				);
+
+
+				optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+
+				JDialog dialog = optionPane.createDialog(null, "Session oplysninger");
+				dialog.setVisible(true);
+			}
+		});
 		btnSessionInfo.setBounds(493, 11, 123, 39);
 		add(btnSessionInfo);
 	}
