@@ -46,7 +46,7 @@ public class CreateCourseMenu extends JPanel {
         add(txtCoursePrice);
         txtCoursePrice.setColumns(10);
 
-        JLabel lblCourseStartDate = new JLabel("Start Dato (YEAR/MM/DD)");
+        JLabel lblCourseStartDate = new JLabel("Start Dato (YEAR-MM-DD))");
         lblCourseStartDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblCourseStartDate.setBounds(325, 182, 221, 20);
         add(lblCourseStartDate);
@@ -56,7 +56,7 @@ public class CreateCourseMenu extends JPanel {
         add(txtCourseStartDate);
         txtCourseStartDate.setColumns(10);
 
-        JLabel lblCourseEndDate = new JLabel("Slut Dato (YEAR/MM/DD)");
+        JLabel lblCourseEndDate = new JLabel("Slut Dato (YEAR-MM-DD)");
         lblCourseEndDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblCourseEndDate.setBounds(325, 245, 221, 20);
         add(lblCourseEndDate);
