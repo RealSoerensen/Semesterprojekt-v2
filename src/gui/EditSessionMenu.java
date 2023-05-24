@@ -39,12 +39,12 @@ public class EditSessionMenu extends JPanel {
 		lblNewLabel.setBounds(191, 121, 103, 26);
 		add(lblNewLabel);
 
-		JLabel lblDato = new JLabel("Dato:");
+		JLabel lblDato = new JLabel("Dato (YEAR-MM-DD):");
 		lblDato.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblDato.setBounds(191, 47, 47, 26);
 		add(lblDato);
 
-		JLabel lblTime = new JLabel("Tid:");
+		JLabel lblTime = new JLabel("Tid (TIME:MIN):");
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTime.setBounds(191, 84, 47, 26);
 		add(lblTime);
