@@ -42,7 +42,7 @@ public class SessionTest {
         address = personController.createAddress(address);
         course = courseController.createCourse(course);
         subject = courseController.createSubject(subject);
-        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
         session = courseController.createSession(session);
 
         //Assert
@@ -62,7 +62,7 @@ public class SessionTest {
         subject = courseController.createSubject(subject);
 
         //Act
-        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
         session = courseController.createSession(session);
         Session result = courseController.getSession(course, session.getSessionID());
 
@@ -84,9 +84,9 @@ public class SessionTest {
 
         //Act
         courseController.createCourse(course);
-        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Session session = new Session(LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
         session = courseController.createSession(session);
-        Session updatedSession = new Session(session.getSessionID(), LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Session updatedSession = new Session(session.getSessionID(), LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
         boolean result = courseController.updateSession(updatedSession);
 
         //Assert
@@ -106,7 +106,7 @@ public class SessionTest {
         subject = courseController.createSubject(subject);
 
         //Act
-        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
+        Session session = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
         session = courseController.createSession(session);
         boolean result = courseController.removeSession(session);
 
@@ -127,9 +127,9 @@ public class SessionTest {
         subject = courseController.createSubject(subject);
 
         //Act
-        Session session1 = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
-        Session session2 = new Session(2, LocalDate.of(2023, Month.MAY, 6), person, course, address, subject, LocalTime.of(14, 30));
-        Session session3 = new Session(3, LocalDate.of(2023, Month.MAY, 7), person, course, address, subject, LocalTime.of(14, 30));
+        Session session1 = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
+        Session session2 = new Session(2, LocalDate.of(2023, Month.MAY, 6), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
+        Session session3 = new Session(3, LocalDate.of(2023, Month.MAY, 7), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
 
         courseController.createSession(session1);
         courseController.createSession(session2);
@@ -153,9 +153,9 @@ public class SessionTest {
         subject = courseController.createSubject(subject);
 
         // Act
-        Session session1 = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30));
-        Session session2 = new Session(2, LocalDate.of(2023, Month.MAY, 6), person, course, address, subject, LocalTime.of(14, 30));
-        Session session3 = new Session(3, LocalDate.of(2023, Month.MAY, 7), person, course, address, subject, LocalTime.of(14, 30));
+        Session session1 = new Session(1, LocalDate.of(2023, Month.MAY, 5), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
+        Session session2 = new Session(2, LocalDate.of(2023, Month.MAY, 6), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
+        Session session3 = new Session(3, LocalDate.of(2023, Month.MAY, 7), person, course, address, subject, LocalTime.of(14, 30), LocalTime.of(16, 30));
 
         courseController.createSession(session1);
         courseController.createSession(session2);

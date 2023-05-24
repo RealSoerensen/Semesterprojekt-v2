@@ -113,6 +113,7 @@ public class DBUtils {
                         sql = "CREATE TABLE Session ("
                                 + "startDate DATE,"
                                 + "startTime TIME,"
+                                + "endTime TIME,"
                                 + "sessionID BIGINT IDENTITY(1,1),"
                                 + "courseID BIGINT,"
                                 + "instructorSsn BIGINT,"

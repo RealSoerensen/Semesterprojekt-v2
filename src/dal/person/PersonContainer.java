@@ -108,4 +108,37 @@ public class PersonContainer implements PersonDataAccessIF {
         }
         return person;
     }
+
+    @Override
+    public List<Person> getAllMembers() {
+        List<Person> members = new ArrayList<>();
+        for (Person person : container) {
+            if (person.getRole() == 1) {
+                members.add(person);
+            }
+        }
+        return members;
+    }
+
+    @Override
+    public List<Person> getAllInstructors() {
+        List<Person> instructors = new ArrayList<>();
+        for (Person person : container) {
+            if (person.getRole() == 2) {
+                instructors.add(person);
+            }
+        }
+        return instructors;
+    }
+
+    @Override
+    public List<Person> getAllAdmins() {
+        List<Person> admins = new ArrayList<>();
+        for (Person person : container) {
+            if (person.getRole() == 3) {
+                admins.add(person);
+            }
+        }
+        return admins;
+    }
 }

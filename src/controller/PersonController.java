@@ -79,36 +79,15 @@ public class PersonController {
 	}
 
 	public List<Person> getAllMembers() throws SQLException {
-		List<Person> members = new ArrayList<>();
-		List<Person> allPersons = getAllPersons();
-		for(Person person : allPersons) {
-			if(person.getRole() == 1) {
-				members.add(person);
-			}
-		}
-		return members;
+		return personDB.getAllMembers();
 	}
 
     public List<Person> getAllInstructors() throws SQLException {
-		List<Person> instructors = new ArrayList<>();
-		List<Person> allPersons = getAllPersons();
-		for(Person person : allPersons) {
-			if(person.getRole() == 2) {
-				instructors.add(person);
-			}
-		}
-		return instructors;
+		return personDB.getAllInstructors();
     }
 
 	public List<Person> getAllAdmins() throws SQLException{
-		List<Person> admins = new ArrayList<>();
-		List<Person> allPersons = getAllPersons();
-		for(Person person : allPersons) {
-			if(person.getRole() == 3) {
-				admins.add(person);
-			}
-		}
-		return admins;
+		return personDB.getAllAdmins();
 	}
 
 	public Person login(long ssn, String password) {

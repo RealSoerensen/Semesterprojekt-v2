@@ -35,15 +35,16 @@ public class SessionDB implements SessionDataAccessIF {
     @Override
     public Session create(Session obj) {
         Session session = null;
-        String sql = " INSERT INTO Session(courseID, subjectID, instructorSsn, addressID, startDate, startTime) " +
-                " VALUES(?, ?, ?, ?, ?, ?) ";
+        String sql = " INSERT INTO Session(courseID, subjectID, instructorSsn, addressID, startDate, startTime, endTime) " +
+                " VALUES(?, ?, ?, ?, ?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, obj.getCourse().getCourseID());
             stmt.setLong(2, obj.getSubject().getSubjectID());
             stmt.setLong(3, obj.getInstructor().getSsn());
             stmt.setLong(4, obj.getAddress().getAddressID());
             stmt.setDate(5, Date.valueOf(obj.getDate()));
-            stmt.setTime(6, Time.valueOf(obj.getTime()));
+            stmt.setTime(6, Time.valueOf(obj.getStartTime()));
+            stmt.setTime(7, Time.valueOf(obj.getEndTime()));
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -104,14 +105,15 @@ public class SessionDB implements SessionDataAccessIF {
     @Override
     public boolean update(Session obj) {
         boolean result = false;
-        String sql = " UPDATE Session SET startDate = ?, startTime = ?, courseID = ?, instructorSsn = ? " +
+        String sql = " UPDATE Session SET startDate = ?, startTime = ?, endTime = ?, courseID = ?, instructorSsn = ? " +
                 " WHERE sessionID = ? ";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(obj.getDate()));
-            stmt.setTime(2, Time.valueOf(obj.getTime()));
-            stmt.setLong(3, obj.getCourse().getCourseID());
-            stmt.setLong(4, obj.getInstructor().getSsn());
-            stmt.setLong(5, obj.getSessionID());
+            stmt.setTime(2, Time.valueOf(obj.getStartTime()));
+            stmt.setTime(3, Time.valueOf(obj.getEndTime()));
+            stmt.setLong(4, obj.getCourse().getCourseID());
+            stmt.setLong(5, obj.getInstructor().getSsn());
+            stmt.setLong(6, obj.getSessionID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,13 +144,14 @@ public class SessionDB implements SessionDataAccessIF {
      */
     private Session createSession(ResultSet rs) throws SQLException {
         LocalDate date = rs.getDate("startDate").toLocalDate();
-        LocalTime time = rs.getTime("startTime").toLocalTime();
+        LocalTime startTime = rs.getTime("startTime").toLocalTime();
+        LocalTime endTime = rs.getTime("endTime").toLocalTime();
         Person instructor = getInstructor(rs.getLong("instructorSsn"));
         Course course = getCourse(rs.getLong("courseID"));
         Address address = getAddress(rs.getLong("addressID"));
         Subject subject = getSubject(rs.getLong("subjectID"));
         long id = rs.getLong("sessionID");
-        return new Session(id, date, instructor, course, address, subject, time);
+        return new Session(id, date, instructor, course, address, subject, startTime, endTime);
     }
 
     /**

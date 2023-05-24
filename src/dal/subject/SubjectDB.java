@@ -77,9 +77,10 @@ public class SubjectDB implements SubjectDataAccessIF {
             stmt.executeQuery();
             ResultSet subjectRS = stmt.getResultSet();
             while (subjectRS.next()) {
+                long subjectID = subjectRS.getLong("subjectID");
                 String name = subjectRS.getString("name");
                 String description = subjectRS.getString("description");
-                Subject subject = new Subject(name, description);
+                Subject subject = new Subject(subjectID, name, description);
                 subjects.add(subject);
             }
         } catch (SQLException e) {

@@ -146,7 +146,7 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
 		});
-		btnJoinSession.setBounds(493, 11, 123, 39);
+		btnJoinSession.setBounds(493, 61, 123, 39);
 		add(btnJoinSession);
 
 		JButton btnLeaveSession = new JButton("Meld afbud");
@@ -168,8 +168,12 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
 		});
-		btnLeaveSession.setBounds(493, 61, 123, 39);
+		btnLeaveSession.setBounds(493, 111, 123, 39);
 		add(btnLeaveSession);
+		
+		JButton btnSessionInfo = new JButton("Session Info");
+		btnSessionInfo.setBounds(493, 11, 123, 39);
+		add(btnSessionInfo);
 	}
 
 	private void refreshTable() throws SQLException {
@@ -256,7 +260,6 @@ public class SessionMenu extends JPanel {
 	private String isEnrolled(Course course, Session session) throws SQLException {
 		String result = "Nej";
 		List<Session> enrolledSessions = courseController.getEnrolledSessions(person, course);
-		System.out.println(enrolledSessions);
 		for(Session enrolledSession : enrolledSessions) {
 			if(enrolledSession.getSessionID() == session.getSessionID()){
 				result = "Ja";
