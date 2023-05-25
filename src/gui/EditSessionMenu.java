@@ -40,16 +40,16 @@ public class EditSessionMenu extends JPanel {
 		lblNewLabel.setBounds(181, 158, 91, 26);
 		add(lblNewLabel);
 
-		JLabel lblDato = new JLabel("Dato (YEAR-MM-DD):");
+		JLabel lblDato = new JLabel("Dato:");
 		lblDato.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblDato.setBounds(180, 47, 91, 26);
 		add(lblDato);
 
-		JLabel lblTime = new JLabel("Tid (TIME:MIN):");
+		JLabel lblTime = new JLabel("Tid:");
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTime.setBounds(191, 84, 47, 26);
 		add(lblTime);
-		JLabel lblStartTime = new JLabel("Start tid (TIME:MIN):");
+		JLabel lblStartTime = new JLabel("Start tid:");
 		lblStartTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblStartTime.setBounds(180, 84, 91, 26);
 		add(lblStartTime);
@@ -188,7 +188,7 @@ public class EditSessionMenu extends JPanel {
 				return;
 			}
 
-			if (date != null || startTime != null || endTime != null) {
+			if ((date == null || startTime == null || endTime == null || date.isBefore(LocalDate.now()) || startTime.isAfter(endTime) || startTime.isBefore(LocalTime.now()))) {
 				String city = textFieldCity.getText();
 				String zip = textFieldZIP.getText();
 				String street = textFieldStreet.getText();
