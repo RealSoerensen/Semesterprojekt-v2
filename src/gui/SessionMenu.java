@@ -15,6 +15,8 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 
 public class SessionMenu extends JPanel {
@@ -224,6 +226,37 @@ public class SessionMenu extends JPanel {
 		
 		mainMenu.setLblTitle(course.getName() + " Sessioner");
 		setButtonsEnabled(false);
+		
+		table.addMouseListener(new MouseAdapter() {
+	         public void mouseClicked(MouseEvent me) {
+	             if (me.getClickCount() == 2) {
+	            	 Session session = (Session) sessionData[table.getSelectedRow()][0];
+	            	 displaySessionInfo(session);
+	             }
+	         }
+	     });
+	}
+	
+	private void displaySessionInfo(Session session) {
+		if (session == null) {
+				JOptionPane.showMessageDialog(null, "Vælg en session at se informationer om");
+				return;
+			}
+		Address address = session.getAddress();
+		JOptionPane optionPane = new JOptionPane();
+		optionPane.setMessage("Session informationer:\n" +
+		"Fag: " + session.getSubject().getName() + "\n" +
+		"Beskrivelse: " + session.getSubject().getDescription() + "\n" +
+		"Start dato: " + session.getDate() + "\n" +
+		"Fra: " + session.getStartTime() + "\n" +
+		"Til: " + session.getEndTime() + "\n" +
+		"Instruktør: " + session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName() + "\n" +
+		"Adresse: " + address.getZipCode() + " " + address.getCity() + "\n" +
+		address.getStreet() + " " + address.getHouseNumber());
+		
+		optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+		JDialog dialog = optionPane.createDialog(null, "Session oplysninger");
+		dialog.setVisible(true);
 	}
 
 	private void refreshTable() throws SQLException {

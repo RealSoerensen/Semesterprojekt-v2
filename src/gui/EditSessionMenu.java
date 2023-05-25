@@ -45,10 +45,6 @@ public class EditSessionMenu extends JPanel {
 		lblDato.setBounds(180, 47, 91, 26);
 		add(lblDato);
 
-		JLabel lblTime = new JLabel("Tid:");
-		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblTime.setBounds(191, 84, 47, 26);
-		add(lblTime);
 		JLabel lblStartTime = new JLabel("Start tid:");
 		lblStartTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblStartTime.setBounds(180, 84, 91, 26);
