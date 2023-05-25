@@ -29,12 +29,12 @@ public class CreateSessionMenu extends JPanel {
 		setLayout(null);
 
 
-		JLabel lblNewLabel = new JLabel("Dato (YEAR-MM-DD):");
+		JLabel lblNewLabel = new JLabel("Dato:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel.setBounds(158, 45, 137, 19);
 		add(lblNewLabel);
 
-		JLabel lblTime = new JLabel("Start tid(time;min):");
+		JLabel lblTime = new JLabel("Start tid:");
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTime.setBounds(158, 78, 137, 19);
 		add(lblTime);
@@ -43,11 +43,13 @@ public class CreateSessionMenu extends JPanel {
 		textFieldDate.setBounds(322, 45, 156, 21);
 		add(textFieldDate);
 		textFieldDate.setColumns(10);
+		textFieldDate.setText(LocalDate.now().toString());
 
 		textFieldStartTime = new JTextField();
 		textFieldStartTime.setBounds(322, 78, 156, 21);
 		add(textFieldStartTime);
 		textFieldStartTime.setColumns(10);
+		textFieldStartTime.setText(LocalTime.now().getHour() + ":" + LocalTime.now().getMinute());
 
 		JLabel lblInstructr = new JLabel("Instruktør:");
 		lblInstructr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -195,7 +197,7 @@ public class CreateSessionMenu extends JPanel {
 				return;
 			}
 
-			if (date == null || startTime == null || endTime == null) {
+			if (date == null || startTime == null || endTime == null || date.isBefore(LocalDate.now()) || startTime.isAfter(endTime) || startTime.isBefore(LocalTime.now())) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato eller tid er skrevet forkert ind");
 				return;
 			}
@@ -243,8 +245,9 @@ public class CreateSessionMenu extends JPanel {
 		textFieldEndTime.setColumns(10);
 		textFieldEndTime.setBounds(322, 108, 156, 21);
 		add(textFieldEndTime);
+		textFieldEndTime.setText(LocalTime.now().getHour() + ":" + LocalTime.now().getMinute());
 
-		JLabel lblSlutTidtimemin = new JLabel("Slut tid(time;min):");
+		JLabel lblSlutTidtimemin = new JLabel("Slut tid:");
 		lblSlutTidtimemin.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblSlutTidtimemin.setBounds(158, 108, 137, 19);
 		add(lblSlutTidtimemin);

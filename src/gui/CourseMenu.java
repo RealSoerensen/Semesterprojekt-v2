@@ -50,8 +50,14 @@ public class CourseMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
 				return;
 			}
-			if(!courseController.createCourseMember(course, person)) {
-				JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde kursus");
+			if(person.getRole() == 1) {
+				if(!courseController.createCourseMember(course, person)) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde kursus");
+					return;
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde et kursus som en kursist");
 				return;
 			}
 			JOptionPane.showMessageDialog(null, "Kursus er tilmeldt");
@@ -196,7 +202,7 @@ public class CourseMenu extends JPanel {
 					break;
 				}
 			}
-			if(!isEnrolled) {
+			if(!isEnrolled && person.getRole() == 1) {
 				JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt dette kursus");
 				return;
 			}
@@ -211,6 +217,7 @@ public class CourseMenu extends JPanel {
 			if (sessionMenu != null) {
 				mainMenu.mainPanel.add(sessionMenu, "session panel");
 				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+				mainMenu.setLblTitle(course.getName() + " Sessioner");
 			}
 		});
 		btnDeleteCourse.addActionListener(e -> {

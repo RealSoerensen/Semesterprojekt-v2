@@ -222,4 +222,12 @@ public class MainMenu extends JFrame {
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
 	}
+
+	public JLabel getLblTitle() {
+		return lblTitle;
+	}
+	
+	public void setLblTitle(String newTitle) {
+		lblTitle.setText(newTitle);
+	}
 }

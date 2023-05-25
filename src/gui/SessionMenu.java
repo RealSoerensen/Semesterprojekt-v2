@@ -26,7 +26,7 @@ public class SessionMenu extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public SessionMenu(MainMenu mainMenu, Course course) throws SQLException{
+	public SessionMenu(MainMenu mainMenu, Course course) throws SQLException {
 		person = mainMenu.user;
 		this.course = course;
 		setLayout(null);
@@ -53,7 +53,7 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Fejl: Kan ikke åbne Kursus-menu");
 				return;
 			}
-
+			mainMenu.setLblTitle("Kurser");
 			mainMenu.mainPanel.add(courseMenu, "course panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel");
 		});
@@ -67,7 +67,7 @@ public class SessionMenu extends JPanel {
 		panelAdmin.setLayout(null);
 
 		panelAdmin.setVisible(person.getRole() > 2);
-		JButton btnCreateNewSession = new JButton("Opret Session");
+		JButton btnCreateNewSession = new JButton("Opret");
 		btnCreateNewSession.addActionListener(e -> {
 			CreateSessionMenu createSessionMenu;
 			try {
@@ -81,7 +81,7 @@ public class SessionMenu extends JPanel {
 		btnCreateNewSession.setBounds(10, 11, 124, 39);
 		panelAdmin.add(btnCreateNewSession);
 
-		JButton btnEditSession = new JButton("Rediger Session");
+		JButton btnEditSession = new JButton("Rediger");
 		btnEditSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -101,7 +101,7 @@ public class SessionMenu extends JPanel {
 		btnEditSession.setBounds(10, 111, 124, 39);
 		panelAdmin.add(btnEditSession);
 
-		JButton btnDeleteSession = new JButton("Slet Session");
+		JButton btnDeleteSession = new JButton("Slet");
 		btnDeleteSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -134,8 +134,14 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) sessionData[selectedRow][0];
-			if (!courseController.createSessionMember(session, person)) {
-				JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
+			if(person.getRole() == 1) {
+				if (!courseController.createSessionMember(session, person)) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
+					return;
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde en session som en kursist");
 				return;
 			}
 			JOptionPane.showMessageDialog(null, "Tilmeldt session");

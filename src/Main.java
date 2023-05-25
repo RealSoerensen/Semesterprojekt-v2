@@ -113,9 +113,9 @@ public class Main {
 		Address address14 = new Address("9000", "Aalborg", "Papkasse", "3");
 		Address address15 = new Address("9000", "Aalborg", "Papkasse", "3");
 		Address address16 = new Address("9000", "Aalborg", "Papkasse", "3");
-		Session session1 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course1, address11, subject1, LocalTime.of(14, 30), LocalTime.of(16, 30));
-		Session session2 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course2, address12, subject2, LocalTime.of(14, 30), LocalTime.of(16, 30));
-		Session session3 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course3, address13, subject3, LocalTime.of(14, 30), LocalTime.of(16, 30));
+		Session session1 = new Session(LocalDate.of(2023, Month.MAY, 5), person5, course1, address11, subject1, LocalTime.of(14, 30), LocalTime.of(16, 30));
+		Session session2 = new Session(LocalDate.of(2023, Month.MAY, 5), person5, course2, address12, subject2, LocalTime.of(14, 30), LocalTime.of(16, 30));
+		Session session3 = new Session(LocalDate.of(2023, Month.MAY, 5), person5, course3, address13, subject3, LocalTime.of(14, 30), LocalTime.of(16, 30));
 		Session session4 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course4, address14, subject4, LocalTime.of(14, 30), LocalTime.of(16, 30));
 		Session session5 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course5, address15, subject5, LocalTime.of(14, 30), LocalTime.of(16, 30));
 		Session session6 = new Session(LocalDate.of(2023, Month.MAY, 5), person4, course6, address16, subject6, LocalTime.of(14, 30), LocalTime.of(16, 30));
