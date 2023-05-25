@@ -190,7 +190,7 @@ public class AccountManagerMenu extends JPanel {
 					"Email: " + person.getEmail() + "\n" +
 					"Telefon: " + person.getPhoneNumber() + "\n" +
 					"CPR: " + person.getSsn() + "\n" +
-					"Rolletype: " + person.getRole() + "\n" +
+					"Rolle: " + getRole(person.getRole()) + "\n" +
 					"Adresse: " + address.getStreet() + " " + address.getHouseNumber() + "\n" +
 					"Postnummer: " + address.getZipCode() + "\n" +
 					"By: " + address.getCity());
@@ -242,10 +242,10 @@ public class AccountManagerMenu extends JPanel {
 		setButtonsEnabled(false);
 		tabbedPane.addChangeListener(new ChangeListener() {
 	        public void stateChanged(ChangeEvent e) {
-	        	setButtonsEnabled(false);
 	        	memberTable.changeSelection(memberTable.getSelectedRow(), memberTable.getSelectedColumn(), true, false);
 	        	instructorTable.changeSelection(instructorTable.getSelectedRow(), instructorTable.getSelectedColumn(), true, false);
 	        	adminTable.changeSelection(adminTable.getSelectedRow(), adminTable.getSelectedColumn(), true, false);
+	        	setButtonsEnabled(false);
 	        }
 	    });
 	}
@@ -310,5 +310,19 @@ public class AccountManagerMenu extends JPanel {
 		btnChangeRole.setEnabled(enabled);
 		btnEditMember.setEnabled(enabled);
 		btnSeeInfo.setEnabled(enabled);
+	}
+	
+	private String getRole(int role) {
+		String stringRole = null;
+		if(role == 1) {
+			stringRole = "Kursist";
+		}
+		if(role == 2) {
+			stringRole = "Instruktør";
+		}
+		if(role == 3) {
+			stringRole = "Administrator";
+		}
+		return stringRole;
 	}
 }

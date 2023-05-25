@@ -44,7 +44,13 @@ public class EditCourseMenu extends JPanel {
     	JButton btnAccept = new JButton("Accepter ændringer");
     	btnAccept.addActionListener(e -> {
 			String name = textFieldName.getText();
-			double price = Double.parseDouble(textFieldPrice.getText());
+			double price;
+            try {
+            	price = Double.parseDouble(textFieldPrice.getText());
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage());
+                return;
+            }
 			String strStartDate = textFieldStartingDate.getText();
 			String strEndDate = textFieldEndingDate.getText();
 

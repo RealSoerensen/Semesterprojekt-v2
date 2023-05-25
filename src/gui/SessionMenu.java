@@ -222,6 +222,7 @@ public class SessionMenu extends JPanel {
 		btnSessionInfo.setBounds(493, 11, 123, 39);
 		add(btnSessionInfo);
 		
+		mainMenu.setLblTitle(course.getName() + " Sessioner");
 		setButtonsEnabled(false);
 	}
 
