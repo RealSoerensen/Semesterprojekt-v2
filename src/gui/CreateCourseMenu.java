@@ -46,7 +46,7 @@ public class CreateCourseMenu extends JPanel {
         add(txtCoursePrice);
         txtCoursePrice.setColumns(10);
 
-        JLabel lblCourseStartDate = new JLabel("Start Dato (YEAR-MM-DD))");
+        JLabel lblCourseStartDate = new JLabel("Start Dato");
         lblCourseStartDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblCourseStartDate.setBounds(325, 182, 221, 20);
         add(lblCourseStartDate);
@@ -55,8 +55,9 @@ public class CreateCourseMenu extends JPanel {
         txtCourseStartDate.setBounds(325, 215, 269, 20);
         add(txtCourseStartDate);
         txtCourseStartDate.setColumns(10);
+        txtCourseStartDate.setText(LocalDate.now().toString());
 
-        JLabel lblCourseEndDate = new JLabel("Slut Dato (YEAR-MM-DD)");
+        JLabel lblCourseEndDate = new JLabel("Slut Dato");
         lblCourseEndDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblCourseEndDate.setBounds(325, 245, 221, 20);
         add(lblCourseEndDate);
@@ -65,6 +66,7 @@ public class CreateCourseMenu extends JPanel {
         txtCourseEndDate.setBounds(325, 276, 269, 20);
         add(txtCourseEndDate);
         txtCourseEndDate.setColumns(10);
+        txtCourseEndDate.setText(LocalDate.now().toString());
 
         JButton btnBack = new JButton();
         btnBack.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel"));
@@ -116,7 +118,7 @@ public class CreateCourseMenu extends JPanel {
                 JOptionPane.showMessageDialog(null, e2);
                 return;
             }
-            if(endDate == null || startDate == null || startDate.isAfter(endDate)) {
+            if(endDate == null || startDate == null || startDate.isAfter(endDate) || startDate.isBefore(LocalDate.now())) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 			}
             else {

@@ -73,7 +73,7 @@ public class EditCourseMenu extends JPanel {
 				return;
 			}
             
-            if(endDate == null || startDate == null || startDate.isAfter(endDate)) {
+            if(endDate == null || startDate == null || startDate.isAfter(endDate) || startDate.isBefore(LocalDate.now())) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
 			}
             else {
@@ -96,6 +96,7 @@ public class EditCourseMenu extends JPanel {
 					JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
 					return;
 				}
+
 	
 				mainMenu.mainPanel.add(courseMenu, "CourseMenu");
 				mainMenu.cardLayout.show(mainMenu.mainPanel, "CourseMenu");
@@ -121,12 +122,12 @@ public class EditCourseMenu extends JPanel {
     	lblPrice.setBounds(179, 247, 72, 14);
     	add(lblPrice);
     	
-    	JLabel lblEndingDate = new JLabel("Slut Dato (YEAR-MM-DD):");
+    	JLabel lblEndingDate = new JLabel("Slut Dato:");
     	lblEndingDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
     	lblEndingDate.setBounds(179, 343, 72, 14);
     	add(lblEndingDate);
     	
-    	JLabel lblStartingDate = new JLabel("Starts dato (YEAR-MM-DD):");
+    	JLabel lblStartingDate = new JLabel("Starts dato:");
     	lblStartingDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
     	lblStartingDate.setBounds(179, 297, 82, 14);
     	add(lblStartingDate);
