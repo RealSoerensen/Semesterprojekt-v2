@@ -11,7 +11,6 @@ import model.*;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-
 		new DBUtils().resetDB();
 		//Create members, instructors and administrators
 		PersonController personController = new PersonController();

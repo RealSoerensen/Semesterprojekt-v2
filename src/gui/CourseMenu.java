@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -160,38 +161,6 @@ public class CourseMenu extends JPanel {
 		panelAdmin.add(btnCreateCourse);
 
 		btnDeleteCourse = new JButton("Slet");
-		btnDeleteCourse.addActionListener(e -> {
-			int selectedRow = table.getSelectedRow();
-			if (selectedRow == -1) {
-				JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
-				return;
-			}
-			Course course = (Course) courseData[selectedRow][0];
-			if (course == null) {
-				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
-				return;
-			}
-
-			boolean isDeleted;
-
-			try {
-				isDeleted = courseController.removeCourse(course);
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke slette kursus");
-				return;
-			}
-
-			if(!isDeleted) {
-				JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
-				return;
-			}
-			JOptionPane.showMessageDialog(null, "Kursus er slettet");
-			try {
-				refreshTable();
-			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
-			}
-		});
 		btnDeleteCourse.setBounds(0, 131, 110, 48);
 		panelAdmin.add(btnDeleteCourse);
 		
@@ -207,6 +176,7 @@ public class CourseMenu extends JPanel {
 			displaySessions(mainMenu);
 		});
 		btnDeleteCourse.addActionListener(e -> {
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
@@ -217,7 +187,6 @@ public class CourseMenu extends JPanel {
 				int result = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil slette dette kursus?", "Slet Kursus", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					courseController.removeCourse(course);
-					JOptionPane.showMessageDialog(null, "Kursus slettet");
 					try {
 						refreshTable();
 					} catch (SQLException ex) {
@@ -227,6 +196,7 @@ public class CourseMenu extends JPanel {
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		
 		table.addMouseListener(new MouseAdapter() {
@@ -241,6 +211,7 @@ public class CourseMenu extends JPanel {
 	}
 	
 	private void displaySessions(MainMenu mainMenu) {
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow == -1) {
 			JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");

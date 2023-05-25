@@ -6,6 +6,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -18,6 +21,7 @@ import javax.swing.table.TableColumnModel;
 import controller.PersonController;
 import model.Address;
 import model.Person;
+import model.Session;
 
 public class AccountManagerMenu extends JPanel {
 
@@ -183,21 +187,7 @@ public class AccountManagerMenu extends JPanel {
 				return;
 			}
 
-			Address address = person.getAddress();
-			JOptionPane optionPane = new JOptionPane();
-			optionPane.setMessage("Navn: " + person.getFirstName() + "\n" +
-					"Efternavn: " + person.getLastName() + "\n" +
-					"Email: " + person.getEmail() + "\n" +
-					"Telefon: " + person.getPhoneNumber() + "\n" +
-					"CPR: " + person.getSsn() + "\n" +
-					"Rolle: " + getRole(person.getRole()) + "\n" +
-					"Adresse: " + address.getStreet() + " " + address.getHouseNumber() + "\n" +
-					"Postnummer: " + address.getZipCode() + "\n" +
-					"By: " + address.getCity());
-			optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-
-			JDialog dialog = optionPane.createDialog(null, "Kursist oplysninger");
-			dialog.setVisible(true);
+			displayPersonInfo(person);
 
 		});
 
@@ -214,6 +204,7 @@ public class AccountManagerMenu extends JPanel {
 		});
 
 		btnDeleteMembers.addActionListener(e -> {
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Person person = getSelectedPerson(tabbedPane);
 			if (person == null) {
 				JOptionPane.showMessageDialog(null, "Vælg en bruger fra tabellen");
@@ -238,16 +229,79 @@ public class AccountManagerMenu extends JPanel {
 					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under opdatering af tabellen");
 				}
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		setButtonsEnabled(false);
-		tabbedPane.addChangeListener(new ChangeListener() {
-	        public void stateChanged(ChangeEvent e) {
-	        	memberTable.changeSelection(memberTable.getSelectedRow(), memberTable.getSelectedColumn(), true, false);
-	        	instructorTable.changeSelection(instructorTable.getSelectedRow(), instructorTable.getSelectedColumn(), true, false);
-	        	adminTable.changeSelection(adminTable.getSelectedRow(), adminTable.getSelectedColumn(), true, false);
-	        	setButtonsEnabled(false);
-	        }
+		tabbedPane.addChangeListener(e -> {
+			memberTable.changeSelection(memberTable.getSelectedRow(), memberTable.getSelectedColumn(), true, false);
+			instructorTable.changeSelection(instructorTable.getSelectedRow(), instructorTable.getSelectedColumn(), true, false);
+			adminTable.changeSelection(adminTable.getSelectedRow(), adminTable.getSelectedColumn(), true, false);
+			setButtonsEnabled(false);
+		});
+		
+		adminTable.addMouseListener(new MouseAdapter() {
+	         public void mouseClicked(MouseEvent me) {
+	        	 if (me.getClickCount() == 2) {
+	               	 Person person = null;
+	               	 try {
+	               		 person = (Person) adminData[adminTable.getSelectedRow()][0];
+	               	 } catch(Exception e) {
+	               		 e.printStackTrace();
+	               	 }
+	               	 if(person != null) {
+	               		 displayPersonInfo(person);
+	               	 }
+	             }
+	         }
 	    });
+		instructorTable.addMouseListener(new MouseAdapter() {
+	         public void mouseClicked(MouseEvent me) {
+	        	 if (me.getClickCount() == 2) {
+	               	 Person person = null;
+	               	 try {
+	               		 person = (Person) instructorData[instructorTable.getSelectedRow()][0];
+	               	 } catch(Exception e) {
+	               		 e.printStackTrace();
+	               	 }
+	               	 if(person != null) {
+	               		 displayPersonInfo(person);
+	               	 }
+	             }
+	         }
+	    });
+		memberTable.addMouseListener(new MouseAdapter() {
+	         public void mouseClicked(MouseEvent me) {
+	        	 if (me.getClickCount() == 2) {
+	               	 Person person = null;
+	               	 try {
+	               		 person = (Person) memberData[memberTable.getSelectedRow()][0];
+	               	 } catch(Exception e) {
+	               		 e.printStackTrace();
+	               	 }
+	               	 if(person != null) {
+	               		 displayPersonInfo(person);
+	               	 }
+	             }
+	         }
+	    });
+	}
+	
+	private void displayPersonInfo(Person person) {
+		Address address = person.getAddress();
+		JOptionPane optionPane = new JOptionPane();
+		optionPane.setMessage("Navn: " + person.getFirstName() + "\n" +
+				"Efternavn: " + person.getLastName() + "\n" +
+				"Email: " + person.getEmail() + "\n" +
+				"Telefon: " + person.getPhoneNumber() + "\n" +
+				"CPR: " + person.getSsn() + "\n" +
+				"Rolle: " + getRole(person.getRole()) + "\n" +
+				"Adresse: " + address.getStreet() + " " + address.getHouseNumber() + "\n" +
+				"Postnummer: " + address.getZipCode() + "\n" +
+				"By: " + address.getCity());
+		optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+
+		JDialog dialog = optionPane.createDialog(null, "Kursist oplysninger");
+		dialog.setVisible(true);
 	}
 
 	private Person getSelectedPerson(JTabbedPane tabbedPane) {
