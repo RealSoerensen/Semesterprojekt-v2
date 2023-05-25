@@ -6,6 +6,8 @@ import model.Course;
 import model.Person;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -17,6 +19,11 @@ public class CourseMenu extends JPanel {
 	private Object[][] courseData;
 	private final CourseController courseController = new CourseController();
 	private final Person person = LoginController.getInstance().getPerson();
+	private JButton btnEnrollCourse;
+	private JButton btnLeaveCourse;
+	private JButton btnEditCourse;
+	private JButton btnDeleteCourse;
+	private JButton btnViewSessions;
 
 	/**
 	 * Create the panel.
@@ -35,10 +42,16 @@ public class CourseMenu extends JPanel {
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 		}
+		
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            setButtonsEnabled(true);
+	        }
+	    });
 
 		scrollPaneCourses.setViewportView(table);
 
-		JButton btnEnrollCourse = new JButton("Tilmeld");
+		btnEnrollCourse = new JButton("Tilmeld");
 		btnEnrollCourse.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -64,7 +77,7 @@ public class CourseMenu extends JPanel {
 		btnEnrollCourse.setBounds(506, 11, 110, 48);
 		add(btnEnrollCourse);
 
-		JButton btnLeaveCourse = new JButton("Frameld");
+		btnLeaveCourse = new JButton("Frameld");
 		btnLeaveCourse.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -102,7 +115,7 @@ public class CourseMenu extends JPanel {
 		panelAdmin.setLayout(null);
 		panelAdmin.setVisible(LoginController.getInstance().getPerson().getRole() > 2);
 
-		JButton btnEditCourse = new JButton("Rediger");
+		btnEditCourse = new JButton("Rediger");
 		btnEditCourse.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -134,10 +147,10 @@ public class CourseMenu extends JPanel {
 			mainMenu.mainPanel.add(createCourseMenu, "create course panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "create course panel");
 		});
-		btnCreateCourse.setBounds(0, 0, 110, 50);
+		btnCreateCourse.setBounds(0, 12, 110, 50);
 		panelAdmin.add(btnCreateCourse);
 
-		JButton btnDeleteCourse = new JButton("Slet");
+		btnDeleteCourse = new JButton("Slet");
 		btnDeleteCourse.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -170,7 +183,7 @@ public class CourseMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 			}
 		});
-		btnDeleteCourse.setBounds(0, 132, 110, 48);
+		btnDeleteCourse.setBounds(0, 131, 110, 48);
 		panelAdmin.add(btnDeleteCourse);
 		
 		JPanel panelSession = new JPanel();
@@ -178,7 +191,7 @@ public class CourseMenu extends JPanel {
 		add(panelSession);
 		panelSession.setLayout(null);
 
-		JButton btnViewSessions = new JButton("Se Sessioner");
+		btnViewSessions = new JButton("Se Sessioner");
 		btnViewSessions.setBounds(0, 0, 110, 44);
 		panelSession.add(btnViewSessions);
 		btnViewSessions.addActionListener(e -> {
@@ -196,7 +209,7 @@ public class CourseMenu extends JPanel {
 					break;
 				}
 			}
-			if(!isEnrolled) {
+			if(!isEnrolled && person.getRole() == 1) {
 				JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt dette kursus");
 				return;
 			}
@@ -236,6 +249,7 @@ public class CourseMenu extends JPanel {
 			}
 		});
 		
+		setButtonsEnabled(false);
 	}
 
 	private void refreshTable() throws SQLException {
@@ -284,5 +298,13 @@ public class CourseMenu extends JPanel {
 			}
 		}
 		return result;
+	}
+	
+	private void setButtonsEnabled(boolean enabled) {
+		btnEnrollCourse.setEnabled(enabled);
+		btnLeaveCourse.setEnabled(enabled);
+		btnEditCourse.setEnabled(enabled);
+		btnDeleteCourse.setEnabled(enabled);
+		btnViewSessions.setEnabled(enabled);
 	}
 }
