@@ -121,7 +121,7 @@ public class EditAccountMenu extends JPanel {
 			if (isEditedFromAccountMenu) {
 				mainMenu.switchPanelToAccountMenu();
 			} else {
-				mainMenu.switchPanelToAccountManagerMenu();
+				mainMenu.switchPanelToAccountManagerMenu(this);
 			}
 		});
 		btnDoneEditInfo.setBounds(473, 452, 143, 52);
@@ -157,7 +157,7 @@ public class EditAccountMenu extends JPanel {
 			if (isEditedFromAccountMenu) {
 				mainMenu.switchPanelToAccountMenu();
 			} else {
-				mainMenu.switchPanelToAccountManagerMenu();
+				mainMenu.switchPanelToAccountManagerMenu(this);
 			}
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 15));

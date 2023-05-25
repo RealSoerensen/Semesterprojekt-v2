@@ -76,6 +76,7 @@ public class CreateCourseMenu extends JPanel {
 
         JButton btnCreateCourse = new JButton();
         btnCreateCourse.addActionListener(e -> {
+        	setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             String name = txtCourseName.getText();
             String description = txtCourseDescription.getText();
             String stringPrice = txtCoursePrice.getText();
