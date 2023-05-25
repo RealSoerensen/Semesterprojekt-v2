@@ -9,6 +9,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -195,37 +198,7 @@ public class CourseMenu extends JPanel {
 		btnViewSessions.setBounds(0, 0, 110, 44);
 		panelSession.add(btnViewSessions);
 		btnViewSessions.addActionListener(e -> {
-			int selectedRow = table.getSelectedRow();
-			if (selectedRow == -1) {
-				JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
-				return;
-			}
-			Course course = (Course) courseData[selectedRow][0];
-			List<Person> courseMembers = courseController.getAllCourseMembers(course);
-			boolean isEnrolled = false;
-			for(Person p : courseMembers) {
-				if(p.getSsn() == person.getSsn()) {
-					isEnrolled = true;
-					break;
-				}
-			}
-			if(!isEnrolled && person.getRole() == 1) {
-				JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt dette kursus");
-				return;
-			}
-
-			SessionMenu sessionMenu = null;
-			try {
-				sessionMenu = new SessionMenu(mainMenu, course);
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
-
-			if (sessionMenu != null) {
-				mainMenu.mainPanel.add(sessionMenu, "session panel");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
-				mainMenu.setLblTitle(course.getName() + " Sessioner");
-			}
+			displaySessions(mainMenu);
 		});
 		btnDeleteCourse.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
@@ -250,7 +223,49 @@ public class CourseMenu extends JPanel {
 			}
 		});
 		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent me) {
+	        	if (me.getClickCount() == 2) {
+	        		displaySessions(mainMenu);
+	        	}
+	        }
+	     });
+		
 		setButtonsEnabled(false);
+	}
+	
+	private void displaySessions(MainMenu mainMenu) {
+		int selectedRow = table.getSelectedRow();
+		if (selectedRow == -1) {
+			JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
+			return;
+		}
+		Course course = (Course) courseData[selectedRow][0];
+		List<Person> courseMembers = courseController.getAllCourseMembers(course);
+		boolean isEnrolled = false;
+		for(Person p : courseMembers) {
+			if(p.getSsn() == person.getSsn()) {
+				isEnrolled = true;
+				break;
+			}
+		}
+		if(!isEnrolled && person.getRole() == 1) {
+			JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt dette kursus");
+			return;
+		}
+
+		SessionMenu sessionMenu = null;
+		try {
+			sessionMenu = new SessionMenu(mainMenu, course);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		if (sessionMenu != null) {
+			mainMenu.mainPanel.add(sessionMenu, "session panel");
+			mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+			mainMenu.setLblTitle(course.getName() + " Sessioner");
+		}
 	}
 
 	private void refreshTable() throws SQLException {
