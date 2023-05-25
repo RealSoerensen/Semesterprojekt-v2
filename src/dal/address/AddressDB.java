@@ -25,7 +25,6 @@ public class AddressDB implements AddressDataAccessIF {
      */
     @Override
     public Address create(Address obj) throws SQLException {
-        Address address = null;
         String sql = " INSERT INTO address (street, city, zipCode, houseNumber) VALUES (?, ?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, obj.getStreet());
@@ -35,16 +34,10 @@ public class AddressDB implements AddressDataAccessIF {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                address = new Address(
-                        rs.getLong(1),
-                        obj.getZipCode(),
-                        obj.getCity(),
-                        obj.getStreet(),
-                        obj.getHouseNumber()
-                );
+                obj.setAddressID(rs.getLong(1));
             }
         }
-        return address;
+        return obj;
     }
 
     /**
@@ -139,30 +132,5 @@ public class AddressDB implements AddressDataAccessIF {
             e.printStackTrace();
         }
         return result;
-    }
-
-    /**
-     * Creates a new Address in the database and returns the id of the newly created Address.
-     *
-     * @param address The Address to be created.
-     * @return The id of the newly created Address.
-     */
-    public long createAddressAndGetID(Address address) {
-        long id = 0;
-        String sql = " INSERT INTO address (street, city, zipCode, houseNumber) VALUES (?, ?, ?, ?) ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, address.getStreet());
-            stmt.setString(2, address.getCity());
-            stmt.setString(3, address.getZipCode());
-            stmt.setString(4, address.getHouseNumber());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                id = rs.getLong(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
     }
 }

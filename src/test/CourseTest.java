@@ -38,7 +38,12 @@ public class CourseTest {
         Course course = new Course("Test Name", 20.00, "Test Description", LocalDate.of(2023, Month.MAY, 5), LocalDate.of(2024, Month.MAY, 5));
 
         //Act
-        Course result = courseController.createCourse(course);
+        Course result;
+        try {
+            result = courseController.createCourse(course);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         //Assert
         assertNotNull(result);

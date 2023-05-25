@@ -16,17 +16,15 @@ public class InstructorSubjectDB implements InstructorSubjectDataAccessIF{
 
 
     @Override
-    public boolean create(Person person, Subject subject) {
-        boolean result;
+    public void create(Person person, Subject subject) {
         String sql = "INSERT INTO InstructorSubject (ssn, subjectid) VALUES (?, ?)";
         try (var stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, person.getSsn());
             stmt.setLong(2, subject.getSubjectID());
-            result = stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return result;
     }
 
     @Override

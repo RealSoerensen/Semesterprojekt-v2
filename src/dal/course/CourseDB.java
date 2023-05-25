@@ -3,11 +3,7 @@ package dal.course;
 import dal.DBConnection;
 import model.Course;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +25,9 @@ public class CourseDB implements CourseDataAccessIF {
      */
     @Override
     public Course create(Course obj) {
-        Course course = null;
         String sql = " INSERT INTO course(name, price, description, startDate, endDate) " +
                 " VALUES(?, ?, ?, ?, ?) ";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try(PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, obj.getName());
             stmt.setDouble(2, obj.getPrice());
             stmt.setString(3, obj.getDescription());
@@ -41,19 +36,12 @@ public class CourseDB implements CourseDataAccessIF {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                course = new Course(
-                        rs.getLong(1),
-                        obj.getName(),
-                        obj.getPrice(),
-                        obj.getDescription(),
-                        obj.getStartDate(),
-                        obj.getEndDate()
-                );
+                obj.setCourseID(rs.getLong(1));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return course;
+        return obj;
     }
 
     /**
@@ -150,37 +138,5 @@ public class CourseDB implements CourseDataAccessIF {
             e.printStackTrace();
         }
         return result;
-    }
-
-    @Override
-    public void deleteAll() {
-        String sql = " DELETE FROM course WHERE courseID > 0 ";
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public long createCourseAndGetID(Course course) {
-        long id = -1;
-        String sql = " INSERT INTO course(name, price, description, startDate, endDate) " +
-                " VALUES(?, ?, ?, ?, ?) ";
-        try(PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, course.getName());
-            stmt.setDouble(2, course.getPrice());
-            stmt.setString(3, course.getDescription());
-            stmt.setDate(4, Date.valueOf(course.getStartDate()));
-            stmt.setDate(5, Date.valueOf(course.getEndDate()));
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                id = rs.getLong(1);
-            }
-        } catch (SQLException ignored) {
-
-        }
-        return id;
     }
 }

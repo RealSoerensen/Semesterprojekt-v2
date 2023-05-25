@@ -105,14 +105,4 @@ public class CourseContainer implements CourseDataAccessIF{
         }
         return result;
     }
-
-    @Override
-    public void deleteAll() {
-        container.clear();
-    }
-
-    @Override
-    public long createCourseAndGetID(Course course) {
-        return 0;
-    }
 }

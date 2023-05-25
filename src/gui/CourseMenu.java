@@ -6,8 +6,6 @@ import model.Course;
 import model.Person;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -22,11 +20,11 @@ public class CourseMenu extends JPanel {
 	private Object[][] courseData;
 	private final CourseController courseController = new CourseController();
 	private final Person person = LoginController.getInstance().getPerson();
-	private JButton btnEnrollCourse;
-	private JButton btnLeaveCourse;
-	private JButton btnEditCourse;
-	private JButton btnDeleteCourse;
-	private JButton btnViewSessions;
+	private final JButton btnEnrollCourse;
+	private final JButton btnLeaveCourse;
+	private final JButton btnEditCourse;
+	private final JButton btnDeleteCourse;
+	private final JButton btnViewSessions;
 
 	/**
 	 * Create the panel.
@@ -46,11 +44,7 @@ public class CourseMenu extends JPanel {
 			JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 		}
 		
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	            setButtonsEnabled(true);
-	        }
-	    });
+		table.getSelectionModel().addListSelectionListener(event -> setButtonsEnabled(true));
 
 		scrollPaneCourses.setViewportView(table);
 

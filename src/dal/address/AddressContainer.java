@@ -100,10 +100,4 @@ public class AddressContainer implements AddressDataAccessIF{
         }
         return result;
     }
-
-    @Override
-    public long createAddressAndGetID(Address address) {
-        create(address);
-        return address.getAddressID();
-    }
 }

@@ -3,8 +3,6 @@ package gui;
 import model.*;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -26,11 +24,11 @@ public class SessionMenu extends JPanel {
 	private final CourseController courseController = new CourseController();
 	private final Person person;
 	private final Course course;
-	private JButton btnDeleteSession;
-	private JButton btnJoinSession;
-	private JButton btnSessionInfo;
-	private JButton btnLeaveSession;
-	private JButton btnEditSession;
+	private final JButton btnDeleteSession;
+	private final JButton btnJoinSession;
+	private final JButton btnSessionInfo;
+	private final JButton btnLeaveSession;
+	private final JButton btnEditSession;
 
 	/**
 	 * Create the frame.
@@ -46,12 +44,8 @@ public class SessionMenu extends JPanel {
 		add(scrollPaneCourses);
 
 		table = new JTable();
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	            setButtonsEnabled(true);
-	        }
-	    });
-		
+		table.getSelectionModel().addListSelectionListener(event -> setButtonsEnabled(true));
+
 		try {
 			refreshTable();
 		} catch (SQLException e) {
@@ -149,13 +143,12 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) sessionData[selectedRow][0];
-			if(person.getRole() == 1) {
+			if (person.getRole() == 1) {
 				if (!courseController.createSessionMember(session, person)) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
 					return;
 				}
-			}
-			else {
+			} else {
 				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde en session som en kursist");
 				return;
 			}
@@ -177,7 +170,7 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) sessionData[selectedRow][0];
-			if (!courseController.removeSessionMember(session, person)) {
+			if (!markAbsent(session)) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke melde afbud");
 				return;
 			}
@@ -190,40 +183,37 @@ public class SessionMenu extends JPanel {
 		});
 		btnLeaveSession.setBounds(493, 111, 123, 39);
 		add(btnLeaveSession);
-		
+
 		btnSessionInfo = new JButton("Session Info");
-		btnSessionInfo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Session session = (Session) sessionData[table.getSelectedRow()][0];
+		btnSessionInfo.addActionListener(e -> {
+			Session session = (Session) sessionData[table.getSelectedRow()][0];
 
-				if (session == null) {
-					JOptionPane.showMessageDialog(null, "Vælg en session at se informationer om");
-					return;
-				}
-
-				Address address = session.getAddress();
-				JOptionPane optionPane = new JOptionPane();
-				optionPane.setMessage("Session informationer:\n" +
-								"Fag: " + session.getSubject().getName() + "\n" +
-								"Beskrivelse: " + session.getSubject().getDescription() + "\n" +
-								"Start dato: " + session.getDate() + "\n" +
-								"Fra: " + session.getStartTime() + "\n" +
-								"Til: " + session.getEndTime() + "\n" +
-								"Instruktør: " + session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName() + "\n" +
-								"Adresse: " + address.getZipCode() + " " + address.getCity() + "\n" +
-								address.getStreet() + " " + address.getHouseNumber()
-				);
-
-
-				optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-
-				JDialog dialog = optionPane.createDialog(null, "Session oplysninger");
-				dialog.setVisible(true);
+			if (session == null) {
+				JOptionPane.showMessageDialog(null, "Vælg en session at se informationer om");
+				return;
 			}
+
+			Address address = session.getAddress();
+			JOptionPane optionPane = new JOptionPane();
+			optionPane.setMessage("Session informationer:\n" +
+					"Fag: " + session.getSubject().getName() + "\n" +
+					"Beskrivelse: " + session.getSubject().getDescription() + "\n" +
+					"Start dato: " + session.getDate() + "\n" +
+					"Fra: " + session.getStartTime() + "\n" +
+					"Til: " + session.getEndTime() + "\n" +
+					"Instruktør: " + session.getInstructor().getFirstName() + " "
+					+ session.getInstructor().getLastName() + "\n" +
+					"Adresse: " + address.getZipCode() + " " + address.getCity() + "\n" +
+					address.getStreet() + " " + address.getHouseNumber());
+
+			optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+
+			JDialog dialog = optionPane.createDialog(null, "Session oplysninger");
+			dialog.setVisible(true);
 		});
 		btnSessionInfo.setBounds(493, 11, 123, 39);
 		add(btnSessionInfo);
-		
+
 		mainMenu.setLblTitle(course.getName() + " Sessioner");
 		setButtonsEnabled(false);
 		
@@ -296,38 +286,41 @@ public class SessionMenu extends JPanel {
 		columnModel.removeColumn(column);
 	}
 
-	private void createNewSubjectPopup(){
-		JTextField textFieldName = new JTextField(10);
-		JTextArea textFieldDescription = new JTextArea();
-		textFieldDescription.setColumns(10);
-		textFieldDescription.setRows(10);
+	private void createNewSubjectPopup() {
+		// Create a JPanel to hold the components
 		JPanel panel = new JPanel(new GridBagLayout());
-		panel.setBounds(10, 11, 414, 143);
-		add(panel);
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(5, 5, 5, 5);
+		// Create GridBagConstraints for component positioning
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.weightx = 1.0;
 
-		panel.add(new JLabel("Navn:"), gbc);
+		// Create a JTextField for "Navn"
+		JTextField nameField = new JTextField(20);
+		panel.add(new JLabel("Navn:"), constraints);
 
-		gbc.gridx = 1;
-		panel.add(textFieldName, gbc);
+		constraints.gridy = 1;
+		panel.add(nameField, constraints);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		panel.add(new JLabel("Beskrivelse:"), gbc);
+		// Create a JTextArea for "Beskrivelse"
+		JTextArea descriptionArea = new JTextArea(5, 20);
+		descriptionArea.setLineWrap(true);
+		descriptionArea.setWrapStyleWord(true);
+		JScrollPane scrollPane = new JScrollPane(descriptionArea);
+		constraints.gridy = 2;
+		panel.add(new JLabel("Beskrivelse:"), constraints);
 
-		gbc.gridx = 1;
-		panel.add(textFieldDescription, gbc);
+		constraints.gridy = 3;
+		panel.add(scrollPane, constraints);
+
 		int result = JOptionPane.showConfirmDialog(null, panel,
 				"Nyt fag", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			Subject subject = new Subject(textFieldName.getText(), textFieldDescription.getText());
+			Subject subject = new Subject(nameField.getText(), descriptionArea.getText());
 			try {
-				if(courseController.createSubject(subject) == null) {
+				if (courseController.createSubject(subject) == null) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke oprette fag");
 					return;
 				}
@@ -343,15 +336,19 @@ public class SessionMenu extends JPanel {
 	private String isEnrolled(Course course, Session session) throws SQLException {
 		String result = "Nej";
 		List<Session> enrolledSessions = courseController.getEnrolledSessions(person, course);
-		for(Session enrolledSession : enrolledSessions) {
-			if(enrolledSession.getSessionID() == session.getSessionID()){
+		for (Session enrolledSession : enrolledSessions) {
+			if (enrolledSession.getSessionID() == session.getSessionID()) {
 				result = "Ja";
 				break;
 			}
 		}
 		return result;
 	}
-	
+
+	private boolean markAbsent(Session session) {
+		return courseController.removeSessionMember(session, person);
+	}
+
 	private void setButtonsEnabled(boolean enabled) {
 		btnDeleteSession.setEnabled(enabled);
 		btnEditSession.setEnabled(enabled);
