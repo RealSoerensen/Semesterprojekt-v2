@@ -1,7 +1,6 @@
 package dal.session;
 
 import dal.CRUD;
-import model.Address;
 import model.Course;
 import model.Person;
 import model.Session;

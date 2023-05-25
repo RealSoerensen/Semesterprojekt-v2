@@ -63,15 +63,15 @@ public class PersonController {
 		return addressDB.delete(person.getAddress());
 	}
 
-	public List<Person> getAllMembers() throws SQLException {
+	public List<Person> getAllMembers() {
 		return personDB.getAllMembers();
 	}
 
-    public List<Person> getAllInstructors() throws SQLException {
+    public List<Person> getAllInstructors() {
 		return personDB.getAllInstructors();
     }
 
-	public List<Person> getAllAdmins() throws SQLException{
+	public List<Person> getAllAdmins() {
 		return personDB.getAllAdmins();
 	}
 
