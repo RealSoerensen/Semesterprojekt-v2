@@ -55,6 +55,7 @@ public class SessionMenu extends JPanel {
 
 		JButton btnBack = new JButton("Tilbage");
 		btnBack.addActionListener(e -> {
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			CourseMenu courseMenu;
 			try {
 				courseMenu = new CourseMenu(mainMenu);

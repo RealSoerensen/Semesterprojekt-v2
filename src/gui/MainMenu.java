@@ -50,6 +50,7 @@ public class MainMenu extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 829, 670);
 		JPanel contentPanel = new JPanel();
+		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPanel);
@@ -76,7 +77,7 @@ public class MainMenu extends JFrame {
 		menuPanel.setLayout(null);
 
 		JButton btnCourses = new JButton("Kurser");
-		btnCourses.addActionListener(e -> switchPanelToCourseMenu());
+		btnCourses.addActionListener(e -> switchPanelToCourseMenu(contentPanel));
 		btnCourses.setBounds(10, 86, 144, 37);
 		menuPanel.add(btnCourses);
 
@@ -161,7 +162,7 @@ public class MainMenu extends JFrame {
 		panelMainWindowAdmin.setVisible(user.getRole() > 2);
 
 		JButton btnAccounts = new JButton("Alle Konti");
-		btnAccounts.addActionListener(e -> switchPanelToAccountManagerMenu());
+		btnAccounts.addActionListener(e -> switchPanelToAccountManagerMenu(contentPanel));
 		btnAccounts.setBounds(10, 39, 144, 37);
 		panelMainWindowAdmin.add(btnAccounts);
 
@@ -185,12 +186,12 @@ public class MainMenu extends JFrame {
 		mainPanel.setLayout(cardLayout);
 		mainPanel.add(new JPanel());
 
-		switchPanelToCourseMenu();
+		switchPanelToCourseMenu(contentPanel);
 	}
 
-	public void switchPanelToCourseMenu() {
+	public void switchPanelToCourseMenu(JPanel contentPanel) {
 		lblTitle.setText("Kurser");
-
+		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		CourseMenu courseMenu;
 		try {
 			courseMenu = new CourseMenu(this);
@@ -201,6 +202,7 @@ public class MainMenu extends JFrame {
 
 		mainPanel.add(courseMenu, COURSE_PANEL);
 		cardLayout.show(mainPanel, COURSE_PANEL);
+		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void switchPanelToAccountMenu() {
@@ -210,7 +212,8 @@ public class MainMenu extends JFrame {
 		cardLayout.show(mainPanel, ACCOUNT_PANEL);
 	}
 
-	public void switchPanelToAccountManagerMenu() {
+	public void switchPanelToAccountManagerMenu(JPanel contentPanel) {
+		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		lblTitle.setText("Alle Konti");
 		AccountManagerMenu accountManagerMenu;
 		try {
@@ -221,6 +224,7 @@ public class MainMenu extends JFrame {
 		}
 		mainPanel.add(accountManagerMenu, ACCOUNT_MANAGER_PANEL);
 		cardLayout.show(mainPanel, ACCOUNT_MANAGER_PANEL);
+		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public JLabel getLblTitle() {

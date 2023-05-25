@@ -7,6 +7,7 @@ import controller.LoginController;
 import controller.PersonController;
 import model.Person;
 
+import java.awt.Cursor;
 import java.awt.Font;
 import java.sql.SQLException;
 
@@ -82,6 +83,7 @@ public class LoginMenu extends JFrame {
 	}
 
 	private void logIn() {
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		long ssn = Long.parseLong(textFieldUsername.getText());
 		String password = new String(passwordField.getPassword());
 		Person person;
@@ -93,7 +95,7 @@ public class LoginMenu extends JFrame {
 		}
 
 		LoginController.getInstance().setLoggedInPerson(person);
-		dispose();
 		new MainMenu().run();
+		dispose();
 	}
 }
