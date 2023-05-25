@@ -320,6 +320,10 @@ public class SessionMenu extends JPanel {
 		return result;
 	}
 
+	private boolean markAbsent(Session session) {
+		return courseController.removeSessionMember(session, person);
+	}
+
 	private void setButtonsEnabled(boolean enabled) {
 		btnDeleteSession.setEnabled(enabled);
 		btnEditSession.setEnabled(enabled);
