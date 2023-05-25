@@ -81,7 +81,7 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
     }
 
     @Override
-    public boolean removeAll(Course course) {
+    public void removeAll(Course course) {
         boolean result = false;
         for(int i = 0; i < container.size() && !result; i++) {
             CourseMember courseMember = container.get(i);
@@ -90,7 +90,6 @@ public class CourseMemberContainer implements CourseMemberDataAccessIF{
                 result = true;
             }
         }
-        return result;
     }
 }
 

@@ -112,10 +112,6 @@ public class SessionContainer implements SessionDataAccessIF {
         return result;
     }
 
-    @Override
-    public void deleteAll() {
-        container.clear();
-    }
 
     @Override
     public List<Session> getEnrolledSessions(Person person, Course course) {
@@ -127,10 +123,5 @@ public class SessionContainer implements SessionDataAccessIF {
             }
         }
         return sessions;
-    }
-
-    @Override
-    public long createAddressAndGetID(Address address) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

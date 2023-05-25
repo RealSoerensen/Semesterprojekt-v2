@@ -22,14 +22,12 @@ public class InstructorSubjectContainer implements InstructorSubjectDataAccessIF
     }
 
     @Override
-    public boolean create(Person person, Subject subject) {
+    public void create(Person person, Subject subject) {
         boolean result = false;
         InstructorSubject newInstructorSubject = new InstructorSubject(person, subject);
         if(!isPersonIn(person, subject)) {
             container.add(newInstructorSubject);
-            result = true;
         }
-        return result;
     }
 
     @Override

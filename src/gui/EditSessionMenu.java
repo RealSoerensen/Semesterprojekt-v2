@@ -85,12 +85,8 @@ public class EditSessionMenu extends JPanel {
 		add(textFieldStartTime);
 		textFieldStartTime.setColumns(10);
 
-		List<Person> instructors = new ArrayList<>();
-		try {
-			instructors = personController.getAllInstructors();
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Kunne ikke hente instruktørene");
-		}
+		List<Person> instructors;
+		instructors = personController.getAllInstructors();
 
 		JComboBox<Person> comboBoxInstructor = new JComboBox<>();
 		for (Person instructor : instructors) {

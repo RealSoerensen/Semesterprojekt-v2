@@ -34,7 +34,6 @@ public class SessionDB implements SessionDataAccessIF {
      */
     @Override
     public Session create(Session obj) {
-        Session session = null;
         String sql = " INSERT INTO Session(courseID, subjectID, instructorSsn, addressID, startDate, startTime, endTime) " +
                 " VALUES(?, ?, ?, ?, ?, ?, ?) ";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -48,13 +47,12 @@ public class SessionDB implements SessionDataAccessIF {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                long generatedId = rs.getLong(1);
-                session = get(generatedId);
+                obj.setSessionID(rs.getLong(1));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return session;
+        return obj;
     }
 
     /**
@@ -194,14 +192,9 @@ public class SessionDB implements SessionDataAccessIF {
         return courseDB.get(courseID);
     }
 
-    @Override
-    public void deleteAll() {
-        String sql = " DELETE FROM Session WHERE sessionID > 0 ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private Address createAddress(Address address) throws SQLException {
+        AddressDataAccessIF addressDB = new AddressDB();
+        return addressDB.create(address);
     }
 
     @Override
@@ -221,25 +214,5 @@ public class SessionDB implements SessionDataAccessIF {
             }
         }
         return enrolledSessions;
-    }
-
-    @Override
-    public long createAddressAndGetID(Address address) {
-        long generatedId = 0;
-        String sql = " INSERT INTO Address (zipCode, city, street, houseNumber) VALUES (?, ?, ?, ?) ";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, address.getZipCode());
-            stmt.setString(2, address.getCity());
-            stmt.setString(3, address.getStreet());
-            stmt.setString(4, address.getHouseNumber());
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                generatedId = rs.getLong(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return generatedId;
     }
 }

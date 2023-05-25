@@ -10,6 +10,5 @@ public interface CourseMemberDataAccessIF {
     boolean isPersonIn(Course course, Person person);
     List<Person> getAll(Course course);
     boolean remove(Course course, Person member);
-
-    boolean removeAll(Course course);
+    void removeAll(Course course);
 }

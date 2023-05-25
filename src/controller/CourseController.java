@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dal.address.AddressDB;
+import dal.address.AddressDataAccessIF;
 import dal.course.CourseDB;
 import dal.course.CourseDataAccessIF;
 import dal.coursemember.CourseMemberDB;
@@ -25,6 +27,7 @@ public class CourseController {
 	private SessionMemberDataAccessIF sessionMemberDB;
 	private SubjectDataAccessIF subjectDB;
 	private InstructorSubjectDataAccessIF instructorSubjectDB;
+	private AddressDataAccessIF addressDB;
 
 	public CourseController() throws SQLException {
 		setCourseDB(new CourseDB());
@@ -33,6 +36,15 @@ public class CourseController {
 		setSessionMemberDB(new SessionMemberDB());
 		setSubjetDB(new SubjectDB());
 		setInstructorSubjectDB(new InstructorSubjectDB());
+		setAddressDB(new AddressDB());
+	}
+
+	private void setAddressDB(AddressDB addressDB) {
+		this.addressDB = addressDB;
+	}
+
+	private AddressDataAccessIF getAddressDB() {
+		return addressDB;
 	}
 
 	private void setInstructorSubjectDB(InstructorSubjectDB instructorSubjectDB) {
@@ -83,9 +95,9 @@ public class CourseController {
 		this.sessionMemberDB = sessionMemberDB;
 	}
 
-	public Course createCourse(Course course) {
-		course.setCourseID(getCourseDB().createCourseAndGetID(course));
-		return course;
+
+	public Course createCourse(Course course) throws SQLException {
+		return getCourseDB().create(course);
 	}
 
 	public Course getCourse(long courseID) throws SQLException {
@@ -130,7 +142,8 @@ public class CourseController {
 	}
 
 	public Session createSession(Session session) throws SQLException {
-		session.getAddress().setAddressID(getSessionDB().createAddressAndGetID(session.getAddress()));
+		Address address = getAddressDB().create(session.getAddress());
+		session.setAddress(address);
 		return getSessionDB().create(session);
 	}
 
@@ -198,28 +211,27 @@ public class CourseController {
 		return getSubjectDB().create(subject);
 	}
 
-	public Subject getSubject(long subjectID) throws SQLException {
-		return getSubjectDB().get(subjectID);
-	}
-
-	public boolean updateSubject(Subject subject) throws SQLException {
-		return getSubjectDB().update(subject);
-	}
-
-	public boolean removeSubject(Subject subject) throws SQLException {
-		return getSubjectDB().delete(subject);
-	}
-
 	public List<Subject> getAllSubjects() throws SQLException {
 		return getSubjectDB().getAll();
 	}
 
-	public boolean createInstructorSubject(Person instructor, Subject subject) {
-		return getInstructorSubjectDB().create(instructor, subject);
+	public void createInstructorSubject(Person instructor, Subject subject) {
+		getInstructorSubjectDB().create(instructor, subject);
 	}
 
 	public boolean removeInstructorSubject(Person instructor, Subject subject) {
 		return getInstructorSubjectDB().remove(instructor, subject);
+	}
+
+	public void removeAllCoursesForMember(Person member) throws SQLException {
+		List<Course> allCourses = getAllCourses();
+		for (Course currentCourse : allCourses) {
+			List<Session> allSessions = getEnrolledSessions(member, currentCourse);
+			for (Session currentSession : allSessions) {
+				removeSessionMember(currentSession, member);
+			}
+			removeCourseMember(currentCourse, member);
+		}
 	}
 
 	public int[] StringArrToIntArr(String[] s) {

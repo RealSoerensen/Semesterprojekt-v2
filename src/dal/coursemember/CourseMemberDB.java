@@ -95,15 +95,13 @@ public class CourseMemberDB implements CourseMemberDataAccessIF {
     }
 
     @Override
-    public boolean removeAll(Course course) {
-        boolean result;
+    public void removeAll(Course course) {
         String sql = "DELETE FROM CourseMember WHERE courseID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, course.getCourseID());
-            result = stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return result;
     }
 }

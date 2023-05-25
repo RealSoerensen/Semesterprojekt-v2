@@ -22,7 +22,6 @@ public class CreateSessionMenu extends JPanel {
 	private final JTextField textFieldStreet;
 	private final JTextField textFieldStreetNum;
 	private final JTextField textFieldStartTime;
-	private JTextField textFieldEndTime;
 
 	public CreateSessionMenu(MainMenu mainMenu, Course course) throws SQLException {
 		setSize(626, 515);
@@ -241,7 +240,7 @@ public class CreateSessionMenu extends JPanel {
 		btnOpretSession.setBounds(322, 391, 106, 45);
 		add(btnOpretSession);
 
-		textFieldEndTime = new JTextField();
+		JTextField textFieldEndTime = new JTextField();
 		textFieldEndTime.setColumns(10);
 		textFieldEndTime.setBounds(322, 108, 156, 21);
 		add(textFieldEndTime);

@@ -1,10 +1,6 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -25,17 +21,17 @@ import model.Session;
 
 public class AccountManagerMenu extends JPanel {
 
-	JTable memberTable;
-	JTable instructorTable;
-	JTable adminTable;
+	final JTable memberTable;
+	final JTable instructorTable;
+	final JTable adminTable;
 	Object[][] memberData;
 	Object[][] instructorData;
 	Object[][] adminData;
 	final PersonController personController = new PersonController();
-	private JButton btnDeleteMembers;
-	private JButton btnEditMember;
-	private JButton btnChangeRole;
-	private JButton btnSeeInfo;
+	private final JButton btnDeleteMembers;
+	private final JButton btnEditMember;
+	private final JButton btnChangeRole;
+	private final JButton btnSeeInfo;
 	/**
 	 * Create the panel.
 	 * Tab 0 = Member, 1 = Instructor, 2 = Administrator.
@@ -60,11 +56,7 @@ public class AccountManagerMenu extends JPanel {
 		memberTable = new JTable();
 		memberData = refreshTable(memberTable, members);
 		scrollPaneMembers.setViewportView(memberTable);
-		memberTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	            setButtonsEnabled(true);
-	        }
-	    });
+		memberTable.getSelectionModel().addListSelectionListener(event -> setButtonsEnabled(true));
 
 		JPanel panelInstructors = new JPanel();
 		tabbedPane.addTab("Instruktører", null, panelInstructors, "Skift til Instruktører");
@@ -78,11 +70,7 @@ public class AccountManagerMenu extends JPanel {
 		instructorTable = new JTable();
 		instructorData = refreshTable(instructorTable, instructors);
 		scrollPaneInstructors.setViewportView(instructorTable);
-		instructorTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	            setButtonsEnabled(true);
-	        }
-	    });
+		instructorTable.getSelectionModel().addListSelectionListener(event -> setButtonsEnabled(true));
 
 		JPanel panelAdminstrator = new JPanel();
 		tabbedPane.addTab("Adminstratorer", null, panelAdminstrator, "Skift til Adminstratorer");
@@ -96,11 +84,7 @@ public class AccountManagerMenu extends JPanel {
 		adminTable = new JTable();
 		adminData = refreshTable(adminTable, admins);
 		scrollPaneAdmin.setViewportView(adminTable);
-		adminTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	            setButtonsEnabled(true);
-	        }
-	    });
+		adminTable.getSelectionModel().addListSelectionListener(event -> setButtonsEnabled(true));
 
 		btnDeleteMembers = new JButton("Slet");
 		btnDeleteMembers.setBounds(486, 170, 118, 34);
@@ -143,13 +127,9 @@ public class AccountManagerMenu extends JPanel {
 				return;
 			}
 
-			try {
-				memberData = refreshTable(memberTable, personController.getAllMembers());
-				instructorData = refreshTable(instructorTable, personController.getAllInstructors());
-				adminData = refreshTable(adminTable, personController.getAllAdmins());
-			} catch (SQLException e1) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl ved opdatering af tabellerne");
-			}
+			memberData = refreshTable(memberTable, personController.getAllMembers());
+			instructorData = refreshTable(instructorTable, personController.getAllInstructors());
+			adminData = refreshTable(adminTable, personController.getAllAdmins());
 		});
 		btnChangeRole.setBounds(486, 80, 118, 34);
 		add(btnChangeRole);
@@ -164,13 +144,9 @@ public class AccountManagerMenu extends JPanel {
 			createUserPanel.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent e) {
-					try {
-						memberData = refreshTable(memberTable, personController.getAllMembers());
-						instructorData = refreshTable(instructorTable, personController.getAllInstructors());
-						adminData = refreshTable(adminTable, personController.getAllAdmins());
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, "Der skete en fejl ved opdatering af tabellerne");
-					}
+					memberData = refreshTable(memberTable, personController.getAllMembers());
+					instructorData = refreshTable(instructorTable, personController.getAllInstructors());
+					adminData = refreshTable(adminTable, personController.getAllAdmins());
 				}
 			});
 			createUserPanel.run(false);
@@ -221,13 +197,9 @@ public class AccountManagerMenu extends JPanel {
 				} catch (SQLException ex) {
 					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under sletning af bruger");
 				}
-				try {
-					memberData = refreshTable(memberTable, personController.getAllMembers());
-					instructorData = refreshTable(instructorTable, personController.getAllInstructors());
-					adminData = refreshTable(adminTable, personController.getAllAdmins());
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Fejl: Der skete en fejl under opdatering af tabellen");
-				}
+				memberData = refreshTable(memberTable, personController.getAllMembers());
+				instructorData = refreshTable(instructorTable, personController.getAllInstructors());
+				adminData = refreshTable(adminTable, personController.getAllAdmins());
 			}
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
@@ -238,7 +210,7 @@ public class AccountManagerMenu extends JPanel {
 			adminTable.changeSelection(adminTable.getSelectedRow(), adminTable.getSelectedColumn(), true, false);
 			setButtonsEnabled(false);
 		});
-		
+	
 		adminTable.addMouseListener(new MouseAdapter() {
 	         public void mouseClicked(MouseEvent me) {
 	        	 if (me.getClickCount() == 2) {
