@@ -211,8 +211,7 @@ public class CreateSessionMenu extends JPanel {
 
 			Session createdSession;
 			try {
-				System.out.println(newSession.getSubject().getSubjectID());
-				createdSession = courseController.createSession(newSession);
+				createdSession = createSession(newSession);
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null,
 						"Der skete en fejl i forbindelse med databasen. Prøv igen senere.");
@@ -251,5 +250,9 @@ public class CreateSessionMenu extends JPanel {
 		lblSlutTidtimemin.setBounds(158, 108, 137, 19);
 		add(lblSlutTidtimemin);
 
+	}
+
+	private Session createSession(Session newSession) throws SQLException {
+		return courseController.createSession(newSession);
 	}
 }

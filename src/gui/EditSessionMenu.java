@@ -180,29 +180,40 @@ public class EditSessionMenu extends JPanel {
 				return;
 			}
 
-			if ((date == null || startTime == null || endTime == null || date.isBefore(LocalDate.now()) || startTime.isAfter(endTime) || startTime.isBefore(LocalTime.now()))) {
-				String city = textFieldCity.getText();
-				String zip = textFieldZIP.getText();
-				String street = textFieldStreet.getText();
-				String streetNum = textFieldStreetNum.getText();
-				Address address = new Address(zip, city, street, streetNum);
-				session.setSubject(subject);
-				session.setInstructor(instructor);
-				session.setDate(date);
-				session.setStartTime(startTime);
-				session.setEndTime(endTime);
-
-				session.setAddress(address);
-				try {
-					courseController.updateSession(session);
-					JOptionPane.showMessageDialog(null, "Ændringerne er gemt");
-					mainMenu.mainPanel.add(new SessionMenu(mainMenu, session.getCourse()), "session panel");
-					mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
-				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
-				}
-			} else {
+			if (!(date == null || startTime == null || endTime == null || date.isBefore(LocalDate.now()) || startTime.isAfter(endTime) || startTime.isBefore(LocalTime.now()))) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato eller tid er ikke skrevet ind");
+				return;
+			}
+			String city = textFieldCity.getText();
+			String zip = textFieldZIP.getText();
+			String street = textFieldStreet.getText();
+			String streetNum = textFieldStreetNum.getText();
+			Address address = new Address(zip, city, street, streetNum);
+			session.setSubject(subject);
+			session.setInstructor(instructor);
+			session.setDate(date);
+			session.setStartTime(startTime);
+			session.setEndTime(endTime);
+			session.setAddress(address);
+
+			boolean isSessionUpdated;
+			try {
+				isSessionUpdated = updateSession(session);
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
+				return;
+			}
+			if(isSessionUpdated) {
+				JOptionPane.showMessageDialog(null, "Ændringerne er gemt");
+			} else {
+				JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
+				return;
+			}
+			try {
+				mainMenu.mainPanel.add(new SessionMenu(mainMenu, session.getCourse()), "session panel");
+				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Kan ikke vise session menuen");
 			}
 		});
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -232,5 +243,9 @@ public class EditSessionMenu extends JPanel {
 		lblEndTime.setBounds(181, 121, 91, 26);
 		add(lblEndTime);
 
+	}
+
+	private boolean updateSession(Session session) throws SQLException {
+		return courseController.updateSession(session);
 	}
 }

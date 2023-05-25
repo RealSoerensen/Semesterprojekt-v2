@@ -96,20 +96,26 @@ public class EditAccountMenu extends JPanel {
 		JButton btnDoneEditInfo = new JButton("Gem ændringer");
 		btnDoneEditInfo.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnDoneEditInfo.addActionListener(e -> {
+			person.setFirstName(txtFirstName.getText());
+			person.setLastName(txtLastName.getText());
+			person.setEmail(txtEmail.getText());
+			person.setRole(getRole());
+			person.setPhoneNumber(txtPhone.getText());
+			person.getAddress().setCity(txtCity.getText());
+			person.getAddress().setHouseNumber(txtHouseNumber.getText());
+			person.getAddress().setStreet(txtRoadname.getText());
+			person.getAddress().setZipCode(txtPostalCode.getText());
+			boolean isEdited;
 			try {
-				person.setFirstName(txtFirstName.getText());
-				person.setLastName(txtLastName.getText());
-				person.setEmail(txtEmail.getText());
-				person.setRole(getRole());
-				person.setPhoneNumber(txtPhone.getText());
-				person.getAddress().setCity(txtCity.getText());
-				person.getAddress().setHouseNumber(txtHouseNumber.getText());
-				person.getAddress().setStreet(txtRoadname.getText());
-				person.getAddress().setZipCode(txtPostalCode.getText());
-				personController.updatePerson(person);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen");
+				isEdited = updatePerson(person);
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke oprette forbindelse til databasen");
 				return;
+			}
+			if (isEdited) {
+				JOptionPane.showMessageDialog(null, "Dine oplysninger er nu ændret");
+			} else {
+				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke ændre dine oplysninger");
 			}
 
 			if (isEditedFromAccountMenu) {
@@ -176,6 +182,12 @@ public class EditAccountMenu extends JPanel {
 		comboBoxRoles.setSelectedIndex(person.getRole() - 1);
 		comboBoxRoles.setBounds(93, 8, 184, 29);
 		adminPanel.add(comboBoxRoles);
+	}
+
+	private boolean updatePerson(Person person) throws SQLException {
+		boolean isEdited = false;
+		personController.updatePerson(person);
+		return isEdited;
 	}
 
 	private int getRole() {

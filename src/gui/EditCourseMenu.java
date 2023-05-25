@@ -81,32 +81,31 @@ public class EditCourseMenu extends JPanel {
             
             if(endDate == null || startDate == null || startDate.isAfter(endDate) || startDate.isBefore(LocalDate.now())) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
+				return;
 			}
-            else {
-				course.setName(name);
-				course.setPrice(price);
-				course.setStartDate(startDate);
-				course.setEndDate(endDate);
-	
-				try {
-					courseController.updateCourse(course);
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Der skete en fejl under opdateringen af kurset.");
-					return;
-				}
-	
-				CourseMenu courseMenu;
-				try {
-					courseMenu = new CourseMenu(mainMenu);
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
-					return;
-				}
 
-	
-				mainMenu.mainPanel.add(courseMenu, "CourseMenu");
-				mainMenu.cardLayout.show(mainMenu.mainPanel, "CourseMenu");
-            }
+			course.setName(name);
+			course.setPrice(price);
+			course.setStartDate(startDate);
+			course.setEndDate(endDate);
+
+			try {
+				updateCourse(course);
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Der skete en fejl under opdateringen af kurset.");
+				return;
+			}
+
+			CourseMenu courseMenu;
+			try {
+				courseMenu = new CourseMenu(mainMenu);
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
+				return;
+			}
+
+			mainMenu.mainPanel.add(courseMenu, "CourseMenu");
+			mainMenu.cardLayout.show(mainMenu.mainPanel, "CourseMenu");
 		});
     	
     	btnAccept.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -162,4 +161,8 @@ public class EditCourseMenu extends JPanel {
     	textArea.setBounds(271, 91, 210, 144);
     	add(textArea);
     }
+
+	private boolean updateCourse(Course course) throws SQLException {
+		return courseController.updateCourse(course);
+	}
 }
