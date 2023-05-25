@@ -3,6 +3,8 @@ package gui;
 import model.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -22,6 +24,11 @@ public class SessionMenu extends JPanel {
 	private final CourseController courseController = new CourseController();
 	private final Person person;
 	private final Course course;
+	private JButton btnDeleteSession;
+	private JButton btnJoinSession;
+	private JButton btnSessionInfo;
+	private JButton btnLeaveSession;
+	private JButton btnEditSession;
 
 	/**
 	 * Create the frame.
@@ -37,6 +44,12 @@ public class SessionMenu extends JPanel {
 		add(scrollPaneCourses);
 
 		table = new JTable();
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				setButtonsEnabled(true);
+			}
+		});
+
 		try {
 			refreshTable();
 		} catch (SQLException e) {
@@ -81,7 +94,7 @@ public class SessionMenu extends JPanel {
 		btnCreateNewSession.setBounds(10, 11, 124, 39);
 		panelAdmin.add(btnCreateNewSession);
 
-		JButton btnEditSession = new JButton("Rediger");
+		btnEditSession = new JButton("Rediger");
 		btnEditSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -101,7 +114,7 @@ public class SessionMenu extends JPanel {
 		btnEditSession.setBounds(10, 111, 124, 39);
 		panelAdmin.add(btnEditSession);
 
-		JButton btnDeleteSession = new JButton("Slet");
+		btnDeleteSession = new JButton("Slet");
 		btnDeleteSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -126,7 +139,7 @@ public class SessionMenu extends JPanel {
 		btnCreateSubject.setBounds(10, 61, 124, 39);
 		panelAdmin.add(btnCreateSubject);
 
-		JButton btnJoinSession = new JButton("Tilmeld session");
+		btnJoinSession = new JButton("Tilmeld session");
 		btnJoinSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -134,13 +147,12 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) sessionData[selectedRow][0];
-			if(person.getRole() == 1) {
+			if (person.getRole() == 1) {
 				if (!courseController.createSessionMember(session, person)) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
 					return;
 				}
-			}
-			else {
+			} else {
 				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde en session som en kursist");
 				return;
 			}
@@ -154,7 +166,7 @@ public class SessionMenu extends JPanel {
 		btnJoinSession.setBounds(493, 61, 123, 39);
 		add(btnJoinSession);
 
-		JButton btnLeaveSession = new JButton("Meld afbud");
+		btnLeaveSession = new JButton("Meld afbud");
 		btnLeaveSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -175,8 +187,8 @@ public class SessionMenu extends JPanel {
 		});
 		btnLeaveSession.setBounds(493, 111, 123, 39);
 		add(btnLeaveSession);
-		
-		JButton btnSessionInfo = new JButton("Session Info");
+
+		btnSessionInfo = new JButton("Session Info");
 		btnSessionInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Session session = (Session) sessionData[table.getSelectedRow()][0];
@@ -189,16 +201,15 @@ public class SessionMenu extends JPanel {
 				Address address = session.getAddress();
 				JOptionPane optionPane = new JOptionPane();
 				optionPane.setMessage("Session informationer:\n" +
-								"Fag: " + session.getSubject().getName() + "\n" +
-								"Beskrivelse: " + session.getSubject().getDescription() + "\n" +
-								"Start dato: " + session.getDate() + "\n" +
-								"Fra: " + session.getStartTime() + "\n" +
-								"Til: " + session.getEndTime() + "\n" +
-								"Instruktør: " + session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName() + "\n" +
-								"Adresse: " + address.getZipCode() + " " + address.getCity() + "\n" +
-								address.getStreet() + " " + address.getHouseNumber()
-				);
-
+						"Fag: " + session.getSubject().getName() + "\n" +
+						"Beskrivelse: " + session.getSubject().getDescription() + "\n" +
+						"Start dato: " + session.getDate() + "\n" +
+						"Fra: " + session.getStartTime() + "\n" +
+						"Til: " + session.getEndTime() + "\n" +
+						"Instruktør: " + session.getInstructor().getFirstName() + " "
+						+ session.getInstructor().getLastName() + "\n" +
+						"Adresse: " + address.getZipCode() + " " + address.getCity() + "\n" +
+						address.getStreet() + " " + address.getHouseNumber());
 
 				optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
 
@@ -208,6 +219,9 @@ public class SessionMenu extends JPanel {
 		});
 		btnSessionInfo.setBounds(493, 11, 123, 39);
 		add(btnSessionInfo);
+
+		mainMenu.setLblTitle(course.getName() + " Sessioner");
+		setButtonsEnabled(false);
 	}
 
 	private void refreshTable() throws SQLException {
@@ -247,7 +261,7 @@ public class SessionMenu extends JPanel {
 		columnModel.removeColumn(column);
 	}
 
-	private void createNewSubjectPopup(){
+	private void createNewSubjectPopup() {
 		// Create a JPanel to hold the components
 		JPanel panel = new JPanel(new GridBagLayout());
 
@@ -281,7 +295,7 @@ public class SessionMenu extends JPanel {
 		if (result == JOptionPane.OK_OPTION) {
 			Subject subject = new Subject(nameField.getText(), descriptionArea.getText());
 			try {
-				if(courseController.createSubject(subject) == null) {
+				if (courseController.createSubject(subject) == null) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke oprette fag");
 					return;
 				}
@@ -297,8 +311,8 @@ public class SessionMenu extends JPanel {
 	private String isEnrolled(Course course, Session session) throws SQLException {
 		String result = "Nej";
 		List<Session> enrolledSessions = courseController.getEnrolledSessions(person, course);
-		for(Session enrolledSession : enrolledSessions) {
-			if(enrolledSession.getSessionID() == session.getSessionID()){
+		for (Session enrolledSession : enrolledSessions) {
+			if (enrolledSession.getSessionID() == session.getSessionID()) {
 				result = "Ja";
 				break;
 			}
@@ -306,7 +320,11 @@ public class SessionMenu extends JPanel {
 		return result;
 	}
 
-	private boolean markAbsent(Session session) {
-		return courseController.removeSessionMember(session, person);
+	private void setButtonsEnabled(boolean enabled) {
+		btnDeleteSession.setEnabled(enabled);
+		btnEditSession.setEnabled(enabled);
+		btnJoinSession.setEnabled(enabled);
+		btnLeaveSession.setEnabled(enabled);
+		btnSessionInfo.setEnabled(enabled);
 	}
 }

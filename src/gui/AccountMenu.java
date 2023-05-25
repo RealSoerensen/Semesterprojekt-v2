@@ -78,12 +78,11 @@ public class AccountMenu extends JPanel {
 			mainMenu.mainPanel.add(editAccountMenu, "edit account panel");
 			mainMenu.cardLayout.show(mainMenu.mainPanel, "edit account panel");
 		});
-		btnEditInfo.setBounds(293, 364, 129, 23);
+		btnEditInfo.setBounds(10, 350, 129, 23);
 		add(btnEditInfo);
 		
-		JButton btnBack = new JButton("Tilbage");
-		btnBack.addActionListener(e -> mainMenu.cardLayout.show(mainMenu.mainPanel, "course panel"));
-		btnBack.setBounds(154, 365, 129, 23);
-		add(btnBack);
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 331, 606, 2);
+		add(separator);
 	}
 }
