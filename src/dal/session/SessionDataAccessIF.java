@@ -10,8 +10,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface SessionDataAccessIF extends CRUD<Session> {
-    void deleteAll();
     List<Session> getEnrolledSessions(Person person, Course course) throws SQLException;
-
-    long createAddressAndGetID(Address address);
 }

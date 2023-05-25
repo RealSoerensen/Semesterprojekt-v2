@@ -1,10 +1,8 @@
 package controller;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import dal.DBConnection;
 import dal.address.AddressDB;
 import dal.address.AddressDataAccessIF;
 import dal.person.PersonDB;
@@ -15,10 +13,12 @@ import model.Person;
 public class PersonController {
 	private PersonDataAccessIF personDB;
 	private AddressDataAccessIF addressDB;
+	private final CourseController courseController;
 
 	public PersonController() throws SQLException {
 		setPersonDB(new PersonDB());
 		setAddressDB(new AddressDB());
+		courseController = new CourseController();
 	}
 
 	public boolean isSsnUnique(long ssn) {
@@ -35,25 +35,9 @@ public class PersonController {
 
 	public Person createPerson(Person person) throws Exception {
 		Address address = person.getAddress();
-		long addressID = addressDB.createAddressAndGetID(address);
-		address.setAddressID(addressID);
+		address = addressDB.create(address);
 		person.setAddress(address);
 		return personDB.create(person);
-	}
-	
-	public boolean createPersonWithAddress(Person person, Address address) throws SQLException {
-		boolean success = false;
-		try {
-			DBConnection.getInstance().startTransaction();
-			addressDB.create(address);
-			personDB.create(person);
-			DBConnection.getInstance().commitTransaction();
-			success = true;
-		}
-		catch(SQLException e) {
-			DBConnection.getInstance().rollbackTransaction();
-		}
-		return success;
 	}
 
 	public Person getPerson(long personID) throws SQLException {
@@ -74,8 +58,9 @@ public class PersonController {
 	}
 
 	public boolean deletePerson(Person person) throws SQLException {
-		addressDB.delete(person.getAddress());
-		return personDB.delete(person);
+		courseController.removeAllCoursesForMember(person);
+		personDB.delete(person);
+		return addressDB.delete(person.getAddress());
 	}
 
 	public List<Person> getAllMembers() throws SQLException {

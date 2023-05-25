@@ -162,7 +162,7 @@ public class SessionMenu extends JPanel {
 				return;
 			}
 			Session session = (Session) sessionData[selectedRow][0];
-			if (!courseController.removeSessionMember(session, person)) {
+			if (!markAbsent(session)) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke melde afbud");
 				return;
 			}
@@ -248,35 +248,38 @@ public class SessionMenu extends JPanel {
 	}
 
 	private void createNewSubjectPopup(){
-		JTextField textFieldName = new JTextField(10);
-		JTextArea textFieldDescription = new JTextArea();
-		textFieldDescription.setColumns(10);
-		textFieldDescription.setRows(10);
+		// Create a JPanel to hold the components
 		JPanel panel = new JPanel(new GridBagLayout());
-		panel.setBounds(10, 11, 414, 143);
-		add(panel);
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(5, 5, 5, 5);
+		// Create GridBagConstraints for component positioning
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.weightx = 1.0;
 
-		panel.add(new JLabel("Navn:"), gbc);
+		// Create a JTextField for "Navn"
+		JTextField nameField = new JTextField(20);
+		panel.add(new JLabel("Navn:"), constraints);
 
-		gbc.gridx = 1;
-		panel.add(textFieldName, gbc);
+		constraints.gridy = 1;
+		panel.add(nameField, constraints);
 
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		panel.add(new JLabel("Beskrivelse:"), gbc);
+		// Create a JTextArea for "Beskrivelse"
+		JTextArea descriptionArea = new JTextArea(5, 20);
+		descriptionArea.setLineWrap(true);
+		descriptionArea.setWrapStyleWord(true);
+		JScrollPane scrollPane = new JScrollPane(descriptionArea);
+		constraints.gridy = 2;
+		panel.add(new JLabel("Beskrivelse:"), constraints);
 
-		gbc.gridx = 1;
-		panel.add(textFieldDescription, gbc);
+		constraints.gridy = 3;
+		panel.add(scrollPane, constraints);
+
 		int result = JOptionPane.showConfirmDialog(null, panel,
 				"Nyt fag", JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			Subject subject = new Subject(textFieldName.getText(), textFieldDescription.getText());
+			Subject subject = new Subject(nameField.getText(), descriptionArea.getText());
 			try {
 				if(courseController.createSubject(subject) == null) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke oprette fag");
@@ -301,5 +304,9 @@ public class SessionMenu extends JPanel {
 			}
 		}
 		return result;
+	}
+
+	private boolean markAbsent(Session session) {
+		return courseController.removeSessionMember(session, person);
 	}
 }

@@ -22,7 +22,6 @@ public class SubjectDB implements SubjectDataAccessIF {
 
     @Override
     public Subject create(Subject obj) {
-        Subject subject = null;
         String sql = "INSERT INTO Subject(name, description) VALUES(?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, obj.getName());
@@ -30,13 +29,12 @@ public class SubjectDB implements SubjectDataAccessIF {
             stmt.executeUpdate();
             ResultSet subjectRS = stmt.getGeneratedKeys();
             if (subjectRS.next()) {
-                long subjectID = subjectRS.getLong(1);
-                subject = new Subject(subjectID, obj.getName(), obj.getDescription());
+                obj.setSubjectID(subjectRS.getLong(1));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return subject;
+        return obj;
     }
 
 
