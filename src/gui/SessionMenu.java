@@ -3,6 +3,8 @@ package gui;
 import model.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -22,6 +24,11 @@ public class SessionMenu extends JPanel {
 	private final CourseController courseController = new CourseController();
 	private final Person person;
 	private final Course course;
+	private JButton btnDeleteSession;
+	private JButton btnJoinSession;
+	private JButton btnSessionInfo;
+	private JButton btnLeaveSession;
+	private JButton btnEditSession;
 
 	/**
 	 * Create the frame.
@@ -37,6 +44,12 @@ public class SessionMenu extends JPanel {
 		add(scrollPaneCourses);
 
 		table = new JTable();
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            setButtonsEnabled(true);
+	        }
+	    });
+		
 		try {
 			refreshTable();
 		} catch (SQLException e) {
@@ -81,7 +94,7 @@ public class SessionMenu extends JPanel {
 		btnCreateNewSession.setBounds(10, 11, 124, 39);
 		panelAdmin.add(btnCreateNewSession);
 
-		JButton btnEditSession = new JButton("Rediger");
+		btnEditSession = new JButton("Rediger");
 		btnEditSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -101,7 +114,7 @@ public class SessionMenu extends JPanel {
 		btnEditSession.setBounds(10, 111, 124, 39);
 		panelAdmin.add(btnEditSession);
 
-		JButton btnDeleteSession = new JButton("Slet");
+		btnDeleteSession = new JButton("Slet");
 		btnDeleteSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -126,7 +139,7 @@ public class SessionMenu extends JPanel {
 		btnCreateSubject.setBounds(10, 61, 124, 39);
 		panelAdmin.add(btnCreateSubject);
 
-		JButton btnJoinSession = new JButton("Tilmeld session");
+		btnJoinSession = new JButton("Tilmeld session");
 		btnJoinSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -154,7 +167,7 @@ public class SessionMenu extends JPanel {
 		btnJoinSession.setBounds(493, 61, 123, 39);
 		add(btnJoinSession);
 
-		JButton btnLeaveSession = new JButton("Meld afbud");
+		btnLeaveSession = new JButton("Meld afbud");
 		btnLeaveSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
@@ -176,7 +189,7 @@ public class SessionMenu extends JPanel {
 		btnLeaveSession.setBounds(493, 111, 123, 39);
 		add(btnLeaveSession);
 		
-		JButton btnSessionInfo = new JButton("Session Info");
+		btnSessionInfo = new JButton("Session Info");
 		btnSessionInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Session session = (Session) sessionData[table.getSelectedRow()][0];
@@ -208,6 +221,8 @@ public class SessionMenu extends JPanel {
 		});
 		btnSessionInfo.setBounds(493, 11, 123, 39);
 		add(btnSessionInfo);
+		
+		setButtonsEnabled(false);
 	}
 
 	private void refreshTable() throws SQLException {
@@ -301,5 +316,13 @@ public class SessionMenu extends JPanel {
 			}
 		}
 		return result;
+	}
+	
+	private void setButtonsEnabled(boolean enabled) {
+		btnDeleteSession.setEnabled(enabled);
+		btnEditSession.setEnabled(enabled);
+		btnJoinSession.setEnabled(enabled);
+		btnLeaveSession.setEnabled(enabled);
+		btnSessionInfo.setEnabled(enabled);
 	}
 }

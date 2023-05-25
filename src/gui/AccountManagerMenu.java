@@ -1,6 +1,10 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -24,7 +28,10 @@ public class AccountManagerMenu extends JPanel {
 	Object[][] instructorData;
 	Object[][] adminData;
 	final PersonController personController = new PersonController();
-
+	private JButton btnDeleteMembers;
+	private JButton btnEditMember;
+	private JButton btnChangeRole;
+	private JButton btnSeeInfo;
 	/**
 	 * Create the panel.
 	 * Tab 0 = Member, 1 = Instructor, 2 = Administrator.
@@ -49,6 +56,11 @@ public class AccountManagerMenu extends JPanel {
 		memberTable = new JTable();
 		memberData = refreshTable(memberTable, members);
 		scrollPaneMembers.setViewportView(memberTable);
+		memberTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            setButtonsEnabled(true);
+	        }
+	    });
 
 		JPanel panelInstructors = new JPanel();
 		tabbedPane.addTab("Instruktører", null, panelInstructors, "Skift til Instruktører");
@@ -62,6 +74,11 @@ public class AccountManagerMenu extends JPanel {
 		instructorTable = new JTable();
 		instructorData = refreshTable(instructorTable, instructors);
 		scrollPaneInstructors.setViewportView(instructorTable);
+		instructorTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            setButtonsEnabled(true);
+	        }
+	    });
 
 		JPanel panelAdminstrator = new JPanel();
 		tabbedPane.addTab("Adminstratorer", null, panelAdminstrator, "Skift til Adminstratorer");
@@ -75,16 +92,21 @@ public class AccountManagerMenu extends JPanel {
 		adminTable = new JTable();
 		adminData = refreshTable(adminTable, admins);
 		scrollPaneAdmin.setViewportView(adminTable);
+		adminTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            setButtonsEnabled(true);
+	        }
+	    });
 
-		JButton btnDeleteMembers = new JButton("Slet");
+		btnDeleteMembers = new JButton("Slet");
 		btnDeleteMembers.setBounds(486, 170, 118, 34);
 		add(btnDeleteMembers);
 
-		JButton btnEditMember = new JButton("Rediger");
+		btnEditMember = new JButton("Rediger");
 		btnEditMember.setBounds(486, 125, 118, 34);
 		add(btnEditMember);
 
-		JButton btnChangeRole = new JButton("Ændre rolle");
+		btnChangeRole = new JButton("Ændre rolle");
 		btnChangeRole.addActionListener(e -> {
 			Person person = getSelectedPerson(tabbedPane);
 
@@ -128,7 +150,7 @@ public class AccountManagerMenu extends JPanel {
 		btnChangeRole.setBounds(486, 80, 118, 34);
 		add(btnChangeRole);
 
-		JButton btnSeeInfo = new JButton("Se oplysninger");
+		btnSeeInfo = new JButton("Se oplysninger");
 		btnSeeInfo.setBounds(486, 35, 118, 34);
 		add(btnSeeInfo);
 
@@ -217,7 +239,15 @@ public class AccountManagerMenu extends JPanel {
 				}
 			}
 		});
-
+		setButtonsEnabled(false);
+		tabbedPane.addChangeListener(new ChangeListener() {
+	        public void stateChanged(ChangeEvent e) {
+	        	setButtonsEnabled(false);
+	        	memberTable.changeSelection(memberTable.getSelectedRow(), memberTable.getSelectedColumn(), true, false);
+	        	instructorTable.changeSelection(instructorTable.getSelectedRow(), instructorTable.getSelectedColumn(), true, false);
+	        	adminTable.changeSelection(adminTable.getSelectedRow(), adminTable.getSelectedColumn(), true, false);
+	        }
+	    });
 	}
 
 	private Person getSelectedPerson(JTabbedPane tabbedPane) {
@@ -273,5 +303,12 @@ public class AccountManagerMenu extends JPanel {
 		TableColumn column = columnModel.getColumn(0);
 		columnModel.removeColumn(column);
 		return data;
+	}
+	
+	private void setButtonsEnabled(boolean enabled) {
+		btnDeleteMembers.setEnabled(enabled);
+		btnChangeRole.setEnabled(enabled);
+		btnEditMember.setEnabled(enabled);
+		btnSeeInfo.setEnabled(enabled);
 	}
 }
