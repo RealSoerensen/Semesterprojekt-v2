@@ -53,8 +53,8 @@ public class PersonController {
 	}
 
 	public boolean updatePerson(Person person) throws SQLException {
-		addressDB.update(person.getAddress());
-		return personDB.update(person);
+		
+		return (personDB.update(person) && addressDB.update(person.getAddress()));
 	}
 
 	public boolean deletePerson(Person person) throws SQLException {
