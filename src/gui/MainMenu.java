@@ -26,6 +26,9 @@ public class MainMenu extends JFrame {
 	private final JLabel lblTitle;
 	public final JPanel menuPanel;
 	public final JPanel panelMainWindowAdmin;
+	private JButton btnMyAccount;
+	private JButton btnAccounts;
+	private JButton btnCourses;
 
 	/**
 	 * Launch the application.
@@ -76,7 +79,7 @@ public class MainMenu extends JFrame {
 		contentPanel.add(menuPanel);
 		menuPanel.setLayout(null);
 
-		JButton btnCourses = new JButton("Kurser");
+		btnCourses = new JButton("Kurser");
 		btnCourses.addActionListener(e -> switchPanelToCourseMenu(contentPanel));
 		btnCourses.setBounds(10, 86, 144, 37);
 		menuPanel.add(btnCourses);
@@ -161,7 +164,7 @@ public class MainMenu extends JFrame {
 		panelMainWindowAdmin.setLayout(null);
 		panelMainWindowAdmin.setVisible(user.getRole() > 2);
 
-		JButton btnAccounts = new JButton("Alle Konti");
+		btnAccounts = new JButton("Alle Konti");
 		btnAccounts.addActionListener(e -> switchPanelToAccountManagerMenu(contentPanel));
 		btnAccounts.setBounds(10, 39, 144, 37);
 		panelMainWindowAdmin.add(btnAccounts);
@@ -173,7 +176,7 @@ public class MainMenu extends JFrame {
 		panelMainWindowAdmin.add(lblAdmin);
 		
 
-		JButton btnMyAccount = new JButton("Min Konto");
+		btnMyAccount = new JButton("Min Konto");
 		btnMyAccount.addActionListener(e -> switchPanelToAccountMenu());
 		btnMyAccount.setBounds(10, 134, 144, 37);
 		menuPanel.add(btnMyAccount);
@@ -206,6 +209,8 @@ public class MainMenu extends JFrame {
 	}
 
 	public void switchPanelToCourseMenu(JPanel contentPanel) {
+		enableButtons();
+		btnCourses.setEnabled(false);
 		lblTitle.setText("Kurser");
 		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		CourseMenu courseMenu;
@@ -222,6 +227,8 @@ public class MainMenu extends JFrame {
 	}
 
 	public void switchPanelToAccountMenu() {
+		enableButtons();
+		btnMyAccount.setEnabled(false);
 		lblTitle.setText("Min Konto");
 		AccountMenu accountMenu = new AccountMenu(this);
 		mainPanel.add(accountMenu, ACCOUNT_PANEL);
@@ -229,6 +236,8 @@ public class MainMenu extends JFrame {
 	}
 
 	public void switchPanelToAccountManagerMenu(JPanel contentPanel) {
+		enableButtons();
+		btnAccounts.setEnabled(false);
 		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		lblTitle.setText("Alle Konti");
 		AccountManagerMenu accountManagerMenu;
@@ -249,5 +258,11 @@ public class MainMenu extends JFrame {
 	
 	public void setLblTitle(String newTitle) {
 		lblTitle.setText(newTitle);
+	}
+	
+	private void enableButtons() {
+		btnMyAccount.setEnabled(true);
+		btnAccounts.setEnabled(true);
+		btnCourses.setEnabled(true);
 	}
 }
