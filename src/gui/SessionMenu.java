@@ -253,13 +253,20 @@ public class SessionMenu extends JPanel {
 	private void refreshTable() throws SQLException {
 		List<Session> sessions = courseController.getAllSessionsFromCourse(course);
 		Object[][] data = new Object[sessions.size()][7];
-
 		for (int i = 0; i < sessions.size(); i++) {
 			Session session = sessions.get(i);
+			Person instructor = session.getInstructor();
+			String instructorString;
+			if(instructor == null) {
+				instructorString = "Ingen instruktør";
+			} else {
+				instructorString = instructor.getFirstName() + " " + instructor.getLastName();
+			}
+			
 			data[i][0] = session;
 			data[i][1] = session.getSubject().getName();
 			data[i][2] = session.getDate();
-			data[i][3] = session.getInstructor().getFirstName() + " " + session.getInstructor().getLastName();
+			data[i][3] = instructorString;
 			data[i][4] = courseController.getAllSessionMembers(session).size();
 			data[i][5] = session.getAddress().getStreet() + " " + session.getAddress().getHouseNumber() + ", "
 					+ session.getAddress().getZipCode() + " " + session.getAddress().getCity();
