@@ -185,9 +185,7 @@ public class EditAccountMenu extends JPanel {
 	}
 
 	private boolean updatePerson(Person person) throws SQLException {
-		boolean isEdited = false;
-		personController.updatePerson(person);
-		return isEdited;
+		return personController.updatePerson(person);
 	}
 
 	private int getRole() {
