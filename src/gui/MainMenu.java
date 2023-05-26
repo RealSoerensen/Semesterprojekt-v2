@@ -48,7 +48,7 @@ public class MainMenu extends JFrame {
 	public MainMenu() {
 		setName("Bruh");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 829, 670);
+		setBounds(100, 100, 829, 749);
 		JPanel contentPanel = new JPanel();
 		contentPanel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -59,7 +59,7 @@ public class MainMenu extends JFrame {
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBackground(new Color(192, 192, 192));
 		titlePanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
-		titlePanel.setBounds(10, 23, 793, 72);
+		titlePanel.setBounds(10, 11, 793, 84);
 		contentPanel.add(titlePanel);
 		titlePanel.setLayout(null);
 
@@ -187,6 +187,22 @@ public class MainMenu extends JFrame {
 		mainPanel.add(new JPanel());
 
 		switchPanelToCourseMenu(contentPanel);
+		
+		JPanel tipPanel = new JPanel();
+		tipPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		tipPanel.setBackground(new Color(192, 192, 192));
+		tipPanel.setBounds(10, 631, 793, 68);
+		contentPanel.add(tipPanel);
+		tipPanel.setLayout(null);
+		
+		JLabel lblTip = new JLabel("Tip");
+		lblTip.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTip.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTip.setBounds(10, 11, 773, 46);
+		tipPanel.add(lblTip);
+		
+		ArthritisTipWorker worker = new ArthritisTipWorker(lblTip);
+        worker.execute();
 	}
 
 	public void switchPanelToCourseMenu(JPanel contentPanel) {
