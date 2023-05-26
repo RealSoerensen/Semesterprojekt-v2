@@ -13,6 +13,7 @@ import controller.CourseController;
 import controller.PersonController;
 import model.Subject;
 
+import java.awt.Cursor;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,7 @@ public class EditSessionMenu extends JPanel {
 
 		JButton btnSave = new JButton("Gem ændringer");
 		btnSave.addActionListener(e -> {
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Subject subject = (Subject) comboBoxSubject.getSelectedItem();
 			Person instructor = (Person) comboBoxInstructor.getSelectedItem();
 			String strDate = textFieldDate.getText();
@@ -204,6 +206,7 @@ public class EditSessionMenu extends JPanel {
 			} else {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato eller tid er ikke skrevet ind");
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnSave.setBounds(336, 423, 170, 36);
@@ -212,11 +215,13 @@ public class EditSessionMenu extends JPanel {
 		JButton btnBack = new JButton("Tilbage");
 		btnBack.addActionListener(e -> {
 			try {
+				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				mainMenu.mainPanel.add(new SessionMenu(mainMenu, session.getCourse()), "session panel");
 				mainMenu.cardLayout.show(mainMenu.mainPanel, "session panel");
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnBack.setBounds(156, 423, 170, 36);

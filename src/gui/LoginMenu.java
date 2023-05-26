@@ -76,6 +76,7 @@ public class LoginMenu extends JFrame {
 		lblPassword.setBounds(10, 83, 134, 25);
 		contentPanel.add(lblPassword);
 	}
+	
 
 	private void createUser() {
 		dispose();
@@ -98,4 +99,5 @@ public class LoginMenu extends JFrame {
 		new MainMenu().run();
 		dispose();
 	}
+
 }
