@@ -7,4 +7,5 @@ public interface InstructorSubjectDataAccessIF {
     void create(Person person, Subject subject);
     boolean isPersonIn(Person person, Subject subject);
     boolean remove(Person person, Subject subject);
+    void removeAllByPerson(Person person);
 }

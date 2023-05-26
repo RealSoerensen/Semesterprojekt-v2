@@ -57,4 +57,15 @@ public class InstructorSubjectDB implements InstructorSubjectDataAccessIF{
         }
         return result;
     }
+
+    @Override
+    public void removeAllByPerson(Person person) {
+        String sql = "DELETE FROM InstructorSubject WHERE ssn = ?";
+        try (var stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, person.getSsn());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -55,6 +55,17 @@ public class InstructorSubjectContainer implements InstructorSubjectDataAccessIF
         }
         return result;
     }
+
+    @Override
+    public void removeAllByPerson(Person person) {
+        List<InstructorSubject> toRemove = new ArrayList<>();
+        for (InstructorSubject instructorSubject : container) {
+            if (instructorSubject.instructor().equals(person)) {
+                toRemove.add(instructorSubject);
+            }
+        }
+        container.removeAll(toRemove);
+    }
 }
 
 record InstructorSubject(Person instructor, Subject subject) {

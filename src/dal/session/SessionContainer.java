@@ -124,4 +124,13 @@ public class SessionContainer implements SessionDataAccessIF {
         }
         return sessions;
     }
+
+    @Override
+    public void setSessionInstructorToNull(Person person) {
+        for (Session session : container) {
+            if (session.getInstructor().equals(person)) {
+                session.setInstructor(null);
+            }
+        }
+    }
 }

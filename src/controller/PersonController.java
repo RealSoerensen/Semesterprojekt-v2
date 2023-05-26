@@ -58,6 +58,9 @@ public class PersonController {
 	}
 
 	public boolean deletePerson(Person person) throws SQLException {
+		if(person.getRole() == 2) {
+			courseController.removeAllCoursesForInstructor(person);
+		}
 		courseController.removeAllCoursesForMember(person);
 		personDB.delete(person);
 		return addressDB.delete(person.getAddress());

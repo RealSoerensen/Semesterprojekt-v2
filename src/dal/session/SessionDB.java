@@ -215,4 +215,13 @@ public class SessionDB implements SessionDataAccessIF {
         }
         return enrolledSessions;
     }
+
+    @Override
+    public void setSessionInstructorToNull(Person person) throws SQLException {
+        String query = "UPDATE Session SET instructorSsn = NULL WHERE instructorSsn = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, person.getSsn());
+            statement.executeUpdate();
+        }
+    }
 }

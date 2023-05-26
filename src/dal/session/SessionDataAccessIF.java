@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface SessionDataAccessIF extends CRUD<Session> {
     List<Session> getEnrolledSessions(Person person, Course course) throws SQLException;
+
+    void setSessionInstructorToNull(Person person) throws SQLException;
 }

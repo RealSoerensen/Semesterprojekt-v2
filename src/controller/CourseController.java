@@ -242,4 +242,9 @@ public class CourseController {
 		}
 		return result;
 	}
+
+    public void removeAllCoursesForInstructor(Person person) throws SQLException {
+		getSessionDB().setSessionInstructorToNull(person);
+		getInstructorSubjectDB().removeAllByPerson(person);
+    }
 }
