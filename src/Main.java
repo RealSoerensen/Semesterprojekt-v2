@@ -15,19 +15,19 @@ public class Main {
 		//Create members, instructors and administrators
 		PersonController personController = new PersonController();
 
-		Address address1 = new Address("9000", "Aalborg", "Her", "5A");
+		Address address1 = new Address("9000", "Aalborg", "Opulensvej", "5A");
 		Person person1 = new Person("Patrick", "Sørensen", address1, "UwULover@gmail.com", "112", 3, "0", 1111);
 
-		Address address2 = new Address("9000", "Aalborg", "Der", "1");
+		Address address2 = new Address("9000", "Aalborg", "Halvevej", "3");
 		Person person2 = new Person("Jonas", "Jørgensen", address2, "Jonas.birch00@gmail.com", "51408590", 3, "1", 9999);
 
-		Address address3 = new Address("9220", "Aalborg", "Hvorhenne", "73");
+		Address address3 = new Address("9000", "Aalborg", "Kridtsløjfen", "20");
 		Person person3 = new Person("Svend", "Damsgaard", address3, "svendmaster@gmail.com", "11111111", 3, "0", 3333);
 
-		Address address4 = new Address("9200", "Aalborg", "Bilka", "252");
+		Address address4 = new Address("9200", "Aalborg", "Mestervej", "252");
 		Person person4 = new Person("Filip", "Nymann", address4, "filipnymann@hotmail.com", "88888888", 2,"2", 7777);
 
-		Address address5 = new Address("9000", "Aalborg", "Langbortistan", "3523");
+		Address address5 = new Address("9000", "Aalborg", "Gadevej", "23");
 		Person person5 = new Person("Nicklas", "Aagaard", address5, "nicklasspillerkata@hotmail.com", "25252525", 2, "2", 5555);
 
 		Address address6 = new Address("8900", "Randers", "Storegade", "17");

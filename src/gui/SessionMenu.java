@@ -212,12 +212,19 @@ public class SessionMenu extends JPanel {
 				}
 			}
 			else if(person.getRole() == 2) {
-				if(session.getInstructor().getSsn() == person.getSsn()) {
-					session.setInstructor(null);
-					try {
-						courseController.updateSession(session);
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, "Kunne ikke opdatere session");
+				if(session.getInstructor() != null) {
+					if(session.getInstructor().getSsn() != person.getSsn()) {
+						JOptionPane.showMessageDialog(null, "Du kan ikke melde afbud fra en session du ikke er meldt til");
+						setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+						return;
+					}
+					else {
+						session.setInstructor(null);
+						try {
+							courseController.updateSession(session);
+						} catch (SQLException e1) {
+							JOptionPane.showMessageDialog(null, "Kunne ikke opdatere session");
+						}
 					}
 				}
 				else {
