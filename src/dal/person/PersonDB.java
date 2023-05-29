@@ -91,18 +91,14 @@ public class PersonDB implements PersonDataAccessIF {
 	public List<Person> getAll() {
 		List<Person> people = new ArrayList<>();
 		String sql = "SELECT * FROM Person";
+		return getPeople(people, sql);
+	}
+
+	private List<Person> getPeople(List<Person> people, String sql) {
 		try (Statement stmt = connection.createStatement()) {
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				long ssn = rs.getLong("ssn");
-				String firstName = rs.getString("firstName");
-				String lastName = rs.getString("lastName");
-				String email = rs.getString("email");
-				int role = rs.getInt("role");
-				String phoneNo = rs.getString("phoneNo");
-				String password = rs.getString("password");
-				Address address = getAddress(rs.getLong("addressID"));
-				Person person = new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
+				Person person = createPerson(rs);
 				people.add(person);
 			}
 		} catch (SQLException e) {
@@ -182,13 +178,7 @@ public class PersonDB implements PersonDataAccessIF {
 			stmt.setString(2, password);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				String firstName = rs.getString("firstName");
-				String lastName = rs.getString("lastName");
-				String email = rs.getString("email");
-				int role = rs.getInt("role");
-				String phoneNo = rs.getString("phoneNo");
-				Address address = getAddress(rs.getLong("addressID"));
-				person = new Person(firstName, lastName, address, email, phoneNo, role, password, ssn);
+				person = createPerson(rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -200,48 +190,21 @@ public class PersonDB implements PersonDataAccessIF {
 	public List<Person> getAllMembers() {
 		String sql = "SELECT * FROM Person WHERE role = 1";
 		List<Person> members = new ArrayList<>();
-		try (Statement stmt = connection.createStatement()) {
-			ResultSet rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				Person person = createPerson(rs);
-				members.add(person);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return members;
+		return getPeople(members, sql);
 	}
 
 	@Override
 	public List<Person> getAllInstructors() {
 		String sql = "SELECT * FROM Person WHERE role = 2";
 		List<Person> instructors = new ArrayList<>();
-		try (Statement stmt = connection.createStatement()) {
-			ResultSet rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				Person person = createPerson(rs);
-				instructors.add(person);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return instructors;
+		return getPeople(instructors, sql);
 	}
 
 	@Override
 	public List<Person> getAllAdmins() {
-String sql = "SELECT * FROM Person WHERE role = 3";
+	String sql = "SELECT * FROM Person WHERE role = 3";
 		List<Person> admins = new ArrayList<>();
-		try (Statement stmt = connection.createStatement()) {
-			ResultSet rs = stmt.executeQuery(sql);
-			while (rs.next()) {
-				Person person = createPerson(rs);
-				admins.add(person);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return admins;
+		return getPeople(admins, sql);
 	}
 
 	private Person createPerson(ResultSet rs) throws SQLException {
