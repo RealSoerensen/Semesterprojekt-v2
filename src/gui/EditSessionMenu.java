@@ -148,9 +148,11 @@ public class EditSessionMenu extends JPanel {
 				date = getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, e2);
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
@@ -162,9 +164,11 @@ public class EditSessionMenu extends JPanel {
 				startTime = LocalTime.of(intTime[0], intTime[1]);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Tid er skrevet forkert ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, e2);
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			
@@ -176,14 +180,17 @@ public class EditSessionMenu extends JPanel {
 				endTime = LocalTime.of(intTime[0], intTime[1]);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Tid er skrevet forkert ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, e2);
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
-			if (!(date == null || startTime == null || endTime == null || date.isBefore(LocalDate.now()) || startTime.isAfter(endTime) || startTime.isBefore(LocalTime.now()))) {
+			if (!(date == null || startTime == null || endTime == null || date.isBefore(LocalDate.now()) || startTime.isAfter(endTime))) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato eller tid er ikke skrevet ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			String city = textFieldCity.getText();
@@ -203,12 +210,14 @@ public class EditSessionMenu extends JPanel {
 				isSessionUpdated = updateSession(session);
 			} catch (SQLException e1) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			if(isSessionUpdated) {
 				JOptionPane.showMessageDialog(null, "Ændringerne er gemt");
 			} else {
 				JOptionPane.showMessageDialog(null, "Kunne ikke gemme ændringerne");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			try {

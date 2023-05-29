@@ -136,6 +136,10 @@ public class CourseController {
 		result = getCourseMemberDB().remove(course, member);
 		return result;
 	}
+	
+	public boolean isMemberInCourse(Course course, Person person) {
+		return getCourseMemberDB().isPersonIn(course, person);
+	}
 
 	public List<Person> getAllCourseMembers(Course course) {
 		return getCourseMemberDB().getAll(course);
@@ -192,7 +196,6 @@ public class CourseController {
 			}
 		}
 		return success;
-
 	}
 
 	public List<Person> getAllSessionMembers(Session session) {
@@ -201,6 +204,10 @@ public class CourseController {
 
 	public boolean removeSessionMember(Session session, Person person) {
 		return getSessionMemberDB().remove(session, person);
+	}
+	
+	public boolean isMemberInSession(Session session, Person person) {
+		return getSessionMemberDB().isPersonIn(session, person);
 	}
 
 	public List<Session> getEnrolledSessions(Person person, Course course) throws SQLException {

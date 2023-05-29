@@ -5,6 +5,8 @@ import controller.PersonController;
 import model.*;
 
 import javax.swing.*;
+
+import java.awt.Cursor;
 import java.awt.Font;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -193,6 +195,12 @@ public class CreateSessionMenu extends JPanel {
 				return;
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, e2);
+				return;
+			}
+			
+			if(comboBoxInstructors.getSelectedItem() == null) {
+				JOptionPane.showMessageDialog(null, "Fejl: Vælg en instruktør");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
