@@ -333,5 +333,10 @@ public class CourseMenu extends JPanel {
 		btnEditCourse.setEnabled(enabled);
 		btnDeleteCourse.setEnabled(enabled);
 		btnViewSessions.setEnabled(enabled);
+		
+		if(person.getRole() == 2) {
+			btnEnrollCourse.setEnabled(false);
+			btnLeaveCourse.setEnabled(false);
+		}
 	}
 }

@@ -110,7 +110,12 @@ public class SessionDB implements SessionDataAccessIF {
             stmt.setTime(2, Time.valueOf(obj.getStartTime()));
             stmt.setTime(3, Time.valueOf(obj.getEndTime()));
             stmt.setLong(4, obj.getCourse().getCourseID());
-            stmt.setLong(5, obj.getInstructor().getSsn());
+            if(obj.getInstructor() != null) {
+            	stmt.setLong(5, obj.getInstructor().getSsn());
+            }
+            else {
+            	stmt.setNull(5, Types.NULL);
+            }
             stmt.setLong(6, obj.getSessionID());
             result = stmt.executeUpdate() > 0;
         } catch (SQLException e) {

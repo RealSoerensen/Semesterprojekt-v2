@@ -156,8 +156,24 @@ public class SessionMenu extends JPanel {
 					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 					return;
 				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde en session som en kursist");
+			} 
+			else if(person.getRole() == 2) {
+				if(session.getInstructor() != null) {
+					JOptionPane.showMessageDialog(null, "Der er allerede en instruktør på dette kursus");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
+				else {
+					session.setInstructor(person);
+					try {
+						courseController.updateSession(session);
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Kunne ikke opdatere session");
+					}
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Man kan ikke melde sig til et kursus som en adminstrator");
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
@@ -182,16 +198,40 @@ public class SessionMenu extends JPanel {
 			}
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Session session = (Session) sessionData[selectedRow][0];
-			if(!courseController.isMemberInSession(session, person)) {
-				JOptionPane.showMessageDialog(null, "Du er allerede meldt fra sessionen");
+			
+			if(person.getRole() == 1) {
+				if(!courseController.isMemberInSession(session, person)) {
+					JOptionPane.showMessageDialog(null, "Du er allerede meldt fra sessionen");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
+				if (!markAbsent(session)) {
+					JOptionPane.showMessageDialog(null, "Kunne ikke melde afbud");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
+			}
+			else if(person.getRole() == 2) {
+				if(session.getInstructor().getSsn() == person.getSsn()) {
+					session.setInstructor(null);
+					try {
+						courseController.updateSession(session);
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Kunne ikke opdatere session");
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Du kan ikke melde afbud fra en session du ikke er meldt til");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
+			}
+			else if(person.getRole() == 3) {
+				JOptionPane.showMessageDialog(null, "Du kan ikke melde afbud fra en session som administrator");
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
-			if (!markAbsent(session)) {
-				JOptionPane.showMessageDialog(null, "Kunne ikke melde afbud");
-				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				return;
-			}
+			
 			try {
 				refreshTable();
 			} catch (SQLException ex) {
