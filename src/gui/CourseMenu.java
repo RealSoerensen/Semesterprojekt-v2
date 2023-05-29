@@ -73,6 +73,12 @@ public class CourseMenu extends JPanel {
 			}
 			
 			if(person.getRole() == 1) {
+				if(courseController.getAllCourseMembers(course).size() == 7) {
+					JOptionPane.showMessageDialog(null, "Der er allerede maks antal kursister på dette kursus");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
+				
 				if(!courseController.createCourseMember(course, person)) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde kursus");
 					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
