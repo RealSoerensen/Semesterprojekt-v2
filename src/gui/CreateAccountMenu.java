@@ -245,7 +245,8 @@ public class CreateAccountMenu extends JDialog {
 		}
 		if (ssn.isEmpty() || ssn.contains(" ")) {
 			errorMessage += "\nDit CPR-Nummer er ugyldidgt";
-		} else if (!personController.isSsnUnique(Long.parseLong(ssn))) {
+		} 
+		else if (!personController.isSsnUnique(Long.parseLong(ssn))) {
 			errorMessage += "\nDu har allerede en bruger";
 			viableAccount = false;
 		}
@@ -305,7 +306,8 @@ public class CreateAccountMenu extends JDialog {
 				JOptionPane.showMessageDialog(null, "Der skete en fejl, prøv igen senere");
 
 			}
-		} else {
+		} 
+		else {
 			JOptionPane.showMessageDialog(null, errorMessage);
 		}
 		return viableAccount;

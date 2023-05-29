@@ -108,16 +108,19 @@ public class AccountManagerMenu extends JPanel {
 					JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 			if (choice == 0) {
 				person.setRole(1);
-			} else if (choice == 1) {
+			} 
+			else if (choice == 1) {
 				person.setRole(2);
-			} else if (choice == 2) {
+			} 
+			else if (choice == 2) {
 				person.setRole(3);
 			}
 
 			try {
 				if(personController.updatePerson(person)) {
 					JOptionPane.showMessageDialog(null, "Personen blev opdateret");
-				} else {
+				} 
+				else {
 					JOptionPane.showMessageDialog(null, "Der skete en fejl ved ændring af rolle");
 					return;
 				}
@@ -286,9 +289,11 @@ public class AccountManagerMenu extends JPanel {
 		if (selectedRow != -1) {
 			if (activeTabIndex == 0) {
 				person = (Person) memberData[selectedRow][0];
-			} else if (activeTabIndex == 1) {
+			} 
+			else if (activeTabIndex == 1) {
 				person = (Person) instructorData[selectedRow][0];
-			} else if (activeTabIndex == 2) {
+			} 
+			else if (activeTabIndex == 2) {
 				person = (Person) adminData[selectedRow][0];
 			}
 		}

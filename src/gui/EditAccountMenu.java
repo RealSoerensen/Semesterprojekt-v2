@@ -114,13 +114,15 @@ public class EditAccountMenu extends JPanel {
 			}
 			if (isEdited) {
 				JOptionPane.showMessageDialog(null, "Dine oplysninger er nu ændret");
-			} else {
+			} 
+			else {
 				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke ændre dine oplysninger");
 			}
 
 			if (isEditedFromAccountMenu) {
 				mainMenu.switchPanelToAccountMenu();
-			} else {
+			} 
+			else {
 				mainMenu.switchPanelToAccountManagerMenu(this);
 			}
 		});
