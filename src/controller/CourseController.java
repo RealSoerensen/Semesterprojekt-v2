@@ -179,6 +179,7 @@ public class CourseController {
 	}
 
 	public boolean removeSession(Session session) throws SQLException {
+		getSessionMemberDB().removeAll(session);
 		return getSessionDB().delete(session);
 	}
 
