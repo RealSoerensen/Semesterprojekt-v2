@@ -4,6 +4,7 @@ import controller.CourseController;
 import controller.LoginController;
 import model.Course;
 import model.Person;
+import model.Session;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,6 +15,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseMenu extends JPanel {
@@ -51,32 +53,59 @@ public class CourseMenu extends JPanel {
 
 		btnEnrollCourse = new JButton("Tilmeld");
 		btnEnrollCourse.addActionListener(e -> {
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			Course course = (Course) courseData[selectedRow][0];
 			if (course == null) {
 				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
+			
+			if(courseController.isMemberInCourse(course, person)) {
+				JOptionPane.showMessageDialog(null, "Du er allerede meldt til kurset");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				return;
+			}
+			
 			if(person.getRole() == 1) {
 				if(!courseController.createCourseMember(course, person)) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde kursus");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 					return;
 				}
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde et kursus som en kursist");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
+			
+			List<Session> sessions = null;
+			try {
+				sessions = courseController.getAllSessionsFromCourse(course);
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(null, "Der skete en fejl med at tilmelde sessioner under kurset");
+			}
+			
+			if(sessions != null) {
+				for(Session element: sessions) {
+					courseController.createSessionMember(element, person);
+				}
+			}
+			
 			JOptionPane.showMessageDialog(null, "Kursus er tilmeldt");
 			try {
 				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		btnEnrollCourse.setBounds(506, 11, 110, 48);
 		add(btnEnrollCourse);
@@ -85,21 +114,30 @@ public class CourseMenu extends JPanel {
 		btnLeaveCourse.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
-				JOptionPane.showMessageDialog(null, "Vælg venligst et kursus");
+				JOptionPane.showMessageDialog(null, "Vælg et kursus");
 				return;
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Course course = (Course) courseData[selectedRow][0];
+			
+			if(!courseController.isMemberInCourse(course, person)) {
+				JOptionPane.showMessageDialog(null, "Du er allerede meldt fra kurset");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				return;
+			}
 
 			boolean isNotEnrolled;
 			try {
 				isNotEnrolled = courseController.removeCourseMember(course, person);
 			} catch (SQLException ex) {
-				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke framelde kursus");
+				JOptionPane.showMessageDialog(null, "Kunne ikke framelde kursus");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			
 			if(!isNotEnrolled) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke framelde kursus");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
@@ -109,6 +147,7 @@ public class CourseMenu extends JPanel {
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Fejl: Kunne ikke opdatere kursus");
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		btnLeaveCourse.setBounds(506, 70, 110, 48);
 		add(btnLeaveCourse);
@@ -174,6 +213,7 @@ public class CourseMenu extends JPanel {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
 				JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 			Course course = (Course) courseData[selectedRow][0];
@@ -190,6 +230,7 @@ public class CourseMenu extends JPanel {
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke slette kursus");
 			}
+			setButtonsEnabled(false);
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		});
 		
@@ -209,6 +250,7 @@ public class CourseMenu extends JPanel {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow == -1) {
 			JOptionPane.showMessageDialog(null, "Kursus er ikke valgt");
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			return;
 		}
 		Course course = (Course) courseData[selectedRow][0];
@@ -222,6 +264,7 @@ public class CourseMenu extends JPanel {
 		}
 		if(!isEnrolled && person.getRole() == 1) {
 			JOptionPane.showMessageDialog(null, "Du er ikke tilmeldt dette kursus");
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			return;
 		}
 
