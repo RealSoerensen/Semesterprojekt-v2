@@ -26,9 +26,9 @@ public class MainMenu extends JFrame {
 	private final JLabel lblTitle;
 	public final JPanel menuPanel;
 	public final JPanel panelMainWindowAdmin;
-	private JButton btnMyAccount;
-	private JButton btnAccounts;
-	private JButton btnCourses;
+	private final JButton btnMyAccount;
+	private final JButton btnAccounts;
+	private final JButton btnCourses;
 
 	/**
 	 * Launch the application.
@@ -192,7 +192,7 @@ public class MainMenu extends JFrame {
 		switchPanelToCourseMenu(contentPanel);
 		
 		JPanel tipPanel = new JPanel();
-		tipPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		tipPanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
 		tipPanel.setBackground(new Color(192, 192, 192));
 		tipPanel.setBounds(10, 631, 793, 68);
 		contentPanel.add(tipPanel);

@@ -17,7 +17,6 @@ import javax.swing.table.TableColumnModel;
 import controller.PersonController;
 import model.Address;
 import model.Person;
-import model.Session;
 
 public class AccountManagerMenu extends JPanel {
 

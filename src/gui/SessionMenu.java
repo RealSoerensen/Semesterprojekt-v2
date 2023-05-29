@@ -11,12 +11,9 @@ import controller.CourseController;
 
 import java.awt.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
 
 public class SessionMenu extends JPanel {
 
@@ -231,17 +228,18 @@ public class SessionMenu extends JPanel {
 	}
 	
 	private String getMembersOnSessionAsString(Session session) {
-		String membersOnSession = "Kursister:";
+		StringBuilder membersOnSession = new StringBuilder("Kursister:");
 		List<Person> members = courseController.getAllSessionMembers(session);
-		
-		for(int i = 0; i < members.size(); i++) {
-			membersOnSession += "\n" + members.get(i).getFirstName() + " " + members.get(i).getLastName();
+
+		for (Person member : members) {
+			membersOnSession.append("\n").append(member.getFirstName()).append(" ").append(member.getLastName());
 		}
+
 		if(members.size() == 0) {
-			membersOnSession = "Ingen Kursister";
+			membersOnSession = new StringBuilder("Ingen Kursister");
 		}
 		
-		return membersOnSession;
+		return membersOnSession.toString();
 	}
 
 	private void refreshTable() throws SQLException {

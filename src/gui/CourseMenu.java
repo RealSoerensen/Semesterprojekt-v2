@@ -166,9 +166,7 @@ public class CourseMenu extends JPanel {
 		btnViewSessions = new JButton("Se Sessioner");
 		btnViewSessions.setBounds(0, 0, 110, 44);
 		panelSession.add(btnViewSessions);
-		btnViewSessions.addActionListener(e -> {
-			displaySessions(mainMenu);
-		});
+		btnViewSessions.addActionListener(e -> displaySessions(mainMenu));
 		btnDeleteCourse.addActionListener(e -> {
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			int selectedRow = table.getSelectedRow();
