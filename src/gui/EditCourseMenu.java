@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import controller.CourseController;
 
+import java.awt.Cursor;
 import java.awt.Font;
 
 import static controller.DateController.getLocalDate;
@@ -26,11 +27,13 @@ public class EditCourseMenu extends JPanel {
     	
     	JButton btnBack = new JButton("Tilbage");
     	btnBack.addActionListener(e -> {
+    		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			CourseMenu courseMenu;
 			try {
 				courseMenu = new CourseMenu(mainMenu);
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
@@ -43,12 +46,14 @@ public class EditCourseMenu extends JPanel {
     	
     	JButton btnAccept = new JButton("Accepter ændringer");
     	btnAccept.addActionListener(e -> {
+    		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			String name = textFieldName.getText();
 			double price;
             try {
             	price = Double.parseDouble(textFieldPrice.getText());
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(null, e1.getMessage());
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 return;
             }
 			String strStartDate = textFieldStartingDate.getText();
@@ -61,9 +66,11 @@ public class EditCourseMenu extends JPanel {
 
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1);
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
@@ -73,14 +80,17 @@ public class EditCourseMenu extends JPanel {
             	endDate = getLocalDate(intDate);
 			} catch (IndexOutOfBoundsException _ignore) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, e2);
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
             
-            if(endDate == null || startDate == null || startDate.isAfter(endDate) || startDate.isBefore(LocalDate.now())) {
+            if(endDate == null || startDate == null || startDate.isAfter(endDate)) {
 				JOptionPane.showMessageDialog(null, "Fejl: Dato er skrevet forkert ind");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
@@ -93,6 +103,7 @@ public class EditCourseMenu extends JPanel {
 				updateCourse(course);
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Der skete en fejl under opdateringen af kurset.");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 
@@ -101,6 +112,7 @@ public class EditCourseMenu extends JPanel {
 				courseMenu = new CourseMenu(mainMenu);
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Der skete en fejl under indlæsningen af kurserne.");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
 

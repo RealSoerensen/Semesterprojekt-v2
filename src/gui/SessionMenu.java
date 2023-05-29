@@ -116,15 +116,17 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Vælg en session at slette");
 				return;
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Session session = (Session) sessionData[selectedRow][0];
 			try {
 				courseController.removeSession(session);
-				JOptionPane.showMessageDialog(null, "Session slettet");
 				refreshTable();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-
+			JOptionPane.showMessageDialog(null, "Session slettet");
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			setButtonsEnabled(false);
 		});
 		btnDeleteSession.setBounds(10, 161, 124, 39);
 		panelAdmin.add(btnDeleteSession);
@@ -141,22 +143,32 @@ public class SessionMenu extends JPanel {
 				JOptionPane.showMessageDialog(null, "Vælg en session at tilmelde dig");
 				return;
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Session session = (Session) sessionData[selectedRow][0];
 			if (person.getRole() == 1) {
+				if(courseController.isMemberInSession(session, person)) {
+					JOptionPane.showMessageDialog(null, "Du er allerede meldt til sessionen");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					return;
+				}
 				if (!courseController.createSessionMember(session, person)) {
 					JOptionPane.showMessageDialog(null, "Kunne ikke tilmelde session");
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 					return;
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Man kan kun tilmelde en session som en kursist");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
-			JOptionPane.showMessageDialog(null, "Tilmeldt session");
 			try {
 				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			JOptionPane.showMessageDialog(null, "Tilmeldt session");
+			setButtonsEnabled(false);
 		});
 		btnJoinSession.setBounds(493, 61, 123, 39);
 		add(btnJoinSession);
@@ -165,26 +177,40 @@ public class SessionMenu extends JPanel {
 		btnLeaveSession.addActionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow == -1) {
-				JOptionPane.showMessageDialog(null, "Vælg en session at melde afbud til");
+				JOptionPane.showMessageDialog(null, "Vælg en session");
 				return;
 			}
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			Session session = (Session) sessionData[selectedRow][0];
+			if(!courseController.isMemberInSession(session, person)) {
+				JOptionPane.showMessageDialog(null, "Du er allerede meldt fra sessionen");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				return;
+			}
 			if (!markAbsent(session)) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke melde afbud");
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				return;
 			}
-			JOptionPane.showMessageDialog(null, "Afmeldt session");
 			try {
 				refreshTable();
 			} catch (SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kunne ikke opdatere sessions-liste");
 			}
+			JOptionPane.showMessageDialog(null, "Afmeldt session");
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			setButtonsEnabled(false);
 		});
 		btnLeaveSession.setBounds(493, 111, 123, 39);
 		add(btnLeaveSession);
 
 		btnSessionInfo = new JButton("Session Info");
 		btnSessionInfo.addActionListener(e -> {
+			int selectedRow = table.getSelectedRow();
+			if (selectedRow == -1) {
+				JOptionPane.showMessageDialog(null, "Vælg en session");
+				return;
+			}
 			Session session = (Session) sessionData[table.getSelectedRow()][0];
 			displaySessionInfo(session);
 		});
