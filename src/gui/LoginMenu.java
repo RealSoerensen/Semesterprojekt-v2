@@ -92,6 +92,7 @@ public class LoginMenu extends JFrame {
 
 		if (person == null) {
 			JOptionPane.showMessageDialog(null, "Forkert brugernavn eller adgangskode");
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			return;
 		}
 
