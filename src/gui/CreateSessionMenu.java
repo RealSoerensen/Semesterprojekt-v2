@@ -220,7 +220,8 @@ public class CreateSessionMenu extends JPanel {
 
 			if (createdSession != null) {
 				JOptionPane.showMessageDialog(null, "Session oprettet");
-			} else {
+			} 
+			else {
 				JOptionPane.showMessageDialog(null, "Kunne ikke oprette session");
 				return;
 			}
